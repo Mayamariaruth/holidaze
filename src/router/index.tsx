@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Home from '../pages/home/Home';
 import Venues from '../pages/venues/Venues';
@@ -12,24 +12,22 @@ import { ProtectedRoute } from '../components/layout/ProtectedRoute';
 
 export default function AppRouter() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/venues" element={<Venues />} />
-        <Route path="/venues/:id" element={<VenueDetail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/venues" element={<Venues />} />
+      <Route path="/venues/:id" element={<VenueDetail />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
-        {/* Customer dashboard */}
-        <Route element={<ProtectedRoute role="customer" />}>
-          <Route path="/dashboard/customer" element={<CustomerDashboard />} />
-        </Route>
+      {/* Customer dashboard */}
+      <Route element={<ProtectedRoute role="customer" />}>
+        <Route path="/dashboard/customer" element={<CustomerDashboard />} />
+      </Route>
 
-        {/* Venue manager dashboard */}
-        <Route element={<ProtectedRoute role="venue_manager" />}>
-          <Route path="/dashboard/manager" element={<ManagerDashboard />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+      {/* Venue manager dashboard */}
+      <Route element={<ProtectedRoute role="venue_manager" />}>
+        <Route path="/dashboard/manager" element={<ManagerDashboard />} />
+      </Route>
+    </Routes>
   );
 }
