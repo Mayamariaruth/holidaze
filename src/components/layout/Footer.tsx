@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 export default function Footer() {
   return (
     <footer>
+      {/* Logo */}
       <div>
         <img src="/logo-blue.png" alt="Holidaze logo" />
         <p>
@@ -11,6 +12,7 @@ export default function Footer() {
         </p>
       </div>
 
+      {/* Contact section */}
       <div>
         <h4>Contact</h4>
         <ul>
@@ -27,6 +29,7 @@ export default function Footer() {
         </ul>
       </div>
 
+      {/* Navigate section */}
       <div>
         <h4>Navigate</h4>
         <ul>
@@ -45,6 +48,7 @@ export default function Footer() {
         </ul>
       </div>
 
+      {/* Socials section */}
       <div>
         <h4>Follow Us</h4>
         <ul>

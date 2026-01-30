@@ -8,10 +8,12 @@ export default function Navbar() {
 
   return (
     <nav className="navbar navbar-expand-lg">
+      {/* Logo */}
       <Link className="navbar-brand" to="/">
-        <img src="/assets/logo.png" alt="Holidaze" height={40} />
+        <img src="src/assets/images/logo.png" alt="Holidaze" height={40} />
       </Link>
 
+      {/* Nav links */}
       <div className="collapse navbar-collapse">
         <ul className="navbar-nav">
           <li className="nav-item">
@@ -19,7 +21,6 @@ export default function Navbar() {
               Home
             </Link>
           </li>
-
           <li className="nav-item">
             <Link className="nav-link" to="/venues">
               Venues
@@ -27,6 +28,7 @@ export default function Navbar() {
           </li>
         </ul>
 
+        {/* Buttons */}
         <div>
           {!isAuthenticated ? (
             <Link to="/login" className="btn">
