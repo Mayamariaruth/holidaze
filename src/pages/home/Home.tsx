@@ -134,8 +134,8 @@ export default function Home() {
             ></img>
             <div>
               <p>
-                Built for modern travellers, Holidaze combines luxury destinations with a seamless
-                booking experience, all in one place.
+                Built for modern travellers, <strong>Holidaze</strong> combines luxury destinations
+                with a seamless booking experience, all in one place.
               </p>
             </div>
           </div>
