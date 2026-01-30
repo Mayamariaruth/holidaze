@@ -1,3 +1,3 @@
-export default function VenueDetail() {
-  return <div>Venue Detail Page</div>;
-}
+import { Link } from 'react-router-dom';
+
+export default function VenueDetail() {}

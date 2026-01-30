@@ -1,3 +1,119 @@
 export default function Venues() {
-  return <div>Venues List / Search Results Page</div>;
+  return (
+    <>
+      <div className="container">
+        {/* Hero */}
+        <section>
+          <img
+            src="src/assets/images/venue-hero.jpg"
+            alt="A luxury resort in the mountains by the sea"
+            height={300}
+          ></img>
+        </section>
+
+        {/* Search/Filter */}
+        <section>
+          <div>
+            {/* Search form */}
+            <form>
+              <input placeholder="Location" />
+              <input placeholder="Check-in / Check-out" />
+              <input placeholder="Guests" />
+              <button type="button">Search</button>
+            </form>
+          </div>
+
+          {/* Filter tabs */}
+          <div>
+            {/* Rating */}
+            <div className="dropdown">
+              <button className="dropdown-toggle" data-bs-toggle="dropdown">
+                Rating
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button className="dropdown-item">Any</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">★ & up</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">★★ & up</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">★★★ & up</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">★★★★ & up</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">★★★★★</button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Price */}
+            <div className="dropdown">
+              <button className="dropdown-toggle" data-bs-toggle="dropdown">
+                Price
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button className="dropdown-item">Any</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Under $100</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">$100 – $300</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">$300+</button>
+                </li>
+              </ul>
+            </div>
+
+            {/* Amenities */}
+            <div className="dropdown">
+              <button className="dropdown-toggle" data-bs-toggle="dropdown">
+                Amenities
+              </button>
+              <ul className="dropdown-menu">
+                <li>
+                  <button className="dropdown-item">WiFi</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Parking</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Pool</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Breakfast</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Gym</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Spa</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">TV</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Pet friendly</button>
+                </li>
+                <li>
+                  <button className="dropdown-item">Wheelchair accessible</button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        {/* Venues list (dynamically generated) */}
+        <section className="venue-list-container"></section>
+      </div>
+    </>
+  );
 }
