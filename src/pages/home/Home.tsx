@@ -8,7 +8,7 @@ export default function Home() {
         <section>
           <div>
             <img
-              src="src/assets/images/hero.jpg"
+              src="src/assets/images/home/hero.jpg"
               alt="A luxury resort with a pool"
               height={300}
             ></img>

@@ -1,4 +1,12 @@
+import VenueCard from '../../components/cards/VenueCard';
+import { useVenues } from '../../hooks/useVenues';
+
 export default function Venues() {
+  const { venues, isLoading, isError } = useVenues();
+
+  if (isLoading) return <p>Loading venues...</p>;
+  if (isError) return <p>Failed to load venues</p>;
+
   return (
     <>
       <div className="container">
@@ -111,8 +119,14 @@ export default function Venues() {
           </div>
         </section>
 
-        {/* Venues list (dynamically generated) */}
-        <section className="venue-list-container"></section>
+        {/* Venues list */}
+        <section className="venue-list-container">
+          <div className="venues-grid">
+            {venues.map((venue) => (
+              <VenueCard key={venue.id} venue={venue} />
+            ))}
+          </div>
+        </section>
       </div>
     </>
   );
