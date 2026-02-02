@@ -1,21 +1,31 @@
 export interface Venue {
   id: string;
   name: string;
-  description: string;
+  description?: string;
   price: number;
-  rating: number;
+  rating?: number;
   maxGuests: number;
-  location: {
-    address: string;
-    city: string;
-    zip: string;
-    country: string;
-    continent: string;
-    lat: number;
-    long: number;
-  };
-  media: {
+  meta: VenueMeta;
+  location: Location;
+  media?: {
     url: string;
     alt?: string;
   }[];
+}
+
+export interface VenueMeta {
+  wifi: boolean;
+  parking: boolean;
+  breakfast: boolean;
+  pets: boolean;
+}
+
+export interface Location {
+  address: string;
+  city: string;
+  zip: string;
+  country: string;
+  continent: string;
+  lat: number;
+  long: number;
 }
