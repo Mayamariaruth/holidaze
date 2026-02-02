@@ -1,4 +1,17 @@
+import { useState } from 'react';
+import { useAuth } from '../../hooks/useAuth';
+
 export default function Login() {
+  const { login, isLoading } = useAuth();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    await login(email, password);
+  };
+
   return (
     <>
       <div className="container">
@@ -21,12 +34,31 @@ export default function Login() {
             </p>
             {/* Login form */}
             <div className="login-form">
-              <form>
-                <label>Email</label>
-                <input placeholder="name@stud.noroff.no" />
-                <label>Password</label>
-                <input placeholder="*********" />
-                <button type="button">Login</button>
+              <form onSubmit={handleSubmit}>
+                {/* Email field */}
+                <label htmlFor="email">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="name@stud.noroff.no"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+
+                {/* Password field */}
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  placeholder="********"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                {/* Button */}
+                <button type="submit" disabled={isLoading}>
+                  {isLoading ? 'Logging in…' : 'Login'}
+                </button>
                 <p>Forgot your password?</p>
               </form>
             </div>
