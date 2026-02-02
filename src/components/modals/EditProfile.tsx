@@ -1,4 +1,4 @@
-export default function EditVenue() {
+export default function EditProfile() {
   return (
     <>
       <div
