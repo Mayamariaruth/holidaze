@@ -11,7 +11,7 @@ export default function Home() {
           <h1 className="fw-bold mb-4">EXCEPTIONAL STAYS, THOUGHTFULLY CURATED</h1>
           <h2 className="mb-5">Book unique venues in destinations around the world.</h2>
 
-          <form className="row g-2 justify-content-center bg-light">
+          <form className="row g-2 justify-content-center bg-white">
             <div className="col-12 col-md-3">
               <input className="form-control" placeholder="Location" />
             </div>

@@ -1,0 +1,48 @@
+// Colors
+$primary: #2c4a5a;
+$secondary: #a35640;
+$success: #3f6b5b;
+$danger: #8c3a3a;
+$light: #f7f6f3;
+$dark: #1f1f1f;
+$neutral-900: #6b6b6b;
+$neutral-700: #b4b4b4;
+$neutral-500: #e3e1dd;
+
+$theme-colors: (
+  'primary': $primary,
+  'secondary': $secondary,
+  'success': $success,
+  'danger': $danger,
+  'light': $light,
+  'dark': $dark,
+  'neutral': $neutral-900,
+  'muted': $neutral-700,
+  'soft': $neutral-500,
+);
+
+// Typography
+$font-family-sans-serif:
+  'Inter',
+  system-ui,
+  -apple-system,
+  sans-serif;
+$headings-font-family: 'Playfair Display', serif;
+$headings-font-weight: 600;
+
+// Container paddings
+$container-padding-x: 16px;
+$container-padding-x-md: 32px;
+$container-padding-x-lg: 64px;
+$container-padding-x-xl: $container-padding-x-lg;
+$container-padding-x-xxl: 96px;
+
+// Buttons
+$btn-border-radius: 8px;
+$btn-font-weight: 700;
+$btn-padding-y: 10px;
+
+// Forms
+$input-border-radius: 8px;
+
+@import 'bootstrap/scss/bootstrap';

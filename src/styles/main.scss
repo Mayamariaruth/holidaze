@@ -1,0 +1,14 @@
+@import './bootstrap';
+@import './pages/auth';
+@import './pages/dashboards';
+@import './pages/home';
+@import './pages/modals';
+@import './pages/venues';
+
+body {
+  background-color: $light;
+}
+
+.navbar {
+  z-index: 10;
+}
