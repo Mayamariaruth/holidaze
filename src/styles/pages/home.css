@@ -1,0 +1,21 @@
+.hero {
+  height: 100vh;
+  background-image: url('/src/assets/images/home/hero.jpg');
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.44);
+}
+
+.hero-content {
+  z-index: 2;
+}
+
+.hero-content form {
+  width: fit-content;
+}

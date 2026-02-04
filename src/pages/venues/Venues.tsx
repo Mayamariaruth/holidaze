@@ -9,16 +9,16 @@ export default function Venues() {
 
   return (
     <>
-      <div className="container">
-        {/* Hero */}
-        <section>
-          <img
-            src="src/assets/images/venue-hero.jpg"
-            alt="A luxury resort in the mountains by the sea"
-            height={300}
-          ></img>
-        </section>
+      {/* Hero section */}
+      <section>
+        <img
+          src="src/assets/images/venue-hero.jpg"
+          alt="A luxury resort in the mountains by the sea"
+          height={300}
+        ></img>
+      </section>
 
+      <div className="container">
         {/* Search/Filter */}
         <section>
           <div>

@@ -7,10 +7,10 @@ export default function Navbar() {
   const dashboardRoute = role === 'venue_manager' ? '/dashboard/manager' : '/dashboard/customer';
 
   return (
-    <nav className="navbar navbar-expand-lg">
+    <nav className="navbar navbar-expand-lg position-absolute w-100">
       {/* Logo */}
       <Link className="navbar-brand" to="/">
-        <img src="src/assets/images/logo.png" alt="Holidaze" height={40} />
+        <img src="src/assets/images/logo.png" alt="Holidaze" height={80} />
       </Link>
 
       {/* Nav links */}

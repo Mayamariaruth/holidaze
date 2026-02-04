@@ -3,30 +3,34 @@ import { Link } from 'react-router-dom';
 export default function Home() {
   return (
     <>
-      <div className="container">
-        {/* Hero */}
-        <section>
-          <div>
-            <img
-              src="src/assets/images/home/hero.jpg"
-              alt="A luxury resort with a pool"
-              height={300}
-            ></img>
-          </div>
-          <div>
-            <h1>EXCEPTIONAL STAYS, THOUGHTFULLY CURATED</h1>
-            <h2>Book unique venues in destinations around the world.</h2>
-            <div>
-              <form>
-                <input placeholder="Location" />
-                <input placeholder="Check-in / Check-out" />
-                <input placeholder="Guests" />
-                <button type="button">Search</button>
-              </form>
-            </div>
-          </div>
-        </section>
+      {/* Hero section */}
+      <section className="hero d-flex align-items-center justify-content-center text-center">
+        <div className="hero-overlay"></div>
 
+        <div className="hero-content text-white position-relative d-flex flex-column align-items-center">
+          <h1 className="fw-bold mb-4">EXCEPTIONAL STAYS, THOUGHTFULLY CURATED</h1>
+          <h2 className="mb-5">Book unique venues in destinations around the world.</h2>
+
+          <form className="row g-2 justify-content-center bg-light">
+            <div className="col-12 col-md-3">
+              <input className="form-control" placeholder="Location" />
+            </div>
+            <div className="col-12 col-md-3">
+              <input className="form-control" placeholder="Check-in / Check-out" />
+            </div>
+            <div className="col-12 col-md-2">
+              <input className="form-control" placeholder="Guests" />
+            </div>
+            <div className="col-12 col-md-2">
+              <button className="btn w-100" type="button">
+                Search
+              </button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <div className="container">
         {/* Top Destinations */}
         <section>
           <div>

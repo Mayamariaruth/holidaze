@@ -1,2 +1,23 @@
+@import './pages/auth.css';
+@import './pages/dashboards.css';
+@import './pages/home.css';
+@import './pages/modals.css';
+@import './pages/venues.css';
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Playfair Display', sans-serif;
+}
+
 .container {
+}
+
+.navbar {
+  z-index: 10;
 }
