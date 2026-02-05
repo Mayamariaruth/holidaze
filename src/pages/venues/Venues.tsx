@@ -27,7 +27,9 @@ export default function Venues() {
               <input placeholder="Location" />
               <input placeholder="Check-in / Check-out" />
               <input placeholder="Guests" />
-              <button type="button">Search</button>
+              <button type="button" className="btn-cta">
+                Search
+              </button>
             </form>
           </div>
 

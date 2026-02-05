@@ -42,7 +42,7 @@ export default function NavbarOther() {
         {/* Buttons */}
         <div>
           {!isAuthenticated ? (
-            <Link to="/login" className="btn btn-outline-primary nav-login-btn">
+            <Link to="/login" className="btn btn-primary nav-login-btn">
               Login
             </Link>
           ) : (

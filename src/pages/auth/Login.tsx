@@ -56,7 +56,7 @@ export default function Login() {
                 />
 
                 {/* Button */}
-                <button type="submit" disabled={isLoading}>
+                <button type="submit" className="btn-primary" disabled={isLoading}>
                   {isLoading ? 'Logging in…' : 'Login'}
                 </button>
                 <p>Forgot your password?</p>
