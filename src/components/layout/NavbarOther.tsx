@@ -8,7 +8,7 @@ export default function NavbarOther() {
   const dashboardRoute = role === 'venue_manager' ? '/dashboard/manager' : '/dashboard/customer';
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-other position-absolute bg-white py-4">
+    <nav className="navbar navbar-expand-lg navbar-other bg-white py-4">
       {/* Logo */}
       <Link className="navbar-brand ps-4" to="/">
         <img src={logo} alt="Holidaze" />

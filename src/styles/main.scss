@@ -8,6 +8,7 @@
 
 body {
   background-color: $light;
+  color: $dark;
 }
 
 .navbar {
@@ -38,4 +39,14 @@ body {
   border-radius: 16px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+footer {
+  width: 98%;
+  margin: 0 auto 13px;
+  border-radius: 16px;
+}
+
+.footer-text {
+  max-width: 300px;
 }
