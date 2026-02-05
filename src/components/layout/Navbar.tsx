@@ -17,12 +17,12 @@ export default function Navbar() {
       <div className="collapse navbar-collapse">
         <ul className="navbar-nav">
           <li className="nav-item">
-            <Link className="nav-link" to="/">
+            <Link className="nav-link text-white" to="/">
               Home
             </Link>
           </li>
           <li className="nav-item">
-            <Link className="nav-link" to="/venues">
+            <Link className="nav-link text-white" to="/venues">
               Venues
             </Link>
           </li>
@@ -31,7 +31,7 @@ export default function Navbar() {
         {/* Buttons */}
         <div>
           {!isAuthenticated ? (
-            <Link to="/login" className="btn">
+            <Link to="/login" className="btn btn-outline-white">
               Login
             </Link>
           ) : (

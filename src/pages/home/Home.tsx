@@ -9,7 +9,9 @@ export default function Home() {
 
         <div className="hero-content text-white position-relative d-flex flex-column align-items-center">
           <h1 className="fw-bold mb-4">EXCEPTIONAL STAYS, THOUGHTFULLY CURATED</h1>
-          <h2 className="mb-5">Book unique venues in destinations around the world.</h2>
+          <p className="hero-text h3 fw-medium mb-4">
+            Book unique venues in destinations around the world.
+          </p>
 
           <form className="row g-2 justify-content-center bg-white">
             <div className="col-12 col-md-3">

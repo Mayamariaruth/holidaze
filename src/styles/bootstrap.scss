@@ -1,6 +1,8 @@
 // Colors
 $primary: #2c4a5a;
+$primary-hover: #223742;
 $secondary: #a35640;
+$secondary-hover: #693728;
 $success: #3f6b5b;
 $danger: #8c3a3a;
 $light: #f7f6f3;
@@ -30,17 +32,18 @@ $font-family-sans-serif:
 $headings-font-family: 'Playfair Display', serif;
 $headings-font-weight: 600;
 
+// Heading sizes (desktop)
+$h1-font-size: 48px;
+$h2-font-size: 40px;
+$h3-font-size: 32px;
+$h4-font-size: 22px;
+
 // Container paddings
 $container-padding-x: 16px;
 $container-padding-x-md: 32px;
 $container-padding-x-lg: 64px;
 $container-padding-x-xl: $container-padding-x-lg;
 $container-padding-x-xxl: 96px;
-
-// Buttons
-$btn-border-radius: 8px;
-$btn-font-weight: 700;
-$btn-padding-y: 10px;
 
 // Forms
 $input-border-radius: 8px;

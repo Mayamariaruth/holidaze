@@ -1,0 +1,75 @@
+.btn {
+  border-radius: 8px;
+  font-weight: 700;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+// Outlined button (primary)
+.btn-outline-primary {
+  @extend .btn;
+
+  background-color: white;
+  color: $primary;
+  border: 1px solid $primary;
+
+  &:hover,
+  &:focus {
+    background-color: $primary;
+    color: white;
+  }
+}
+
+// Outlined button (white)
+.btn-outline-white {
+  @extend .btn;
+
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+
+  &:hover,
+  &:focus {
+    background-color: white;
+    color: $dark;
+  }
+}
+
+// Primary button
+.btn-primary {
+  @extend .btn;
+  @extend .btn-primary;
+
+  color: #fff;
+  background-color: $primary;
+
+  &:hover {
+    background-color: $primary-hover;
+  }
+}
+
+// CTA / accent button
+.btn-cta {
+  @extend .btn;
+  @extend .btn-secondary;
+
+  color: #fff;
+  background-color: $secondary;
+
+  &:hover {
+    background-color: $secondary-hover;
+  }
+}
+
+// Cancel button
+.btn-cancel {
+  @extend .btn;
+
+  background-color: white;
+  color: $neutral-900;
+  border: 1px solid $neutral-700;
+
+  &:hover {
+    background-color: $neutral-500;
+  }
+}
