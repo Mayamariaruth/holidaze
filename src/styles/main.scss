@@ -13,3 +13,29 @@ body {
 .navbar {
   z-index: 10;
 }
+
+.navbar-brand img {
+  height: 52px;
+}
+
+.nav-login-btn {
+  width: 127px;
+}
+
+.nav-link:hover {
+  border-bottom: solid white 1px;
+  border-top: solid white 1px;
+}
+
+.nav-link-other:hover {
+  border-bottom: solid $primary 1px;
+  border-top: solid $primary 1px;
+}
+
+.navbar-other {
+  width: 98%;
+  margin: 13px 0;
+  border-radius: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
