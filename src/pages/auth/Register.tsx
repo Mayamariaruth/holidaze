@@ -43,17 +43,8 @@ export default function Register() {
 
   return (
     <div className="container py-5">
-      <div>
-        <img
-          src="/src/assets/images/auth/register.jpg"
-          alt="Luxury hotel lounge"
-          height={300}
-        ></img>
-      </div>
-      <div>
-        <hr></hr>
-        <h1>Register an account with us</h1>
-      </div>
+      <hr></hr>
+      <h1>Register an account with us</h1>
       <form onSubmit={handleSubmit} className="register-form">
         {/* Name */}
         <label htmlFor="name">Full Name</label>
@@ -102,10 +93,17 @@ export default function Register() {
           </label>
         </div>
 
-        <button type="submit" className="btn btn-cta" disabled={isLoading}>
+        <button type="submit" className="btn btn-primary" disabled={isLoading}>
           {isLoading ? 'Registering…' : 'Register'}
         </button>
       </form>
+      <div>
+        <img
+          src="src/assets/images/auth/register.jpg"
+          className="register-img"
+          alt="Luxury hotel lounge"
+        />
+      </div>
     </div>
   );
 }

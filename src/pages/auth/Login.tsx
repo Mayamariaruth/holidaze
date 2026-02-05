@@ -1,70 +1,79 @@
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
   const { login, isLoading } = useAuth();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await login(email, password);
+
+    const fieldErrors: typeof errors = {};
+    if (!email.trim()) fieldErrors.email = 'Email is required';
+    if (!password.trim()) fieldErrors.password = 'Password is required';
+    setErrors(fieldErrors);
+    if (Object.keys(fieldErrors).length > 0) return;
+
+    try {
+      await login(email, password);
+      navigate('/');
+    } catch (err) {
+      if (err instanceof Error) {
+        setErrors({ ...fieldErrors, password: err.message });
+      } else {
+        setErrors({ ...fieldErrors, password: 'Login failed' });
+      }
+    }
   };
 
   return (
-    <>
-      <div className="container">
-        <div>
-          <img
-            src="/src/assets/images/auth/login.jpg"
-            alt="Luxury hotel entrance with a fountain"
-            height={300}
-          ></img>
-        </div>
-        <div>
-          <div>
-            <hr></hr>
-            <h1>Login to your account</h1>
-          </div>
-          <div>
-            <p>
+    <div className="container py-5 auth-page mb-5">
+      <div className="auth-form-wrapper">
+        <div className="auth-form">
+          <hr className="w-50 mb-2 heading-line"></hr>
+          <h1 className="mb-4">Login to your account</h1>
+          <form onSubmit={handleSubmit} className="login-form">
+            <h4 className="hero-text mb-4">
               Login to access your bookings, manage your profile, or update your venues — all from
               one place.
-            </p>
-            {/* Login form */}
-            <div className="login-form">
-              <form onSubmit={handleSubmit}>
-                {/* Email field */}
-                <label htmlFor="email">Email</label>
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="name@stud.noroff.no"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
+            </h4>
+            {/* Email */}
+            <label htmlFor="email">Email</label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={`form-control mb-3 ${errors.email ? 'is-invalid' : ''}`}
+            />
+            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
 
-                {/* Password field */}
-                <label htmlFor="password">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  placeholder="********"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
+            {/* Password */}
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+            />
+            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
 
-                {/* Button */}
-                <button type="submit" className="btn-primary" disabled={isLoading}>
-                  {isLoading ? 'Logging in…' : 'Login'}
-                </button>
-                <p>Forgot your password?</p>
-              </form>
-            </div>
-          </div>
+            <button type="submit" className="btn btn-cta mt-4 w-100" disabled={isLoading}>
+              {isLoading ? 'Logging in…' : 'Login'}
+            </button>
+            <p className="text-center text-neutral mt-2">Forgot your password?</p>
+          </form>
         </div>
       </div>
-    </>
+      <div className="auth-image">
+        <img src="src/assets/images/auth/login.jpg" alt="Luxury hotel" />
+      </div>
+    </div>
   );
 }
