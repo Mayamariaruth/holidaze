@@ -52,5 +52,11 @@ footer {
 }
 
 .heading-line {
-  color: $dark;
+  color: white;
+}
+
+@media (min-width: 998px) {
+  .heading-line {
+    color: $dark;
+  }
 }
