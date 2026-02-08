@@ -1,17 +1,22 @@
-import { DayPicker, DateRange } from 'react-day-picker';
+import { DayPicker } from 'react-day-picker';
 import 'react-day-picker/dist/style.css';
 import { useState } from 'react';
+import type { Booking } from '../../types/booking.types';
 import { getBookedDates } from '../../utils/date';
 
 interface Props {
-  venue: any;
+  bookings: Booking[];
   onClose: () => void;
 }
 
-export default function Calendar({ venue, onClose }: Props) {
-  const bookedDates = getBookedDates(venue.bookings);
+type DateRange = {
+  from: Date | undefined;
+  to?: Date | undefined;
+};
 
-  const [range, setRange] = useState<DateRange | undefined>();
+export default function Calendar({ bookings, onClose }: Props) {
+  const bookedDates: Date[] = getBookedDates(bookings).map((d) => new Date(d));
+  const [range, setRange] = useState<DateRange | undefined>(undefined);
 
   return (
     <>
@@ -19,25 +24,30 @@ export default function Calendar({ venue, onClose }: Props) {
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content rounded-4">
             <div className="modal-header">
-              <h5 className="modal-title">Select dates</h5>
+              <h4 className="modal-title">Select dates</h4>
+              <button className="btn-close" onClick={onClose} />
             </div>
 
             <div className="modal-body">
-              <DayPicker
-                mode="range"
-                selected={range}
-                onSelect={setRange}
-                disabled={bookedDates.map((date: string) => new Date(date))}
-              />
+              <DayPicker mode="range" selected={range} onSelect={setRange} disabled={bookedDates} />
+            </div>
+
+            <div className="modal-footer">
+              <button className="btn btn-secondary" onClick={onClose}>
+                Cancel
+              </button>
+              <button
+                className="btn btn-primary"
+                disabled={!range?.from || !range?.to}
+                onClick={() => console.log(range)}
+              >
+                Apply
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <div>
-        <button className="btn-cancel" onClick={onClose} />
-        <button className="btn btn-primary">Apply</button>
-      </div>
       <div className="modal-backdrop fade show" onClick={onClose} />
     </>
   );

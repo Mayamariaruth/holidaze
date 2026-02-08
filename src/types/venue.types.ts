@@ -7,6 +7,9 @@ export interface Venue {
   maxGuests: number;
   meta: VenueMeta;
   location: Location;
+  owner?: {
+    name: string;
+  };
   media?: {
     url: string;
     alt?: string;

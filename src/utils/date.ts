@@ -1,12 +1,14 @@
-export function getBookedDates(bookings: any[]) {
-  const dates: string[] = [];
+import type { Booking } from '../types/booking.types';
 
-  bookings.forEach((booking) => {
-    const start = new Date(booking.dateFrom);
-    const end = new Date(booking.dateTo);
+export function getBookedDates(bookings: Booking[]): Date[] {
+  const dates: Date[] = [];
+
+  bookings.forEach((b) => {
+    const start = new Date(b.dateFrom);
+    const end = new Date(b.dateTo);
 
     for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      dates.push(d.toISOString().split('T')[0]);
+      dates.push(new Date(d));
     }
   });
 
