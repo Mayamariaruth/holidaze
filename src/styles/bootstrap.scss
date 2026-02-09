@@ -47,5 +47,9 @@ $container-padding-x-xxl: 96px;
 
 // Forms
 $input-border-radius: 8px;
+$input-bg: $neutral-500;
+$input-btn-focus-color: $neutral-700;
+$input-focus-box-shadow: none;
+$input-placeholder-color: $neutral-700;
 
 @import 'bootstrap/scss/bootstrap';

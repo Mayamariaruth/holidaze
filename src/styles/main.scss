@@ -55,6 +55,10 @@ footer {
   color: white;
 }
 
+input:focus {
+  border: solid 2px;
+}
+
 @media (min-width: 998px) {
   .heading-line {
     color: $dark;

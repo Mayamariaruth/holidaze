@@ -1,3 +1,5 @@
+import type { Booking } from './booking.types';
+
 export interface Venue {
   id: string;
   name: string;
@@ -7,6 +9,7 @@ export interface Venue {
   maxGuests: number;
   meta: VenueMeta;
   location: Location;
+  bookings?: Booking[];
   owner?: {
     name: string;
   };

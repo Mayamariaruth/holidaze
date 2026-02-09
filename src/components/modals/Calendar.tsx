@@ -22,10 +22,10 @@ export default function Calendar({ bookings, onClose }: Props) {
     <>
       <div className="modal fade show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content rounded-4">
+          <div className="modal-content rounded-3 w-auto">
             <div className="modal-header">
               <h4 className="modal-title">Select dates</h4>
-              <button className="btn-close" onClick={onClose} />
+              <button className="btn-close text-neutral" onClick={onClose} />
             </div>
 
             <div className="modal-body">
@@ -33,11 +33,11 @@ export default function Calendar({ bookings, onClose }: Props) {
             </div>
 
             <div className="modal-footer">
-              <button className="btn btn-secondary" onClick={onClose}>
+              <button className="btn btn-cancel w-100" onClick={onClose}>
                 Cancel
               </button>
               <button
-                className="btn btn-primary"
+                className="btn btn-primary w-100"
                 disabled={!range?.from || !range?.to}
                 onClick={() => console.log(range)}
               >

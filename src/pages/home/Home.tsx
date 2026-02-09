@@ -13,7 +13,7 @@ export default function Home() {
             Book unique venues in destinations around the world.
           </p>
 
-          <form className="row g-2 justify-content-center bg-white">
+          <form className="row g-2 justify-content-center bg-white rounded-4">
             <div className="col-12 col-md-3">
               <input className="form-control" placeholder="Location" />
             </div>
@@ -24,7 +24,7 @@ export default function Home() {
               <input className="form-control" placeholder="Guests" />
             </div>
             <div className="col-12 col-md-2">
-              <button className="btn w-100" type="button">
+              <button className="btn btn-cta w-100" type="button">
                 Search
               </button>
             </div>
