@@ -1,34 +1,68 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import Calendar from '../../components/modals/Calendar';
 
 export default function Home() {
+  const [dateFrom, setDateFrom] = useState<Date | null>(null);
+  const [dateTo, setDateTo] = useState<Date | null>(null);
+  const [showCalendar, setShowCalendar] = useState(false);
+
   return (
     <>
       {/* Hero section */}
       <section className="hero d-flex align-items-center justify-content-center text-center">
         <div className="hero-overlay"></div>
 
-        <div className="hero-content text-white position-relative d-flex flex-column align-items-center">
+        <div className="hero-content text-white position-relative d-flex flex-column align-items-center w-100 px-3 px-md-0">
           <h1 className="fw-bold mb-4">EXCEPTIONAL STAYS, THOUGHTFULLY CURATED</h1>
           <p className="hero-text h3 fw-medium mb-4">
             Book unique venues in destinations around the world.
           </p>
 
-          <form className="row g-2 justify-content-center bg-white rounded-4">
-            <div className="col-12 col-md-3">
-              <input className="form-control" placeholder="Location" />
-            </div>
-            <div className="col-12 col-md-3">
-              <input className="form-control" placeholder="Check-in / Check-out" />
-            </div>
-            <div className="col-12 col-md-2">
-              <input className="form-control" placeholder="Guests" />
-            </div>
-            <div className="col-12 col-md-2">
-              <button className="btn btn-cta w-100" type="button">
-                Search
-              </button>
-            </div>
+          <form className="hero-form d-flex flex-column flex-md-row bg-white align-items-stretch rounded-4 p-3 gap-2">
+            {/* Location */}
+            <input className="form-control flex-fill" placeholder="Location" />
+
+            {/* Check-in */}
+            <input
+              type="text"
+              className="form-control flex-fill"
+              placeholder="Check-in"
+              readOnly
+              value={dateFrom ? dateFrom.toLocaleDateString() : ''}
+              onClick={() => setShowCalendar(true)}
+            />
+
+            {/* Check-out */}
+            <input
+              type="text"
+              className="form-control flex-fill"
+              placeholder="Check-out"
+              readOnly
+              value={dateTo ? dateTo.toLocaleDateString() : ''}
+              onClick={() => setShowCalendar(true)}
+            />
+
+            {/* Guests */}
+            <input className="form-control" placeholder="Guests" />
+
+            {/* Search */}
+            <button className="btn btn-cta px-4" type="button">
+              Search
+            </button>
           </form>
+
+          {/* Calendar modal */}
+          {showCalendar && (
+            <Calendar
+              bookings={[]}
+              onClose={() => setShowCalendar(false)}
+              onSelectRange={(from, to) => {
+                setDateFrom(from);
+                setDateTo(to);
+              }}
+            />
+          )}
         </div>
       </section>
 

@@ -32,7 +32,7 @@ export default function Calendar({ bookings, onClose, onSelectRange }: Props) {
     <>
       <div className="modal fade show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content rounded-3">
+          <div className="modal-content calendar rounded-3">
             <div className="modal-header">
               <h4 className="modal-title">Select dates</h4>
               <button className="btn-close" onClick={onClose} />

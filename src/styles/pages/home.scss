@@ -16,10 +16,11 @@
   z-index: 2;
 }
 
-.hero-content form {
-  width: fit-content;
-}
-
 .hero-text {
   font-family: 'Inter';
+}
+
+.hero-form {
+  width: 75%;
+  max-width: 1000px;
 }
