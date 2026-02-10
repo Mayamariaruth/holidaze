@@ -19,7 +19,7 @@ export default function VenueDetail() {
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
 
-  const [guests, setGuests] = useState(1);
+  const [guests, setGuests] = useState<number | ''>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -51,11 +51,6 @@ export default function VenueDetail() {
 
     if (!dateFrom || !dateTo) {
       setError('Please select dates');
-      return;
-    }
-
-    if (guests < 1 || guests > venue.maxGuests) {
-      setError('Invalid number of guests');
       return;
     }
 
@@ -196,26 +191,33 @@ export default function VenueDetail() {
               <span className="fw-medium">Max {venue.maxGuests} guests</span>
             </div>
 
-            <input
-              type="text"
-              className="form-control mb-2"
-              placeholder="Check-in / Check-out"
-              readOnly
-              value={
-                dateFrom && dateTo
-                  ? `${dateFrom.toLocaleDateString()} – ${dateTo.toLocaleDateString()}`
-                  : ''
-              }
-              onClick={() => setShowCalendar(true)}
-            />
+            <div className="d-flex gap-2 mb-3">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Check-in"
+                readOnly
+                value={dateFrom ? dateFrom.toLocaleDateString() : ''}
+                onClick={() => setShowCalendar(true)}
+              />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Check-out"
+                readOnly
+                value={dateTo ? dateTo.toLocaleDateString() : ''}
+                onClick={() => setShowCalendar(true)}
+              />
+            </div>
 
             <input
               type="number"
               className="form-control mb-3"
+              placeholder="Guests"
               min={1}
               max={venue.maxGuests}
               value={guests}
-              onChange={(e) => setGuests(Number(e.target.value))}
+              onChange={(e) => setGuests(e.target.value === '' ? '' : Number(e.target.value))}
             />
 
             {error && <p className="text-danger">{error}</p>}
@@ -225,7 +227,7 @@ export default function VenueDetail() {
               <strong>${venue.price}/night</strong>
               <button
                 className="btn btn-cta w-100"
-                disabled={!dateFrom || !dateTo || isSubmitting}
+                disabled={!dateFrom || !dateTo || isSubmitting || !guests}
                 onClick={handleBook}
               >
                 {isSubmitting ? 'Booking…' : 'Book'}

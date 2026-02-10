@@ -4,6 +4,7 @@ import 'react-day-picker/dist/style.css';
 import { useState } from 'react';
 import type { Booking } from '../../types/booking.types';
 import { getBookedDates } from '../../utils/date';
+import { isSameDay } from 'date-fns';
 
 interface Props {
   bookings: Booking[];
@@ -13,13 +14,15 @@ interface Props {
 
 export default function Calendar({ bookings, onClose, onSelectRange }: Props) {
   const bookedDates = getBookedDates(bookings).map((d) => new Date(d));
+  const [selectedRange, setSelectedRange] = useState<DateRange>({ from: undefined, to: undefined });
 
-  const [range, setRange] = useState<DateRange | undefined>();
+  const isBooked = (date: Date) => bookedDates.some((d) => isSameDay(d, date));
 
   const handleSelect = (range: DateRange | undefined) => {
-    setRange(range);
+    if (!range) return;
+    setSelectedRange({ ...range });
 
-    if (range?.from && range?.to) {
+    if (range.from && range.to && !isSameDay(range.from, range.to)) {
       onSelectRange(range.from, range.to);
       onClose();
     }
@@ -38,15 +41,15 @@ export default function Calendar({ bookings, onClose, onSelectRange }: Props) {
             <div className="modal-body">
               <DayPicker
                 mode="range"
-                selected={range}
+                selected={{ from: selectedRange.from, to: selectedRange.to }}
                 onSelect={handleSelect}
-                disabled={bookedDates}
+                disabled={isBooked}
+                defaultMonth={new Date()}
               />
             </div>
           </div>
         </div>
       </div>
-
       <div className="modal-backdrop fade show" onClick={onClose} />
     </>
   );
