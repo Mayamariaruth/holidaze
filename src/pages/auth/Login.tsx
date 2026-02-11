@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import bgImg from '../../assets/images/auth/login.jpg';
 
 export default function Login() {
   const { login, isLoading } = useAuth();
@@ -33,15 +34,14 @@ export default function Login() {
 
   return (
     <div className="container py-5 auth-page mb-5">
-      <div className="auth-form-wrapper">
+      <div className="auth-form-wrapper" style={{ backgroundImage: `url(${bgImg})` }}>
         <div className="auth-form">
-          <hr className="w-50 mb-2 heading-line"></hr>
-          <h1 className="mb-4">Login to your account</h1>
           <form onSubmit={handleSubmit} className="login-form">
-            <h4 className="hero-text mb-4">
+            <h1 className="mb-4">Login to your account</h1>
+            <h2 className="hero-text mb-4 h4">
               Login to access your bookings, manage your profile, or update your venues — all from
               one place.
-            </h4>
+            </h2>
             {/* Email */}
             <label htmlFor="email">Email</label>
             <input
@@ -70,9 +70,6 @@ export default function Login() {
             <p className="text-center text-neutral mt-2">Forgot your password?</p>
           </form>
         </div>
-      </div>
-      <div className="auth-image">
-        <img src="src/assets/images/auth/login.jpg" alt="Luxury hotel" />
       </div>
     </div>
   );

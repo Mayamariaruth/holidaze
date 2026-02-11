@@ -1,5 +1,6 @@
 import VenueCard from '../../components/cards/VenueCard';
 import { useVenues } from '../../hooks/useVenues';
+import heroImage from '../../assets/images/venue-hero.jpg';
 
 export default function Venues() {
   const { venues, isLoading, isError } = useVenues();
@@ -10,13 +11,7 @@ export default function Venues() {
   return (
     <>
       {/* Hero section */}
-      <section>
-        <img
-          src="src/assets/images/venue-hero.jpg"
-          alt="A luxury resort in the mountains by the sea"
-          height={300}
-        ></img>
-      </section>
+      <section className="venue-hero" style={{ backgroundImage: `url(${heroImage})` }}></section>
 
       <div className="container">
         {/* Search/Filter */}

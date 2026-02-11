@@ -1,6 +1,16 @@
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import Calendar from '../../components/modals/Calendar';
+import heroImage from '../../assets/images/home/hero.jpg';
+import bali from '../../assets/images/home/destinations/bali.jpg';
+import dubai from '../../assets/images/home/destinations/dubai.jpg';
+import honolulu from '../../assets/images/home/destinations/honolulu.jpg';
+import marrakesh from '../../assets/images/home/destinations/marrakesh.jpg';
+import phuket from '../../assets/images/home/destinations/phuket.jpg';
+import santorini from '../../assets/images/home/destinations/santorini.jpg';
+import venues1 from '../../assets/images/home/venues/venues1.jpg';
+import venues2 from '../../assets/images/home/venues/venues2.jpg';
+import venues3 from '../../assets/images/home/venues/venues3.jpg';
 
 export default function Home() {
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
@@ -10,7 +20,10 @@ export default function Home() {
   return (
     <>
       {/* Hero section */}
-      <section className="hero d-flex align-items-center justify-content-center text-center">
+      <section
+        className="hero d-flex align-items-center justify-content-center text-center"
+        style={{ backgroundImage: `url(${heroImage})` }}
+      >
         <div className="hero-overlay"></div>
 
         <div className="hero-content text-white position-relative d-flex flex-column align-items-center w-100 px-3 px-md-0">
@@ -75,26 +88,18 @@ export default function Home() {
           </div>
           <div>
             <div>
-              <img
-                src="src/assets/images/home/destinations/bali.jpg"
-                alt="A luxury resort with a pool by the sea"
-                height={50}
-              ></img>
+              <img src={bali} alt="A luxury resort with a pool by the sea" height={50}></img>
               <p>Bali</p>
               <p>Indonesia</p>
             </div>
             <div>
-              <img
-                src="src/assets/images/home/destinations/dubai.jpg"
-                alt="The Atlantis luxury resort in Dubai"
-                height={50}
-              ></img>
+              <img src={dubai} alt="The Atlantis luxury resort in Dubai" height={50}></img>
               <p>Dubai</p>
               <p>UAE</p>
             </div>
             <div>
               <img
-                src="src/assets/images/home/destinations/honolulu.jpg"
+                src={honolulu}
                 alt="A luxury resort with palm trees and a beach club"
                 height={50}
               ></img>
@@ -103,7 +108,7 @@ export default function Home() {
             </div>
             <div>
               <img
-                src="src/assets/images/home/destinations/marrakesh.jpg"
+                src={marrakesh}
                 alt="A luxury resort with Moroccan architecture"
                 height={50}
               ></img>
@@ -111,20 +116,12 @@ export default function Home() {
               <p>Morocco</p>
             </div>
             <div>
-              <img
-                src="src/assets/images/home/destinations/phuket.jpg"
-                alt="A luxury resort with a pool in the tropics"
-                height={50}
-              ></img>
+              <img src={phuket} alt="A luxury resort with a pool in the tropics" height={50}></img>
               <p>Phuket</p>
               <p>Thailand</p>
             </div>
             <div>
-              <img
-                src="src/assets/images/home/destinations/santorini.jpg"
-                alt="Houses in Santorini overlooking the sea"
-                height={50}
-              ></img>
+              <img src={santorini} alt="Houses in Santorini overlooking the sea" height={50}></img>
               <p>Santorini</p>
               <p>Greece</p>
             </div>
@@ -149,7 +146,7 @@ export default function Home() {
           </div>
           <div>
             <img
-              src="src/assets/images/home/venues/venues1.jpg"
+              src={venues1}
               alt="A resort with trees and a pool in the courtyard"
               height={50}
             ></img>
@@ -161,17 +158,13 @@ export default function Home() {
             </div>
             <Link to="/venues">
               <img
-                src="src/assets/images/home/venues/venues2.jpg"
+                src={venues2}
                 alt="A luxury resort with a pool and sunbeds at sundown"
                 height={50}
               ></img>
               <p>View all venues</p>
             </Link>
-            <img
-              src="src/assets/images/home/venues/venues3.jpg"
-              alt="Multiple luxury resorts on the beach"
-              height={50}
-            ></img>
+            <img src={venues3} alt="Multiple luxury resorts on the beach" height={50}></img>
             <div>
               <p>
                 Built for modern travellers, <strong>Holidaze</strong> combines luxury destinations
