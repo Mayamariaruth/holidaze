@@ -4,7 +4,7 @@ export interface AuthUser {
   name: string;
   email: string;
   avatar?: string;
-  venueManager: boolean;
+  venueManager?: boolean;
 }
 
 export interface AuthState {

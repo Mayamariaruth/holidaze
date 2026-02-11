@@ -24,12 +24,7 @@ export function useAuth() {
     }
   };
 
-  const register = async (
-    name: string,
-    email: string,
-    password: string,
-    venueManager?: boolean
-  ) => {
+  const register = async (name: string, email: string, password: string, venueManager: boolean) => {
     try {
       setIsLoading(true);
       setIsError(false);

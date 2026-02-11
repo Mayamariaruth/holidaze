@@ -31,22 +31,34 @@ export default function Navbar() {
               </li>
             </>
           ) : (
-            <li className="nav-item">
-              <Link className="nav-link fw-normal text-white" to={dashboardRoute}>
-                Dashboard
-              </Link>
-            </li>
+            <ul className="navbar-nav gap-5">
+              <li className="nav-item">
+                <Link className="nav-link fw-normal text-white" to="/">
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link fw-normal text-white" to="/venues">
+                  Venues
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link fw-normal text-white" to={dashboardRoute}>
+                  Dashboard
+                </Link>
+              </li>
+            </ul>
           )}
         </ul>
 
         {/* Buttons */}
         <div>
           {!isAuthenticated ? (
-            <Link to="/login" className="btn btn-outline-white nav-login-btn">
+            <Link to="/login" className="btn btn-outline-white nav-btn">
               Login
             </Link>
           ) : (
-            <button className="btn btn-cta" onClick={logout}>
+            <button className="btn btn-cta nav-btn" onClick={logout}>
               Logout
             </button>
           )}

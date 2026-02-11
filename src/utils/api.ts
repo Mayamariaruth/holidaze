@@ -12,10 +12,13 @@ export async function apiFetch<T>(url: string, options: RequestInit = {}): Promi
     },
   });
 
+  const json = await response.json().catch(() => null);
+
   if (!response.ok) {
-    throw new Error('API request failed');
+    console.error('API error:', json);
+    const message = json?.message || response.statusText || 'API request failed';
+    throw new Error(message);
   }
 
-  const json = await response.json();
-  return json.data ?? json;
+  return json?.data ?? json;
 }

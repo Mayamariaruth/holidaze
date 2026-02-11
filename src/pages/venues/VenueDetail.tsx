@@ -93,11 +93,11 @@ export default function VenueDetail() {
         <Link to="/" className="text-decoration-none text-muted">
           Home
         </Link>
-        <i class="fa-solid fa-angle-right text-muted"></i>
+        <i className="fa-solid fa-angle-right text-muted"></i>
         <Link to="/venues" className="text-decoration-none text-muted">
           Venues
         </Link>
-        <i class="fa-solid fa-angle-right text-muted"></i>
+        <i className="fa-solid fa-angle-right text-muted"></i>
         <span className="active text-muted">{venue.name}</span>
       </nav>
 

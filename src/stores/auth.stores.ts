@@ -19,7 +19,7 @@ export const useAuthStore = create<AuthStore>()(
         set({
           user,
           accessToken: token,
-          role: user.venueManager ? 'venue_manager' : 'customer',
+          role: user?.venueManager ? 'venue_manager' : 'customer',
           isAuthenticated: true,
         }),
 

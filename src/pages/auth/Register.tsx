@@ -11,8 +11,6 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [venueManager, setVenueManager] = useState(false);
-
-  // Track errors per field
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

@@ -164,7 +164,6 @@ export default function Home() {
 
       {/* View all venues */}
       <section className="mb-5">
-        {/* Heading */}
         <div className="mb-5 d-flex align-items-center justify-content-center gap-3">
           <hr className="title-line" />
           <h2 className="fw-semibold text-center m-0">Discover exceptional places to stay</h2>

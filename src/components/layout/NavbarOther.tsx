@@ -31,22 +31,37 @@ export default function NavbarOther() {
               </li>
             </>
           ) : (
-            <li className="nav-item">
-              <Link className="nav-link nav-link-other fw-normal text-primary" to={dashboardRoute}>
-                Dashboard
-              </Link>
-            </li>
+            <ul className="navbar-nav gap-5">
+              <li className="nav-item">
+                <Link className="nav-link nav-link-other fw-normal text-primary" to="/">
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link nav-link-other fw-normal text-primary" to="/venues">
+                  Venues
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  className="nav-link nav-link-other fw-normal text-primary"
+                  to={dashboardRoute}
+                >
+                  Dashboard
+                </Link>
+              </li>
+            </ul>
           )}
         </ul>
 
         {/* Buttons */}
         <div>
           {!isAuthenticated ? (
-            <Link to="/login" className="btn btn-primary nav-login-btn">
+            <Link to="/login" className="btn btn-primary nav-btn">
               Login
             </Link>
           ) : (
-            <button className="btn btn-cta" onClick={logout}>
+            <button className="btn btn-cta nav-btn" onClick={logout}>
               Logout
             </button>
           )}
