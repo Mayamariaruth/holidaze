@@ -11,7 +11,7 @@ export default function DeleteVenue() {
           <div className="modal-content p-3">
             <div className="modal-header">
               <div className="delete-trash">
-                <i class="fa-regular fa-trash-can"></i>
+                <i className="fa-regular fa-trash-can"></i>
               </div>
               <button type="button" data-bs-dismiss="modal">
                 <i className="fa-solid fa-xmark"></i>
