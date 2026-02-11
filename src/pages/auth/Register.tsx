@@ -43,70 +43,72 @@ export default function Register() {
   };
 
   return (
-    <div className="container py-5">
-      <div className="auth-form-wrapper" style={{ backgroundImage: `url(${bgImg})` }}>
-        <div className="auth-form">
-          <form onSubmit={handleSubmit} className="register-form">
-            <h1>Register an account with us</h1>
-            {/* Name */}
-            <label htmlFor="name">Full Name</label>
+    <div
+      className="auth-page py-5 mb-4 mt-4 rounded-4"
+      style={{ backgroundImage: `url(${bgImg})` }}
+    >
+      <div className="hero-overlay rounded-4"></div>
+      <div className="auth-form bg-white rounded-4 p-5 position-relative">
+        <form onSubmit={handleSubmit}>
+          <h1 className="mb-3">Register an account with us</h1>
+          <p className="auth-text fw-medium mb-4">
+            Choose how you’d like to use Holidaze — whether booking stays or managing venues, your
+            account gives you full access.
+          </p>
+          {/* Name */}
+          <label htmlFor="name">Name</label>
+          <input
+            id="name"
+            placeholder="Heidi123"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className={`form-control mb-3 ${errors.name ? 'is-invalid' : ''}`}
+          />
+          {errors.name && <div className="invalid-feedback">{errors.name}</div>}
+
+          {/* Email */}
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            placeholder="heidi@stud.noroff.no"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`form-control mb-3 ${errors.email ? 'is-invalid' : ''}`}
+          />
+          {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+
+          {/* Password */}
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            placeholder="********"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={`form-control mb-3 ${errors.password ? 'is-invalid' : ''}`}
+          />
+          {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+
+          {/* Account type checkbox */}
+          <div className="form-check my-3">
             <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+              type="checkbox"
+              id="venueManager"
+              className="form-check-input me-2"
+              checked={venueManager}
+              onChange={(e) => setVenueManager(e.target.checked)}
             />
-            {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-
-            {/* Email */}
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-            />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
-
-            {/* Password */}
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-            />
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
-
-            {/* Account type checkbox */}
-            <div className="form-check my-3">
-              <input
-                type="checkbox"
-                id="venueManager"
-                className="form-check-input"
-                checked={venueManager}
-                onChange={(e) => setVenueManager(e.target.checked)}
-              />
-              <label htmlFor="venueManager" className="form-check-label">
-                Register as Venue Manager
-              </label>
-            </div>
-
-            <button type="submit" className="btn btn-primary" disabled={isLoading}>
-              {isLoading ? 'Registering…' : 'Register'}
-            </button>
-          </form>
-          <div>
-            <img
-              src="src/assets/images/auth/register.jpg"
-              className="register-img"
-              alt="Luxury hotel lounge"
-            />
+            <label htmlFor="venueManager" className="form-check-label">
+              Register as Venue Manager
+            </label>
           </div>
-        </div>
+
+          <button type="submit" className="btn btn-primary mt-4 w-100" disabled={isLoading}>
+            {isLoading ? 'Registering…' : 'Register'}
+          </button>
+        </form>
       </div>
     </div>
   );

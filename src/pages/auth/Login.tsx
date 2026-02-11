@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import bgImg from '../../assets/images/auth/login.jpg';
@@ -33,43 +34,44 @@ export default function Login() {
   };
 
   return (
-    <div className="container py-5 auth-page mb-5">
-      <div className="auth-form-wrapper" style={{ backgroundImage: `url(${bgImg})` }}>
-        <div className="auth-form">
-          <form onSubmit={handleSubmit} className="login-form">
-            <h1 className="mb-4">Login to your account</h1>
-            <h2 className="hero-text mb-4 h4">
-              Login to access your bookings, manage your profile, or update your venues — all from
-              one place.
-            </h2>
-            {/* Email */}
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={`form-control mb-3 ${errors.email ? 'is-invalid' : ''}`}
-            />
-            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+    <div className="hero py-5 mb-4 mt-4 rounded-4" style={{ backgroundImage: `url(${bgImg})` }}>
+      <div className="hero-overlay rounded-4"></div>
+      <div className="auth-form bg-white rounded-4 p-5 position-relative">
+        <form onSubmit={handleSubmit}>
+          <h1 className="mb-4">Login to your account</h1>
+          <p className="auth-text fw-medium mb-4">
+            Login to access your bookings, manage your profile, or update your venues — all from one
+            place.
+          </p>
+          {/* Email */}
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`form-control mb-3 ${errors.email ? 'is-invalid' : ''}`}
+          />
+          {errors.email && <div className="invalid-feedback">{errors.email}</div>}
 
-            {/* Password */}
-            <label htmlFor="password">Password</label>
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-            />
-            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+          {/* Password */}
+          <label htmlFor="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+          />
+          {errors.password && <div className="invalid-feedback">{errors.password}</div>}
 
-            <button type="submit" className="btn btn-cta mt-4 w-100" disabled={isLoading}>
-              {isLoading ? 'Logging in…' : 'Login'}
-            </button>
-            <p className="text-center text-neutral mt-2">Forgot your password?</p>
-          </form>
-        </div>
+          <button type="submit" className="btn btn-cta mt-4 w-100" disabled={isLoading}>
+            {isLoading ? 'Logging in…' : 'Login'}
+          </button>
+          <p className="text-center text-neutral mt-2">
+            Don't have an account? Register <Link to="/register">here</Link>
+          </p>
+        </form>
       </div>
     </div>
   );

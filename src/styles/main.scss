@@ -51,16 +51,19 @@ footer {
   max-width: 300px;
 }
 
-.heading-line {
-  color: white;
-}
-
 input:focus {
   border: solid 2px;
 }
 
-@media (min-width: 998px) {
-  .heading-line {
-    color: $dark;
-  }
+.form-control.is-invalid {
+  border-color: $danger;
+  background-color: #ebbaba;
+  margin-bottom: 5px !important;
+}
+
+.invalid-feedback {
+  margin-top: 0;
+  font-size: 16px;
+  color: $danger;
+  margin-bottom: 13px;
 }

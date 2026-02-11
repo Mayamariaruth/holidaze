@@ -43,8 +43,9 @@
   color: #fff;
   background-color: $primary !important;
 
-  &:hover {
-    background-color: $primary-hover;
+  &:hover,
+  &:focus {
+    background-color: $primary-hover !important;
   }
 }
 
@@ -56,8 +57,9 @@
   color: #fff;
   background-color: $secondary;
 
-  &:hover {
-    background-color: $secondary-hover;
+  &:hover,
+  &:focus {
+    background-color: $secondary-hover !important;
   }
 }
 
@@ -69,7 +71,8 @@
   color: $neutral-900;
   border: 1px solid $neutral-700;
 
-  &:hover {
-    background-color: $neutral-500;
+  &:hover,
+  &:focus {
+    background-color: $neutral-500 !important;
   }
 }
