@@ -117,7 +117,7 @@ export default function Home() {
       {/* Top Destinations */}
       <section className="mb-5 mt-5">
         <div className="d-flex align-items-center gap-3 mb-3">
-          <h2 className="mb-2 ps-5">Top Destinations</h2>
+          <h2 className="mb-2 ps-5 me-4">Top Destinations</h2>
           <hr className="flex-grow-1" />
         </div>
 
@@ -140,9 +140,9 @@ export default function Home() {
       </section>
 
       {/* Highest rated */}
-      <section className="highest-rated mb-5 position-relative">
+      <section className="highest-rated">
         <div className="d-flex align-items-center gap-3 mb-3">
-          <hr className="flex-grow-1" />
+          <hr className="flex-grow-1 ms-4" />
           <h2 className="mb-2 pe-5">Highest rated</h2>
         </div>
         <div className="rated-wrapper">
@@ -163,37 +163,50 @@ export default function Home() {
       </section>
 
       {/* View all venues */}
-      <section>
-        <div>
-          <hr></hr>
-          <h2>Discover exceptional places to stay</h2>
+      <section className="mb-5">
+        {/* Heading */}
+        <div className="mb-5 d-flex align-items-center justify-content-center gap-3">
+          <hr className="title-line" />
+          <h2 className="fw-semibold text-center m-0">Discover exceptional places to stay</h2>
+          <hr className="title-line" />
         </div>
-        <div>
-          <img
-            src={venues1}
-            alt="A resort with trees and a pool in the courtyard"
-            height={50}
-          ></img>
-          <div>
-            <p>
-              From intimate retreats to refined city escapes, explore carefully selected venues
-              designed for comfort, style, and unforgettable stays.
-            </p>
-          </div>
-          <Link to="/venues">
-            <img
-              src={venues2}
-              alt="A luxury resort with a pool and sunbeds at sundown"
-              height={50}
-            ></img>
-            <p>View all venues</p>
-          </Link>
-          <img src={venues3} alt="Multiple luxury resorts on the beach" height={50}></img>
-          <div>
-            <p>
-              Built for modern travellers, <strong>Holidaze</strong> combines luxury destinations
-              with a seamless booking experience, all in one place.
-            </p>
+
+        <div className="container">
+          <div className="row g-4 mb-5">
+            <div className="col-12 col-lg-4 p-0">
+              <div className="image-wrapper">
+                <img src={venues1} alt="Beautiful luxury resort" className="img-fluid" />
+
+                <div className="info-box mt-4">
+                  <p>
+                    From intimate retreats to refined city escapes, explore carefully selected
+                    venues designed for comfort, style, and unforgettable stays.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="col-12 col-lg-4 p-0">
+              <Link to="/venues" className="image-wrapper d-block text-decoration-none">
+                <img src={venues2} alt="Beautiful luxury resort" className="img-fluid" />
+
+                <div className="home-overlay"></div>
+
+                <div className="overlay-text">View all venues</div>
+              </Link>
+            </div>
+
+            <div className="col-12 col-lg-4 p-0">
+              <div className="image-wrapper">
+                <div className="info-box mb-4">
+                  <p>
+                    Built for modern travellers, <strong>Holidaze</strong> combines luxury
+                    destinations with a seamless booking experience, all in one place.
+                  </p>
+                </div>
+                <img src={venues3} alt="Beautiful luxury resort" className="img-fluid" />
+              </div>
+            </div>
           </div>
         </div>
       </section>
