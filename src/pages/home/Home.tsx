@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import Calendar from '../../components/modals/Calendar';
+import { useEffect, useRef, useState } from 'react';
+import { endpoints } from '../../config/api';
+import { apiFetch } from '../../utils/api';
+import type { Venue } from '../../types/venue.types';
+import VenueCard from '../../components/cards/VenueCard';
+
+import scrollIcon from '../../assets/icons/scroll-icon.png';
 import heroImage from '../../assets/images/home/hero.jpg';
 import bali from '../../assets/images/home/destinations/bali.jpg';
 import dubai from '../../assets/images/home/destinations/dubai.jpg';
@@ -16,6 +22,35 @@ export default function Home() {
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
+  const [ratedVenues, setRatedVenues] = useState<Venue[]>([]);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const scroll = (direction: 'left' | 'right'): void => {
+    if (!scrollRef.current) return;
+
+    const scrollAmount = 400;
+
+    scrollRef.current.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
+  useEffect(() => {
+    async function fetchVenues() {
+      try {
+        const venues = await apiFetch<Venue[]>(`${endpoints.venues}?limit=20`);
+
+        const sorted = venues.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 10);
+
+        setRatedVenues(sorted);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetchVenues();
+  }, []);
 
   return (
     <>
@@ -79,101 +114,89 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="container">
-        {/* Top Destinations */}
-        <section>
-          <div>
-            <hr></hr>
-            <h2>Top Destinations</h2>
-          </div>
-          <div>
-            <div>
-              <img src={bali} alt="A luxury resort with a pool by the sea" height={50}></img>
-              <p>Bali</p>
-              <p>Indonesia</p>
-            </div>
-            <div>
-              <img src={dubai} alt="The Atlantis luxury resort in Dubai" height={50}></img>
-              <p>Dubai</p>
-              <p>UAE</p>
-            </div>
-            <div>
-              <img
-                src={honolulu}
-                alt="A luxury resort with palm trees and a beach club"
-                height={50}
-              ></img>
-              <p>Honolulu</p>
-              <p>Hawaii</p>
-            </div>
-            <div>
-              <img
-                src={marrakesh}
-                alt="A luxury resort with Moroccan architecture"
-                height={50}
-              ></img>
-              <p>Marrakesh</p>
-              <p>Morocco</p>
-            </div>
-            <div>
-              <img src={phuket} alt="A luxury resort with a pool in the tropics" height={50}></img>
-              <p>Phuket</p>
-              <p>Thailand</p>
-            </div>
-            <div>
-              <img src={santorini} alt="Houses in Santorini overlooking the sea" height={50}></img>
-              <p>Santorini</p>
-              <p>Greece</p>
-            </div>
-          </div>
-        </section>
+      {/* Top Destinations */}
+      <section className="mb-5 mt-5">
+        <div className="d-flex align-items-center gap-3 mb-3">
+          <h2 className="mb-2 ps-5">Top Destinations</h2>
+          <hr className="flex-grow-1" />
+        </div>
 
-        {/* Highest rated */}
-        <section>
-          <div>
-            <hr></hr>
-            <h2>Highest rated</h2>
-          </div>
-          {/* Venues (dynamically generated) */}
-          <div className="rated-container"></div>
-        </section>
+        <div className="destinations-scroll d-flex gap-4 overflow-auto pb-2">
+          {[
+            { img: bali, city: 'Bali', country: 'Indonesia' },
+            { img: dubai, city: 'Dubai', country: 'UAE' },
+            { img: honolulu, city: 'Honolulu', country: 'Hawaii' },
+            { img: marrakesh, city: 'Marrakesh', country: 'Morocco' },
+            { img: phuket, city: 'Phuket', country: 'Thailand' },
+            { img: santorini, city: 'Santorini', country: 'Greece' },
+          ].map((destination) => (
+            <div key={destination.city} className="text-center flex-shrink-0 destination-item">
+              <img src={destination.img} alt={destination.city} className="destination-img" />
+              <p className="mb-0 fw-medium mt-2">{destination.city}</p>
+              <small className="text-muted">{destination.country}</small>
+            </div>
+          ))}
+        </div>
+      </section>
 
-        {/* View all venues */}
-        <section>
-          <div>
-            <hr></hr>
-            <h2>Discover exceptional places to stay</h2>
+      {/* Highest rated */}
+      <section className="highest-rated mb-5 position-relative">
+        <div className="d-flex align-items-center gap-3 mb-3">
+          <hr className="flex-grow-1" />
+          <h2 className="mb-2 pe-5">Highest rated</h2>
+        </div>
+        <div className="rated-wrapper">
+          <button type="button" className="scroll-btn left" onClick={() => scroll('left')}>
+            <img src={scrollIcon} alt="Scroll left" />
+          </button>
+
+          <div className="rated-scroll" ref={scrollRef}>
+            {ratedVenues.map((venue: Venue) => (
+              <VenueCard key={venue.id} venue={venue} />
+            ))}
           </div>
+
+          <button type="button" className="scroll-btn right" onClick={() => scroll('right')}>
+            <img src={scrollIcon} alt="Scroll right" />
+          </button>
+        </div>
+      </section>
+
+      {/* View all venues */}
+      <section>
+        <div>
+          <hr></hr>
+          <h2>Discover exceptional places to stay</h2>
+        </div>
+        <div>
+          <img
+            src={venues1}
+            alt="A resort with trees and a pool in the courtyard"
+            height={50}
+          ></img>
           <div>
+            <p>
+              From intimate retreats to refined city escapes, explore carefully selected venues
+              designed for comfort, style, and unforgettable stays.
+            </p>
+          </div>
+          <Link to="/venues">
             <img
-              src={venues1}
-              alt="A resort with trees and a pool in the courtyard"
+              src={venues2}
+              alt="A luxury resort with a pool and sunbeds at sundown"
               height={50}
             ></img>
-            <div>
-              <p>
-                From intimate retreats to refined city escapes, explore carefully selected venues
-                designed for comfort, style, and unforgettable stays.
-              </p>
-            </div>
-            <Link to="/venues">
-              <img
-                src={venues2}
-                alt="A luxury resort with a pool and sunbeds at sundown"
-                height={50}
-              ></img>
-              <p>View all venues</p>
-            </Link>
-            <img src={venues3} alt="Multiple luxury resorts on the beach" height={50}></img>
-            <div>
-              <p>
-                Built for modern travellers, <strong>Holidaze</strong> combines luxury destinations
-                with a seamless booking experience, all in one place.
-              </p>
-            </div>
+            <p>View all venues</p>
+          </Link>
+          <img src={venues3} alt="Multiple luxury resorts on the beach" height={50}></img>
+          <div>
+            <p>
+              Built for modern travellers, <strong>Holidaze</strong> combines luxury destinations
+              with a seamless booking experience, all in one place.
+            </p>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
     </>
   );
 }

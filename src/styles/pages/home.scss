@@ -28,3 +28,75 @@
 .hero-form button {
   height: 44px;
 }
+
+.destinations-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.destination-item {
+  width: 270px;
+}
+
+.destination-img {
+  width: 270px;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.highest-rated {
+  margin: 4rem 0;
+  position: relative;
+}
+
+.rated-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.rated-scroll > * {
+  flex: 0 0 auto;
+}
+
+.rated-scroll {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 1rem 2rem;
+}
+
+.rated-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.scroll-btn {
+  border: none;
+  background-color: transparent;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+  position: absolute;
+  z-index: 10;
+}
+
+.scroll-btn img {
+  width: 45px;
+}
+
+.scroll-btn.left {
+  left: 0;
+  transform: translateX(20%) scaleX(-1);
+}
+
+.scroll-btn.right {
+  right: 0;
+  transform: translateX(-20%);
+}
+
+@media (max-width: 768px) {
+  .scroll-btn {
+    display: none;
+  }
+}
