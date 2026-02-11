@@ -15,7 +15,7 @@ export default function Venues() {
         <div className="hero-overlay"></div>
       </section>
 
-      <div className="container">
+      <div className="container mb-5">
         <section className="venue-controls">
           {/* Search form */}
           <form className="search-bar rounded-4">
@@ -29,24 +29,24 @@ export default function Venues() {
           </form>
 
           {/* Filters */}
-          <div className="mt-5 d-flex gap-1">
+          <div className="mt-4 d-flex gap-3">
             <div className="dropdown filter-dropdown">
               <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                <i className="fa-regular fa-star me-2"></i> Rating
+                <i className="fa-regular fa-star me-1"></i> Rating
               </button>
               <ul className="dropdown-menu">...</ul>
             </div>
 
             <div className="dropdown filter-dropdown">
               <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                <i className="fa-solid fa-dollar-sign me-2"></i> Price
+                <i className="fa-solid fa-dollar-sign me-1"></i> Price
               </button>
               <ul className="dropdown-menu">...</ul>
             </div>
 
             <div className="dropdown filter-dropdown">
               <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                <i className="fa-solid fa-wifi me-2"></i> Amenities
+                <i className="fa-solid fa-wifi me-1"></i> Amenities
               </button>
               <ul className="dropdown-menu">...</ul>
             </div>
