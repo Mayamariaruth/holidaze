@@ -43,8 +43,9 @@ export default function VenueDetail() {
 
   async function handleBook() {
     if (!venue) return;
+    const token = useAuthStore.getState().accessToken;
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !token) {
       setError('You must be logged in to book');
       return;
     }

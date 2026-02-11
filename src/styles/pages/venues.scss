@@ -1,10 +1,4 @@
-.venue-hero {
-  height: 70vh;
-  background-size: cover;
-  background-position: center;
-  position: relative;
-}
-
+// Venue detail page
 .breadcrumb {
   font-size: 14px;
 }
@@ -15,9 +9,15 @@
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
 }
 
-.venue-card {
-  width: 230px;
-  height: 327px;
+// Venue list page
+.venue-hero {
+  height: 70vh;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.venue-card-list {
   background: white;
   border-radius: 16px;
   overflow: hidden;
@@ -25,32 +25,98 @@
   box-shadow:
     rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.venue-card:hover {
+.venue-card-list:hover {
   transform: translateY(-4px);
 }
 
-.venue-card img {
+.venue-card-list img {
   width: 100%;
-  height: 190px;
+  height: 220px;
   object-fit: cover;
 }
 
-.venue-card h4,
-.venue-card p {
+.venue-card-list h4,
+.venue-card-list p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
+.venue-controls {
+  margin-top: -100px;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.search-bar {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  padding: 1rem;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.search-bar input,
+.btn-search {
+  height: 44px;
+}
+
+.btn-search {
+  width: 100%;
+}
+
+.filter-dropdown .dropdown-toggle {
+  background: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.filter-dropdown .dropdown-toggle::after {
+  margin-left: 0.5rem;
+}
+
+.filter-dropdown .dropdown-menu {
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  padding: 0.5rem;
+}
+
+.dropdown-item {
+  border-radius: 10px;
+}
+
+.dropdown-item:hover {
+  background: $neutral-500;
+}
+
+.venues-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
 @media (min-width: 998px) {
-  .venue-card {
-    width: 344px;
-    height: 465px;
+  .venue-controls {
+    margin-top: -40px;
   }
 
-  .venue-card img {
-    height: 320px;
+  .search-bar {
+    flex-direction: row;
+    gap: 5px;
+  }
+
+  .btn-search {
+    width: 50%;
   }
 }

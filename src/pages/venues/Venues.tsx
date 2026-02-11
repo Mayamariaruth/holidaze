@@ -1,4 +1,4 @@
-import VenueCard from '../../components/cards/VenueCard';
+import VenueCardList from '../../components/cards/VenueCardList';
 import { useVenues } from '../../hooks/useVenues';
 import heroImage from '../../assets/images/venue-hero.jpg';
 
@@ -11,116 +11,53 @@ export default function Venues() {
   return (
     <>
       {/* Hero section */}
-      <section className="venue-hero" style={{ backgroundImage: `url(${heroImage})` }}></section>
+      <section className="venue-hero" style={{ backgroundImage: `url(${heroImage})` }}>
+        <div className="hero-overlay"></div>
+      </section>
 
       <div className="container">
-        {/* Search/Filter */}
-        <section>
-          <div>
-            {/* Search form */}
-            <form>
-              <input placeholder="Location" />
-              <input placeholder="Check-in / Check-out" />
-              <input placeholder="Guests" />
-              <button type="button" className="btn-cta">
-                Search
-              </button>
-            </form>
-          </div>
+        <section className="venue-controls">
+          {/* Search form */}
+          <form className="search-bar rounded-4">
+            <input type="text" className="form-control" placeholder="Location" />
+            <input type="text" className="form-control" placeholder="Check-in" />
+            <input type="text" className="form-control" placeholder="Check-out" />
+            <input type="number" className="form-control" placeholder="Guests" />
+            <button type="button" className="btn btn-cta btn-search">
+              Search
+            </button>
+          </form>
 
-          {/* Filter tabs */}
-          <div>
-            {/* Rating */}
-            <div className="dropdown">
+          {/* Filters */}
+          <div className="mt-5 d-flex gap-1">
+            <div className="dropdown filter-dropdown">
               <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                Rating
+                <i className="fa-regular fa-star me-2"></i> Rating
               </button>
-              <ul className="dropdown-menu">
-                <li>
-                  <button className="dropdown-item">Any</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">★ & up</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">★★ & up</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">★★★ & up</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">★★★★ & up</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">★★★★★</button>
-                </li>
-              </ul>
+              <ul className="dropdown-menu">...</ul>
             </div>
 
-            {/* Price */}
-            <div className="dropdown">
+            <div className="dropdown filter-dropdown">
               <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                Price
+                <i className="fa-solid fa-dollar-sign me-2"></i> Price
               </button>
-              <ul className="dropdown-menu">
-                <li>
-                  <button className="dropdown-item">Any</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Under $100</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">$100 – $300</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">$300+</button>
-                </li>
-              </ul>
+              <ul className="dropdown-menu">...</ul>
             </div>
 
-            {/* Amenities */}
-            <div className="dropdown">
+            <div className="dropdown filter-dropdown">
               <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                Amenities
+                <i className="fa-solid fa-wifi me-2"></i> Amenities
               </button>
-              <ul className="dropdown-menu">
-                <li>
-                  <button className="dropdown-item">WiFi</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Parking</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Pool</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Breakfast</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Gym</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Spa</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">TV</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Pet friendly</button>
-                </li>
-                <li>
-                  <button className="dropdown-item">Wheelchair accessible</button>
-                </li>
-              </ul>
+              <ul className="dropdown-menu">...</ul>
             </div>
           </div>
         </section>
 
         {/* Venues list */}
-        <section className="venue-list-container">
+        <section>
           <div className="venues-grid">
             {venues.map((venue) => (
-              <VenueCard key={venue.id} venue={venue} />
+              <VenueCardList key={venue.id} venue={venue} />
             ))}
           </div>
         </section>

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { endpoints } from '../../config/api';
 import { apiFetch } from '../../utils/api';
 import type { Venue } from '../../types/venue.types';
-import VenueCard from '../../components/cards/VenueCard';
+import VenueCardHome from '../../components/cards/VenueCardHome';
 
 import scrollIcon from '../../assets/icons/scroll-icon.png';
 import heroImage from '../../assets/images/home/hero.jpg';
@@ -117,8 +117,8 @@ export default function Home() {
       {/* Top Destinations */}
       <section className="mb-5 mt-5">
         <div className="d-flex align-items-center gap-3 mb-3">
-          <h2 className="mb-2 ps-5 me-4">Top Destinations</h2>
-          <hr className="flex-grow-1" />
+          <h2 className="mb-2 ps-5">Top Destinations</h2>
+          <hr className="flex-grow-1 me-4" />
         </div>
 
         <div className="destinations-scroll d-flex gap-4 overflow-auto pb-2">
@@ -152,7 +152,7 @@ export default function Home() {
 
           <div className="rated-scroll" ref={scrollRef}>
             {ratedVenues.map((venue: Venue) => (
-              <VenueCard key={venue.id} venue={venue} />
+              <VenueCardHome key={venue.id} venue={venue} />
             ))}
           </div>
 
@@ -164,7 +164,7 @@ export default function Home() {
 
       {/* View all venues */}
       <section className="mb-5">
-        <div className="mb-5 d-flex align-items-center justify-content-center gap-3">
+        <div className="mb-4 d-flex align-items-center justify-content-center gap-3">
           <hr className="title-line" />
           <h2 className="fw-semibold text-center m-0">Discover exceptional places to stay</h2>
           <hr className="title-line" />
