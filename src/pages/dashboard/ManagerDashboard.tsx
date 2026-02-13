@@ -27,7 +27,7 @@ export default function ManagerDashboard() {
   }, [user]);
 
   return (
-    <Dashboard profile={profile}>
+    <Dashboard profile={profile} setProfile={setProfile}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <p className="h2">Venues</p>

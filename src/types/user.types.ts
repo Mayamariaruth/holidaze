@@ -31,6 +31,7 @@ export interface Favorite {
 export interface UserProfile {
   name: string;
   email: string;
+  bio?: string;
   avatar?: {
     url: string;
     alt: string;
@@ -42,4 +43,15 @@ export interface UserProfile {
   bookings?: UserBooking[];
   favorites?: Favorite[];
   venueManager?: boolean;
+}
+
+export interface UpdateProfilePayload {
+  bio?: string;
+  venueManager?: boolean;
+  banner?: {
+    url: string;
+  };
+  avatar?: {
+    url: string;
+  };
 }

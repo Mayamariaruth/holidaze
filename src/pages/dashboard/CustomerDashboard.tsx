@@ -29,7 +29,7 @@ export default function CustomerDashboard() {
   }, [user]);
 
   return (
-    <Dashboard profile={profile}>
+    <Dashboard profile={profile} setProfile={setProfile}>
       {/* Tabs */}
       <div className="tabs mb-4 d-flex">
         <button

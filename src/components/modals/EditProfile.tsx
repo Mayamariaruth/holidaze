@@ -1,14 +1,86 @@
+import { useState, useEffect } from 'react';
+import type { UserProfile } from '../../types/user.types';
+import { useAuthStore } from '../../stores/auth.stores';
+import { getProfile, updateProfile } from '../../services/profiles.service';
+
 interface Props {
+  profile: UserProfile | null;
+  setProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   onClose: () => void;
 }
 
-export default function EditProfile({ onClose }: Props) {
+export default function EditProfile({ profile, setProfile, onClose }: Props) {
+  const { setRole } = useAuthStore();
+
+  const [formState, setFormState] = useState({
+    bio: '',
+    accountType: 'customer' as 'customer' | 'manager',
+    banner: '',
+    avatar: '',
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  // Autofill when profile loads
+  useEffect(() => {
+    if (!profile) return;
+
+    setFormState({
+      bio: profile.bio || '',
+      accountType: profile.venueManager ? 'manager' : 'customer',
+      banner: profile.banner?.url || '',
+      avatar: profile.avatar?.url || '',
+    });
+  }, [profile]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormState((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAccountTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState((prev) => ({
+      ...prev,
+      accountType: e.target.value as 'customer' | 'manager',
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!profile) return;
+
+    setLoading(true);
+
+    try {
+      await updateProfile(profile.name, {
+        bio: formState.bio,
+        venueManager: formState.accountType === 'manager',
+        banner: formState.banner ? { url: formState.banner } : undefined,
+        avatar: formState.avatar ? { url: formState.avatar } : undefined,
+      });
+
+      // Refetch full profile
+      const freshProfile = await getProfile(profile.name);
+      setProfile(freshProfile);
+
+      // Update auth role immediately
+      setRole(formState.accountType === 'manager' ? 'venue_manager' : 'customer');
+
+      onClose();
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (!profile) return null;
+
   return (
     <>
-      {/* Backdrop */}
       <div className="modal-backdrop fade show" onClick={onClose}></div>
 
-      <div className="modal show d-block" tabIndex={-1} aria-modal="true" role="dialog">
+      <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content p-3">
             <div className="modal-header">
@@ -17,83 +89,83 @@ export default function EditProfile({ onClose }: Props) {
             </div>
 
             <div className="modal-body">
-              <form id="edit-profile-form" noValidate>
+              <form onSubmit={handleSubmit}>
                 {/* Account type */}
                 <div className="mb-3">
                   <label className="form-label">Account type</label>
                   <div className="d-flex gap-4">
-                    <div className="d-flex flex-column align-items-start gap-1">
-                      <label htmlFor="customer">Customer</label>
-                      <input type="radio" id="customer" name="accountType" />
+                    <div className="d-flex flex-column gap-1 align-items-start">
+                      <label>Customer</label>
+                      <input
+                        type="radio"
+                        name="accountType"
+                        value="customer"
+                        checked={formState.accountType === 'customer'}
+                        onChange={handleAccountTypeChange}
+                      />
                     </div>
-                    <div className="d-flex flex-column align-items-start gap-1">
-                      <label htmlFor="manager">Manager</label>
-                      <input type="radio" id="manager" name="accountType" />
+                    <div className="d-flex flex-column gap-1 align-items-start">
+                      <label>Manager</label>
+                      <input
+                        type="radio"
+                        name="accountType"
+                        value="manager"
+                        checked={formState.accountType === 'manager'}
+                        onChange={handleAccountTypeChange}
+                      />
                     </div>
                   </div>
                 </div>
 
-                {/* Name */}
-                <div className="mb-3">
-                  <label htmlFor="profile-name" className="form-label">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="profile-name"
+                {/* Bio */}
+                <div className="mb-4">
+                  <label className="form-label mb-0">Bio</label>
+                  <textarea
+                    name="bio"
                     className="form-control"
-                    placeholder="name123"
-                  />
-                </div>
-
-                {/* Email */}
-                <div className="mb-3">
-                  <label htmlFor="profile-email" className="form-label">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="profile-email"
-                    className="form-control"
-                    placeholder="name@stud.noroff.no"
+                    value={formState.bio}
+                    onChange={handleChange}
                   />
                 </div>
 
                 {/* Banner */}
-                <div className="mb-3">
-                  <label htmlFor="profile-banner" className="form-label">
-                    Banner URL
-                  </label>
+                <div className="mb-4">
+                  <label className="form-label mb-0">Banner URL</label>
                   <input
                     type="text"
-                    id="profile-banner"
+                    name="banner"
                     className="form-control"
-                    placeholder="https://url.com/placeholder"
+                    value={formState.banner}
+                    onChange={handleChange}
                   />
                 </div>
 
                 {/* Avatar */}
-                <div className="mb-3">
-                  <label htmlFor="profile-avatar" className="form-label">
-                    Avatar URL
-                  </label>
+                <div className="mb-4">
+                  <label className="form-label mb-0">Avatar URL</label>
                   <input
                     type="text"
-                    id="profile-avatar"
+                    name="avatar"
                     className="form-control"
-                    placeholder="https://url.com/placeholder"
+                    value={formState.avatar}
+                    onChange={handleChange}
                   />
                 </div>
 
                 <hr />
 
-                {/* Buttons */}
-                <div className="d-flex flex-row gap-2 mt-4">
-                  <button type="button" className="btn btn-cancel flex-fill" onClick={onClose}>
+                <div className="d-flex gap-2 mt-4">
+                  <button
+                    type="button"
+                    className="btn btn-cancel flex-fill"
+                    onClick={onClose}
+                    disabled={loading}
+                  >
                     Cancel
                   </button>
-                  <button type="submit" className="btn btn-primary flex-fill">
-                    Confirm
+
+                  <button type="submit" className="btn btn-primary flex-fill" disabled={loading}>
+                    {loading ? 'Updating...' : 'Confirm'}
                   </button>
                 </div>
               </form>

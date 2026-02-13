@@ -5,6 +5,7 @@ import type { AuthState, AuthUser } from '../types/auth.types';
 interface AuthStore extends AuthState {
   login: (user: AuthUser, token: string) => void;
   logout: () => void;
+  setRole: (role: 'customer' | 'venue_manager') => void; // new
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -30,6 +31,8 @@ export const useAuthStore = create<AuthStore>()(
           role: null,
           isAuthenticated: false,
         }),
+
+      setRole: (role) => set({ role }),
     }),
     {
       name: 'holidaze-auth',
