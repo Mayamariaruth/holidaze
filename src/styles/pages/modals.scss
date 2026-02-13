@@ -22,3 +22,19 @@
 input[type='radio'] {
   accent-color: $secondary;
 }
+
+.delete-trash {
+  background-color: #ebbaba;
+  border-radius: 50%;
+  height: 42px;
+  width: 42px;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fa-trash-can {
+  color: $danger;
+  font-size: 20px;
+}

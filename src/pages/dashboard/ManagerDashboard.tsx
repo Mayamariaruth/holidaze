@@ -5,10 +5,12 @@ import Dashboard from '../../components/layout/Dashboard';
 import CreateVenue from '../../components/modals/CreateVenue';
 import type { UserProfile } from '../../types/user.types';
 import type { Venue } from '../../types/venue.types';
+import DeleteVenue from '../../components/modals/DeleteVenue';
 
 export default function ManagerDashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -32,6 +34,13 @@ export default function ManagerDashboard() {
     setProfile((prev) => ({
       ...prev!,
       venues: prev?.venues ? [...prev.venues, venue] : [venue],
+    }));
+  };
+
+  const handleVenueDelete = (id: string) => {
+    setProfile((prev) => ({
+      ...prev!,
+      venues: prev?.venues?.filter((v) => v.id !== id) || [],
     }));
   };
 
@@ -83,7 +92,12 @@ export default function ManagerDashboard() {
                   {/* Buttons */}
                   <div className="btn-container d-flex flex-row flex-md-column gap-2">
                     <button className="btn btn-cancel flex-grow-1">Edit</button>
-                    <button className="btn btn-danger flex-grow-1">Delete</button>
+                    <button
+                      className="btn btn-danger flex-grow-1"
+                      onClick={() => setDeleteVenueId(venue.id)}
+                    >
+                      Delete
+                    </button>
                   </div>
                 </div>
               </div>
@@ -97,6 +111,15 @@ export default function ManagerDashboard() {
       {/* Create Venue Modal */}
       {showCreateModal && (
         <CreateVenue onClose={() => setShowCreateModal(false)} onCreate={handleCreateVenue} />
+      )}
+
+      {/* Delete Venue Modal */}
+      {deleteVenueId && (
+        <DeleteVenue
+          venueId={deleteVenueId}
+          onClose={() => setDeleteVenueId(null)}
+          onDelete={handleVenueDelete}
+        />
       )}
     </Dashboard>
   );

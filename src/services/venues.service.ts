@@ -16,3 +16,9 @@ export function createVenue(ownerName: string, payload: VenuePayload) {
     body: JSON.stringify({ ...payload, owner: { name: ownerName } }),
   });
 }
+
+export function deleteVenue(id: string) {
+  return apiFetch(`${endpoints.venues}/${id}`, {
+    method: 'DELETE',
+  });
+}
