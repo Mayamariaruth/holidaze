@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useAuthStore } from '../stores/auth.stores';
 import { loginUser, registerUser } from '../services/auth.service';
+import type { AuthUser } from '../types/auth.types';
 
 export function useAuth() {
   const loginToStore = useAuthStore((s) => s.login);
@@ -14,7 +15,10 @@ export function useAuth() {
       setIsLoading(true);
       setIsError(false);
 
-      const { user, accessToken } = await loginUser({ email, password });
+      const data = await loginUser({ email, password });
+      const { name, email: userEmail, venueManager, accessToken } = data;
+      const user: AuthUser = { name, email: userEmail, venueManager };
+
       loginToStore(user, accessToken);
     } catch (error) {
       setIsError(true);

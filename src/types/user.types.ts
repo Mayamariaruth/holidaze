@@ -2,11 +2,14 @@ export type AccountType = 'customer' | 'venue_manager';
 
 export interface UserBooking {
   id: string;
-  venueName: string;
   dateFrom: string;
   dateTo: string;
   guests: number;
   status: string;
+  venue?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface Favorite {
@@ -16,10 +19,16 @@ export interface Favorite {
 }
 
 export interface UserProfile {
-  id: string;
   name: string;
   email: string;
-  avatar?: string;
+  avatar?: {
+    url: string;
+    alt: string;
+  };
+  banner?: {
+    url: string;
+    alt: string;
+  };
   accountType: AccountType;
   bookings?: UserBooking[];
   favorites?: Favorite[];

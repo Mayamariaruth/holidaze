@@ -3,8 +3,10 @@ import { apiFetch } from '../utils/api';
 import type { AuthUser } from '../types/auth.types';
 
 interface LoginResponse {
+  name: string;
+  email: string;
+  venueManager: boolean;
   accessToken: string;
-  user: AuthUser;
 }
 
 interface RegisterPayload {

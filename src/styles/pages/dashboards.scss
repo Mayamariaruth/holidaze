@@ -1,0 +1,22 @@
+.dashboard-banner {
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  min-height: 300px;
+}
+
+.profile-card {
+  max-width: 700px;
+  margin: -80px auto 0;
+  z-index: 10;
+}
+
+.profile-avatar {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.dashboard-content .tabs .btn {
+  flex: 1;
+}
