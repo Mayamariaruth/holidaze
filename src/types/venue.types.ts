@@ -37,7 +37,13 @@ export interface Location {
 }
 
 export interface VenuePayload {
+  id: string;
   name: string;
+  description?: string;
+  price: number;
+  rating?: number;
+  maxGuests: number;
+  meta: VenueMeta;
   location: Location;
   media?: {
     url: string;

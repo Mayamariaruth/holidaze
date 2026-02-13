@@ -10,9 +10,9 @@ export function fetchVenueById(id: string) {
   return apiFetch(`${endpoints.venues}/${id}?_bookings=true&_owner=true`);
 }
 
-export function createVenue(payload: VenuePayload) {
+export function createVenue(ownerName: string, payload: VenuePayload) {
   return apiFetch<Venue>(`${endpoints.venues}`, {
     method: 'POST',
-    body: JSON.stringify({ ...payload }),
+    body: JSON.stringify({ ...payload, owner: { name: ownerName } }),
   });
 }

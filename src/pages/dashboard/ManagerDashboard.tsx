@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../stores/auth.stores';
 import { getProfile } from '../../services/profiles.service';
 import Dashboard from '../../components/layout/Dashboard';
+import CreateVenue from '../../components/modals/CreateVenue';
 import type { UserProfile } from '../../types/user.types';
+import type { Venue } from '../../types/venue.types';
 
 export default function ManagerDashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -25,12 +28,21 @@ export default function ManagerDashboard() {
     fetchProfile();
   }, [user]);
 
+  const handleCreateVenue = async (venue: Venue) => {
+    setProfile((prev) => ({
+      ...prev!,
+      venues: prev?.venues ? [...prev.venues, venue] : [venue],
+    }));
+  };
+
   return (
     <Dashboard profile={profile} setProfile={setProfile}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <p className="h2">Venues</p>
-        <button className="btn btn-primary btn-create">Create venue</button>
+        <button className="btn btn-primary btn-create" onClick={() => setShowCreateModal(true)}>
+          Create venue
+        </button>
       </div>
       <hr />
 
@@ -39,14 +51,11 @@ export default function ManagerDashboard() {
         {profile?.venues && profile.venues.length > 0 ? (
           profile.venues.map((venue) => {
             const location = venue.location;
-
-            const formattedAddress = location
+            const fullAddress = location
               ? [location.address, location.city, location.zip, location.country]
                   .filter(Boolean)
                   .join(', ')
-              : '';
-
-            const fullAddress = formattedAddress || 'No location available';
+              : 'No location available';
 
             return (
               <div key={venue.id} className="col-md-4">
@@ -61,9 +70,9 @@ export default function ManagerDashboard() {
                   <div className="card-body">
                     <h4 className="card-title">{venue.name}</h4>
                     <p className="text-muted mb-1 mb-md-0">{fullAddress}</p>
-                    <button>See bookings</button>
+                    <button className="text-decoration-underline mt-2">See bookings</button>
                   </div>
-                  <div>
+                  <div className="d-flex gap-2 p-2">
                     <button className="btn btn-cancel">Edit</button>
                     <button className="btn btn-danger">Delete</button>
                   </div>
@@ -75,6 +84,11 @@ export default function ManagerDashboard() {
           <p className="text-muted mt-3">No venues created yet.</p>
         )}
       </div>
+
+      {/* Create Venue Modal */}
+      {showCreateModal && (
+        <CreateVenue onClose={() => setShowCreateModal(false)} onCreate={handleCreateVenue} />
+      )}
     </Dashboard>
   );
 }
