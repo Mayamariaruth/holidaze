@@ -37,7 +37,6 @@ export interface Location {
 }
 
 export interface VenuePayload {
-  id: string;
   name: string;
   description?: string;
   price: number;
@@ -48,5 +47,5 @@ export interface VenuePayload {
   media?: {
     url: string;
     alt?: string;
-  };
+  }[];
 }

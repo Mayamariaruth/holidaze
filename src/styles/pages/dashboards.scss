@@ -49,6 +49,18 @@
   width: 180px;
 }
 
+.btn-bookings {
+  border: none;
+  background-color: transparent;
+  text-decoration: underline;
+  padding-left: 0;
+}
+
+.venue-img {
+  width: 180px;
+  height: 120px;
+}
+
 @media (min-width: 768px) {
   .profile-card {
     width: 100%;
@@ -58,5 +70,10 @@
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
+  }
+
+  .btn-container {
+    width: 25%;
+    height: 44px;
   }
 }

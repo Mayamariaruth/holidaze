@@ -47,7 +47,7 @@ export default function ManagerDashboard() {
       <hr />
 
       {/* Venue list */}
-      <div className="row g-4 mt-3">
+      <div className="d-flex flex-column gap-4 mt-4">
         {profile?.venues && profile.venues.length > 0 ? (
           profile.venues.map((venue) => {
             const location = venue.location;
@@ -58,23 +58,32 @@ export default function ManagerDashboard() {
               : 'No location available';
 
             return (
-              <div key={venue.id} className="col-md-4">
-                <div className="card h-100 box-shadow">
-                  {venue.media?.[0]?.url && (
-                    <img
-                      src={venue.media[0].url}
-                      className="card-img-top"
-                      alt={venue.media[0].alt || venue.name}
-                    />
-                  )}
-                  <div className="card-body">
-                    <h4 className="card-title">{venue.name}</h4>
-                    <p className="text-muted mb-1 mb-md-0">{fullAddress}</p>
-                    <button className="text-decoration-underline mt-2">See bookings</button>
+              <div
+                key={venue.id}
+                className="venue-card bg-light p-4 rounded-3 box-shadow d-flex flex-column flex-md-row gap-4"
+              >
+                {/* Image */}
+                <div className="flex-shrink-0 venue-img">
+                  <img
+                    className="img-fluid rounded object-fit-cover w-100 h-100"
+                    src={venue.media?.[0]?.url || '/placeholder.jpg'}
+                    alt={venue.media?.[0]?.alt || venue.name}
+                  />
+                </div>
+
+                {/* Content */}
+                <div className="flex-grow-1 d-flex flex-column flex-md-row justify-between gap-3">
+                  {/* Content */}
+                  <div className="flex-grow-1">
+                    <h4 className="mb-1">{venue.name}</h4>
+                    <p className="text-muted mb-2">{fullAddress}</p>
+                    <button className="btn-bookings fw-semibold mt-4">See bookings</button>
                   </div>
-                  <div className="d-flex gap-2 p-2">
-                    <button className="btn btn-cancel">Edit</button>
-                    <button className="btn btn-danger">Delete</button>
+
+                  {/* Buttons */}
+                  <div className="btn-container d-flex flex-row flex-md-column gap-2">
+                    <button className="btn btn-cancel flex-grow-1">Edit</button>
+                    <button className="btn btn-danger flex-grow-1">Delete</button>
                   </div>
                 </div>
               </div>
