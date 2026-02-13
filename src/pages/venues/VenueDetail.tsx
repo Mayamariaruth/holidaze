@@ -5,7 +5,7 @@ import Calendar from '../../components/modals/Calendar';
 import { endpoints } from '../../config/api';
 import { apiFetch } from '../../utils/api';
 import type { Venue, VenueMeta } from '../../types/venue.types';
-import { isOverlapping } from '../../utils/validation';
+import { useBooking } from '../../hooks/useBookings';
 
 export default function VenueDetail() {
   const { id } = useParams<{ id: string }>();
@@ -14,15 +14,8 @@ export default function VenueDetail() {
   const [venue, setVenue] = useState<Venue | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-
   const [showCalendar, setShowCalendar] = useState(false);
-  const [dateFrom, setDateFrom] = useState<Date | null>(null);
-  const [dateTo, setDateTo] = useState<Date | null>(null);
-
-  const [guests, setGuests] = useState<number | ''>('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState(false);
+  const booking = useBooking(venue);
 
   useEffect(() => {
     if (!id) return;
@@ -40,47 +33,6 @@ export default function VenueDetail() {
 
     fetchVenue();
   }, [id]);
-
-  async function handleBook() {
-    if (!venue) return;
-    const token = useAuthStore.getState().accessToken;
-
-    if (!isAuthenticated && !token) {
-      setError('You must be logged in to book');
-      return;
-    }
-
-    if (!dateFrom || !dateTo) {
-      setError('Please select dates');
-      return;
-    }
-
-    if (isOverlapping(dateFrom, dateTo, venue.bookings ?? [])) {
-      setError('Selected dates are not available');
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-      setError(null);
-
-      await apiFetch(endpoints.bookings, {
-        method: 'POST',
-        body: JSON.stringify({
-          venueId: venue.id,
-          dateFrom: dateFrom.toISOString(),
-          dateTo: dateTo.toISOString(),
-          guests,
-        }),
-      });
-
-      setSuccess(true);
-    } catch {
-      setError('Failed to create booking');
-    } finally {
-      setIsSubmitting(false);
-    }
-  }
 
   if (isLoading) return <p className="container py-5">Loading venue…</p>;
   if (isError || !venue) return <p className="container py-5">Venue not found.</p>;
@@ -201,7 +153,7 @@ export default function VenueDetail() {
                   className="form-control"
                   placeholder="Check-in"
                   readOnly
-                  value={dateFrom ? dateFrom.toLocaleDateString() : ''}
+                  value={booking.dateFrom ? booking.dateFrom.toLocaleDateString() : ''}
                   onClick={() => setShowCalendar(true)}
                 />
                 <input
@@ -209,7 +161,7 @@ export default function VenueDetail() {
                   className="form-control"
                   placeholder="Check-out"
                   readOnly
-                  value={dateTo ? dateTo.toLocaleDateString() : ''}
+                  value={booking.dateTo ? booking.dateTo.toLocaleDateString() : ''}
                   onClick={() => setShowCalendar(true)}
                 />
               </div>
@@ -220,21 +172,24 @@ export default function VenueDetail() {
                 placeholder="Guests"
                 min={1}
                 max={venue.maxGuests}
-                value={guests}
-                onChange={(e) => setGuests(e.target.value === '' ? '' : Number(e.target.value))}
+                value={booking.guests}
+                onChange={(e) =>
+                  booking.setGuests(e.target.value === '' ? '' : Number(e.target.value))
+                }
               />
 
-              {error && <p className="text-danger">{error}</p>}
-              {success && <p className="text-success">Booking confirmed!</p>}
+              {booking.error && <p className="text-danger">{booking.error}</p>}
+              {booking.success && <p className="text-success">Booking confirmed!</p>}
 
               <div className="d-flex justify-content-between align-items-center gap-5 mt-4">
                 <strong>${venue.price}/night</strong>
                 <button
-                  className="btn btn-cta w-100"
-                  disabled={!dateFrom || !dateTo || isSubmitting || !guests}
-                  onClick={handleBook}
+                  disabled={
+                    !booking.dateFrom || !booking.dateTo || booking.isSubmitting || !booking.guests
+                  }
+                  onClick={booking.book}
                 >
-                  {isSubmitting ? 'Booking…' : 'Book'}
+                  {booking.isSubmitting ? 'Booking…' : 'Book'}
                 </button>
               </div>
             </div>

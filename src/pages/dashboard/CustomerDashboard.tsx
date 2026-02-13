@@ -3,7 +3,8 @@ import { useAuthStore } from '../../stores/auth.stores';
 import { getProfile } from '../../services/profiles.service';
 import Dashboard from '../../components/layout/Dashboard';
 import BookingCard from '../../components/cards/BookingCard';
-import type { UserProfile, UserBooking } from '../../types/user.types';
+import type { UserProfile } from '../../types/user.types';
+import type { UserBooking } from '../../types/booking.types';
 
 export default function CustomerDashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
