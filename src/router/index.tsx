@@ -5,8 +5,7 @@ import Venues from '../pages/venues/Venues';
 import VenueDetail from '../pages/venues/VenueDetail';
 import Login from '../pages/auth/Login';
 import Register from '../pages/auth/Register';
-import CustomerDashboard from '../pages/dashboard/CustomerDashboard';
-import ManagerDashboard from '../pages/dashboard/ManagerDashboard';
+import Dashboard from '../pages/dashboard/Dashboard';
 
 import { ProtectedRoute } from '../components/layout/ProtectedRoute';
 
@@ -18,15 +17,8 @@ export default function AppRouter() {
       <Route path="/venues/:id" element={<VenueDetail />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-
-      {/* Customer dashboard */}
-      <Route element={<ProtectedRoute role="customer" />}>
-        <Route path="/dashboard/customer" element={<CustomerDashboard />} />
-      </Route>
-
-      {/* Venue manager dashboard */}
-      <Route element={<ProtectedRoute role="venue_manager" />}>
-        <Route path="/dashboard/manager" element={<ManagerDashboard />} />
+      <Route element={<ProtectedRoute />}>
+        <Route path="/dashboard" element={<Dashboard />} />
       </Route>
     </Routes>
   );

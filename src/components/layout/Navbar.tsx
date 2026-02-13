@@ -3,9 +3,9 @@ import { useAuthStore } from '../../stores/auth.stores';
 import logo from '../../assets/images/logo.png';
 
 export default function Navbar() {
-  const { isAuthenticated, role, logout } = useAuthStore();
+  const { isAuthenticated, logout } = useAuthStore();
 
-  const dashboardRoute = role === 'venue_manager' ? '/dashboard/manager' : '/dashboard/customer';
+  const dashboardRoute = '/dashboard';
 
   return (
     <nav className="navbar navbar-expand-lg position-absolute w-100 py-4">
