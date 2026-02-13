@@ -5,10 +5,20 @@ export interface UserBooking {
   dateFrom: string;
   dateTo: string;
   guests: number;
-  status: string;
   venue?: {
     id: string;
     name: string;
+    price: number;
+    location?: {
+      address: string;
+      city: string;
+      zip: string;
+      country: string;
+    };
+    media?: {
+      url: string;
+      alt: string;
+    };
   };
 }
 
@@ -29,7 +39,7 @@ export interface UserProfile {
     url: string;
     alt: string;
   };
-  accountType: AccountType;
   bookings?: UserBooking[];
   favorites?: Favorite[];
+  venueManager?: boolean;
 }

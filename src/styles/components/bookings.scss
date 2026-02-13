@@ -1,0 +1,14 @@
+.booking-font {
+  font-size: 18px;
+}
+
+.booking-img {
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 768px) {
+  .booking-img {
+    width: 25%;
+  }
+}
