@@ -1,3 +1,5 @@
+import type { Venue } from './venue.types';
+
 export type AccountType = 'customer' | 'venue_manager';
 
 export interface UserBooking {
@@ -43,6 +45,7 @@ export interface UserProfile {
   bookings?: UserBooking[];
   favorites?: Favorite[];
   venueManager?: boolean;
+  venues?: Venue[];
 }
 
 export interface UpdateProfilePayload {

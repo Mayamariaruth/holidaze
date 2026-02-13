@@ -38,6 +38,7 @@ export default function Dashboard({ profile, setProfile, children }: Props) {
                   <i className="fa-solid fa-pen-to-square"></i>
                 </button>
               </div>
+              <p className="mb-0">{profile.bio}</p>
 
               <div className="w-100">
                 <div className="d-flex justify-content-between">
@@ -48,11 +49,6 @@ export default function Dashboard({ profile, setProfile, children }: Props) {
                 <div className="d-flex justify-content-between">
                   <p className="fw-medium profile-label">Email</p>
                   <p>{profile.email}</p>
-                </div>
-
-                <div className="d-flex justify-content-between">
-                  <p className="fw-medium profile-label">Bio</p>
-                  <p>{profile.bio}</p>
                 </div>
 
                 <div className="d-flex justify-content-between">

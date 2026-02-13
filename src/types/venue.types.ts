@@ -35,3 +35,12 @@ export interface Location {
   lat: number;
   long: number;
 }
+
+export interface VenuePayload {
+  name: string;
+  location: Location;
+  media?: {
+    url: string;
+    alt?: string;
+  };
+}
