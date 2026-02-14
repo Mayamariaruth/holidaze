@@ -39,7 +39,9 @@ export default function BookingCard({ booking, isManagerView = false }: Props) {
         {/* Title + price */}
         <div className="d-flex justify-content-between mb-1 flex-wrap">
           {isManagerView ? (
-            <p className="booking-font fw-bold mb-0">{title}</p>
+            <p className="booking-font mb-0">
+              Customer: <span className="fw-bold mb-0">{title}</span>
+            </p>
           ) : (
             <Link
               to={`/venues/${venue?.id}`}

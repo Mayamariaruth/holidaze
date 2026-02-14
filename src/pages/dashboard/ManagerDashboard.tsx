@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../stores/auth.stores';
 import { getProfile } from '../../services/profiles.service';
-import { fetchBookingsByVenue } from '../../services/bookings.service';
 import Dashboard from '../../components/layout/Dashboard';
 import CreateVenue from '../../components/modals/CreateVenue';
 import type { UserProfile } from '../../types/user.types';
 import type { Venue } from '../../types/venue.types';
-import type { UserBooking } from '../../types/booking.types';
 import DeleteVenue from '../../components/modals/DeleteVenue';
 import EditVenue from '../../components/modals/EditVenue';
 import ManagerBookings from '../../components/modals/ManagerBookings';
@@ -17,7 +15,7 @@ export default function ManagerDashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
   const [editVenue, setEditVenue] = useState<Venue | null>(null);
-  const [selectedBookings, setSelectedBookings] = useState<UserBooking[] | null>(null);
+  const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null); // <-- just the venue ID
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -37,7 +35,7 @@ export default function ManagerDashboard() {
     fetchProfile();
   }, [user]);
 
-  const handleCreateVenue = async (venue: Venue) => {
+  const handleCreateVenue = (venue: Venue) => {
     setProfile((prev) => ({
       ...prev!,
       venues: prev?.venues ? [...prev.venues, venue] : [venue],
@@ -97,14 +95,7 @@ export default function ManagerDashboard() {
                     <p className="text-muted mb-2">{fullAddress}</p>
                     <button
                       className="btn-bookings fw-semibold mt-4"
-                      onClick={async () => {
-                        try {
-                          const bookings = await fetchBookingsByVenue(venue.id);
-                          setSelectedBookings(bookings);
-                        } catch (err) {
-                          console.error(err);
-                        }
-                      }}
+                      onClick={() => setSelectedVenueId(venue.id)} // <-- just set the ID
                     >
                       See bookings
                     </button>
@@ -147,7 +138,6 @@ export default function ManagerDashboard() {
           onEdit={(updated) => {
             setProfile((prev) => {
               if (!prev || !prev.venues) return prev;
-
               return {
                 ...prev,
                 venues: prev.venues.map((v) => (v.id === updated.id ? updated : v)),
@@ -167,8 +157,8 @@ export default function ManagerDashboard() {
       )}
 
       {/* Bookings Modal */}
-      {selectedBookings && (
-        <ManagerBookings bookings={selectedBookings} onClose={() => setSelectedBookings(null)} />
+      {selectedVenueId && (
+        <ManagerBookings venueId={selectedVenueId} onClose={() => setSelectedVenueId(null)} />
       )}
     </Dashboard>
   );
