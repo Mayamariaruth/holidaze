@@ -141,7 +141,8 @@ export default function ManagerDashboard() {
           onClose={() => setShowCreateModal(false)}
           onCreate={(venue) => {
             handleCreateVenue(venue);
-            setGlobalAlert?.({ type: 'success', message: 'Venue created successfully!' });
+            setShowCreateModal(false);
+            setGlobalAlert({ type: 'success', message: 'Venue created successfully!' });
           }}
         />
       )}
@@ -159,6 +160,8 @@ export default function ManagerDashboard() {
                 venues: prev.venues.map((v) => (v.id === updated.id ? updated : v)),
               };
             });
+
+            setEditVenue(null);
             setGlobalAlert({ type: 'success', message: 'Venue updated successfully!' });
           }}
         />
@@ -171,6 +174,7 @@ export default function ManagerDashboard() {
           onClose={() => setDeleteVenueId(null)}
           onDelete={(id) => {
             handleVenueDelete(id);
+            setDeleteVenueId(null);
             setGlobalAlert({ type: 'success', message: 'Venue deleted successfully!' });
           }}
         />

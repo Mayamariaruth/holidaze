@@ -7,9 +7,13 @@ interface Props {
   profile: UserProfile | null;
   setProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   onClose: () => void;
+
+  setGlobalAlert?: React.Dispatch<
+    React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>
+  >;
 }
 
-export default function EditProfile({ profile, setProfile, onClose }: Props) {
+export default function EditProfile({ profile, setProfile, onClose, setGlobalAlert }: Props) {
   const { setRole } = useAuthStore();
 
   const [formState, setFormState] = useState({
@@ -21,7 +25,6 @@ export default function EditProfile({ profile, setProfile, onClose }: Props) {
 
   const [loading, setLoading] = useState(false);
 
-  // Autofill when profile loads
   useEffect(() => {
     if (!profile) return;
 
@@ -59,16 +62,17 @@ export default function EditProfile({ profile, setProfile, onClose }: Props) {
         avatar: formState.avatar ? { url: formState.avatar } : undefined,
       });
 
-      // Refetch full profile
       const freshProfile = await getProfile(profile.name);
       setProfile(freshProfile);
 
-      // Update auth role immediately
       setRole(formState.accountType === 'manager' ? 'venue_manager' : 'customer');
 
       onClose();
+
+      setGlobalAlert?.({ type: 'success', message: 'Profile updated successfully!' });
     } catch (error) {
       console.error('Failed to update profile:', error);
+      setGlobalAlert?.({ type: 'danger', message: 'Failed to update profile.' });
     } finally {
       setLoading(false);
     }

@@ -92,6 +92,7 @@ export default function Dashboard({
           profile={profile}
           setProfile={setProfile}
           onClose={() => setShowModal(false)}
+          setGlobalAlert={setGlobalAlert}
         />
       )}
     </div>
