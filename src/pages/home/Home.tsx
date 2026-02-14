@@ -5,6 +5,8 @@ import { endpoints } from '../../config/api';
 import { apiFetch } from '../../utils/api';
 import type { Venue } from '../../types/venue.types';
 import VenueCardHome from '../../components/cards/VenueCardHome';
+import { useSearch } from '../../hooks/useSearch';
+import { useNavigate } from 'react-router-dom';
 
 import scrollIcon from '../../assets/icons/scroll-icon.png';
 import heroImage from '../../assets/images/home/hero.jpg';
@@ -19,6 +21,7 @@ import venues2 from '../../assets/images/home/venues/venues2.jpg';
 import venues3 from '../../assets/images/home/venues/venues3.jpg';
 
 export default function Home() {
+  const navigate = useNavigate();
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
@@ -52,6 +55,8 @@ export default function Home() {
     fetchVenues();
   }, []);
 
+  const { searchParams, handleChange } = useSearch([]);
+
   return (
     <>
       {/* Hero section */}
@@ -69,7 +74,12 @@ export default function Home() {
 
           <form className="hero-form d-flex flex-column flex-md-row bg-white align-items-stretch rounded-4 p-3 gap-2">
             {/* Location */}
-            <input className="form-control flex-fill" placeholder="Location" />
+            <input
+              className="form-control flex-fill"
+              placeholder="Location"
+              value={searchParams.location}
+              onChange={(e) => handleChange('location', e.target.value)}
+            />
 
             {/* Check-in */}
             <input
@@ -92,10 +102,28 @@ export default function Home() {
             />
 
             {/* Guests */}
-            <input className="form-control" placeholder="Guests" />
+            <input
+              className="form-control"
+              placeholder="Guests"
+              type="number"
+              value={searchParams.guests ?? ''}
+              onChange={(e) => handleChange('guests', Number(e.target.value))}
+            />
 
-            {/* Search */}
-            <button className="btn btn-cta px-4" type="button">
+            <button
+              className="btn btn-cta px-4"
+              type="button"
+              onClick={() => {
+                const query = new URLSearchParams({
+                  location: searchParams.location,
+                  guests: searchParams.guests?.toString() ?? '',
+                  dateFrom: searchParams.dateFrom?.toISOString() ?? '',
+                  dateTo: searchParams.dateTo?.toISOString() ?? '',
+                }).toString();
+
+                navigate(`/venues?${query}`);
+              }}
+            >
               Search
             </button>
           </form>
@@ -108,6 +136,7 @@ export default function Home() {
               onSelectRange={(from, to) => {
                 setDateFrom(from);
                 setDateTo(to);
+                setShowCalendar(false);
               }}
             />
           )}
