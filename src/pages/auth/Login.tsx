@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import bgImg from '../../assets/images/auth/login.jpg';
 import Alert from '../../components/ui/Alert';
+import Loader from '../../components/ui/Loader';
 
 export default function Login() {
   const { login, isLoading } = useAuth();
@@ -31,7 +32,6 @@ export default function Login() {
       setTimeout(() => navigate('/'), 1500);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Invalid email or password';
-
       setGlobalAlert({ type: 'danger', message });
     }
   };
@@ -53,6 +53,9 @@ export default function Login() {
       </div>
 
       <div className="auth-form bg-white rounded-4 p-5 position-relative">
+        {/* Loader overlay */}
+        {isLoading && <Loader overlay size="lg" />}
+
         <form onSubmit={handleSubmit}>
           <h1 className="mb-4">Login to your account</h1>
           <p className="auth-text fw-medium mb-4">

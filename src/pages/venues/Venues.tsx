@@ -6,6 +6,7 @@ import Calendar from '../../components/modals/Calendar';
 import { useVenues } from '../../hooks/useVenues';
 import { useSearch } from '../../hooks/useSearch';
 import heroImage from '../../assets/images/venue-hero.jpg';
+import Loader from '../../components/ui/Loader';
 
 export default function Venues() {
   const { venues, isLoading, isError } = useVenues();
@@ -24,7 +25,6 @@ export default function Venues() {
 
   const [showCalendar, setShowCalendar] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-
   const [minRating, setMinRating] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [amenitiesFilter, setAmenitiesFilter] = useState<string[]>([]);
@@ -40,14 +40,8 @@ export default function Venues() {
 
   let filteredVenues = searchResults;
 
-  if (minRating) {
-    filteredVenues = filteredVenues.filter((v) => (v.rating ?? 0) >= minRating);
-  }
-
-  if (maxPrice) {
-    filteredVenues = filteredVenues.filter((v) => v.price <= maxPrice);
-  }
-
+  if (minRating) filteredVenues = filteredVenues.filter((v) => (v.rating ?? 0) >= minRating);
+  if (maxPrice) filteredVenues = filteredVenues.filter((v) => v.price <= maxPrice);
   if (amenitiesFilter.length) {
     filteredVenues = filteredVenues.filter((v) => {
       if (!v.meta) return false;
@@ -67,8 +61,12 @@ export default function Venues() {
 
   return (
     <>
-      {isLoading && <p>Loading venues...</p>}
-      {isError && <p>Failed to load venues</p>}
+      {/* Loader overlay */}
+      {isLoading && <Loader overlay size="lg" />}
+
+      {!isLoading && isError && (
+        <div className="text-center text-danger mt-5">Failed to load venues.</div>
+      )}
 
       {!isLoading && !isError && (
         <>
@@ -152,7 +150,6 @@ export default function Venues() {
                         {r} ⭐ & up
                       </Dropdown.Item>
                     ))}
-                    {/* Clear button */}
                     <Dropdown.Item
                       onClick={() => {
                         setMinRating(null);
@@ -180,7 +177,6 @@ export default function Venues() {
                         Up to ${price}
                       </Dropdown.Item>
                     ))}
-                    {/* Clear button */}
                     <Dropdown.Item
                       onClick={() => {
                         setMaxPrice(null);
@@ -223,7 +219,7 @@ export default function Venues() {
               </div>
 
               {!filteredVenues.length && (
-                <p className="text-center text-muted mt-4">No venues match your search.</p>
+                <div className="text-center text-muted mt-4">No venues match your search.</div>
               )}
 
               {totalPages > 1 && (

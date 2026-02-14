@@ -8,6 +8,8 @@ import VenueCardHome from '../../components/cards/VenueCardHome';
 import { useSearch } from '../../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
 
+import Loader from '../../components/ui/Loader';
+
 import scrollIcon from '../../assets/icons/scroll-icon.png';
 import heroImage from '../../assets/images/home/hero.jpg';
 import bali from '../../assets/images/home/destinations/bali.jpg';
@@ -26,13 +28,12 @@ export default function Home() {
   const [dateTo, setDateTo] = useState<Date | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
   const [ratedVenues, setRatedVenues] = useState<Venue[]>([]);
+  const [searching, setSearching] = useState(false);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const scroll = (direction: 'left' | 'right'): void => {
     if (!scrollRef.current) return;
-
     const scrollAmount = 400;
-
     scrollRef.current.scrollBy({
       left: direction === 'left' ? -scrollAmount : scrollAmount,
       behavior: 'smooth',
@@ -43,21 +44,19 @@ export default function Home() {
     async function fetchVenues() {
       try {
         const venues = await apiFetch<Venue[]>(`${endpoints.venues}?limit=20`);
-
         const sorted = venues.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 10);
-
         setRatedVenues(sorted);
       } catch (error) {
         console.error(error);
       }
     }
-
     fetchVenues();
   }, []);
 
   const { searchParams, handleChange } = useSearch([]);
 
   const onSearch = () => {
+    setSearching(true);
     const query = new URLSearchParams({
       location: searchParams.location,
       guests: searchParams.guests?.toString() ?? '',
@@ -65,11 +64,17 @@ export default function Home() {
       dateTo: dateTo ? dateTo.toISOString() : '',
     }).toString();
 
-    navigate(`/venues?${query}`);
+    setTimeout(() => {
+      navigate(`/venues?${query}`);
+      setSearching(false);
+    }, 300);
   };
 
   return (
     <>
+      {/* Loader overlay */}
+      {searching && <Loader overlay size="lg" />}
+
       {/* Hero section */}
       <section
         className="hero d-flex align-items-center justify-content-center text-center"

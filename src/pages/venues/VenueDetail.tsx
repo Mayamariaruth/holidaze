@@ -2,13 +2,13 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../stores/auth.stores';
 import Calendar from '../../components/modals/Calendar';
-import { endpoints } from '../../config/api';
-import { apiFetch } from '../../utils/api';
 import type { Venue, VenueMeta } from '../../types/venue.types';
 import { useBookings } from '../../hooks/useBookings';
 import EditVenue from '../../components/modals/EditVenue';
 import VenueMap from '../../components/ui/VenueMap';
 import Alert from '../../components/ui/Alert';
+import Loader from '../../components/ui/Loader';
+import { fetchVenueById } from '../../services/venues.service';
 
 export default function VenueDetail() {
   const { id } = useParams<{ id: string }>();
@@ -38,7 +38,7 @@ export default function VenueDetail() {
 
     const fetchVenue = async () => {
       try {
-        const data = await apiFetch<Venue>(`${endpoints.venues}/${id}?_bookings=true&_owner=true`);
+        const data = await fetchVenueById();
         setVenue(data);
       } catch {
         setIsError(true);
@@ -50,8 +50,9 @@ export default function VenueDetail() {
     fetchVenue();
   }, [id]);
 
-  if (isLoading) return <p className="container py-5">Loading venue…</p>;
-  if (isError || !venue) return <p className="container py-5">Venue not found.</p>;
+  if (isLoading) return <Loader overlay size="lg" />;
+  if (isError || !venue)
+    return <div className="container py-5 text-center text-danger">Venue not found.</div>;
 
   const amenities: (keyof VenueMeta)[] = ['wifi', 'parking', 'breakfast', 'pets'];
 

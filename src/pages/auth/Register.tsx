@@ -3,6 +3,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import bgImg from '../../assets/images/auth/register.jpg';
 import Alert from '../../components/ui/Alert';
+import Loader from '../../components/ui/Loader';
 
 export default function Register() {
   const { register, isLoading } = useAuth();
@@ -63,6 +64,9 @@ export default function Register() {
       </div>
 
       <div className="auth-form bg-white rounded-4 p-5 position-relative">
+        {/* Loader overlay */}
+        {isLoading && <Loader overlay size="lg" />}
+
         <form onSubmit={handleSubmit}>
           <h1 className="mb-3">Register an account with us</h1>
           <p className="auth-text fw-medium mb-4">
