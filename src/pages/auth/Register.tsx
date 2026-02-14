@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import bgImg from '../../assets/images/auth/register.jpg';
+import Alert from '../../components/ui/Alert';
 
 export default function Register() {
   const { register, isLoading } = useAuth();
@@ -11,13 +12,17 @@ export default function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [venueManager, setVenueManager] = useState(false);
+
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
+  const [globalAlert, setGlobalAlert] = useState<{
+    type: 'success' | 'danger';
+    message: string;
+  } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const fieldErrors: typeof errors = {};
-
     if (!name.trim()) fieldErrors.name = 'Name is required';
     if (!email.trim()) fieldErrors.email = 'Email is required';
     else if (!email.endsWith('@stud.noroff.no'))
@@ -25,18 +30,16 @@ export default function Register() {
     if (!password.trim()) fieldErrors.password = 'Password is required';
 
     setErrors(fieldErrors);
-
     if (Object.keys(fieldErrors).length > 0) return;
 
     try {
       await register(name, email, password, venueManager);
-      navigate('/login');
+      setGlobalAlert({ type: 'success', message: 'Registration successful!' });
+      setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
-      if (err instanceof Error) {
-        setErrors({ ...fieldErrors, email: err.message });
-      } else {
-        setErrors({ ...fieldErrors, email: 'Registration failed' });
-      }
+      const message = err instanceof Error ? err.message : 'Registration failed';
+      setErrors({ ...fieldErrors, email: message });
+      setGlobalAlert({ type: 'danger', message });
     }
   };
 
@@ -46,6 +49,19 @@ export default function Register() {
       style={{ backgroundImage: `url(${bgImg})` }}
     >
       <div className="hero-overlay rounded-4"></div>
+
+      {/* Global alerts */}
+      <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1050 }}>
+        {globalAlert && (
+          <Alert
+            type={globalAlert.type}
+            message={globalAlert.message}
+            onClose={() => setGlobalAlert(null)}
+            autoDismiss={5000}
+          />
+        )}
+      </div>
+
       <div className="auth-form bg-white rounded-4 p-5 position-relative">
         <form onSubmit={handleSubmit}>
           <h1 className="mb-3">Register an account with us</h1>
@@ -53,6 +69,7 @@ export default function Register() {
             Choose how you’d like to use Holidaze — whether booking stays or managing venues, your
             account gives you full access.
           </p>
+
           {/* Name */}
           <label htmlFor="name">Name</label>
           <input

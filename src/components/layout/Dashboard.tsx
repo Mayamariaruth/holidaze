@@ -2,18 +2,40 @@ import { useState } from 'react';
 import placeholder from '../../assets/images/placeholder.jpg';
 import EditProfile from '../modals/EditProfile';
 import type { UserProfile } from '../../types/user.types';
+import Alert from '../../components/ui/Alert';
 
 interface Props {
   profile: UserProfile | null;
   setProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   children: React.ReactNode;
+  globalAlert?: { type: 'success' | 'danger'; message: string } | null;
+  setGlobalAlert?: React.Dispatch<
+    React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>
+  >;
 }
 
-export default function Dashboard({ profile, setProfile, children }: Props) {
+export default function Dashboard({
+  profile,
+  setProfile,
+  children,
+  globalAlert,
+  setGlobalAlert,
+}: Props) {
   const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="dashboard-page">
+      {/* Global alerts */}
+      <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1050 }}>
+        {globalAlert && (
+          <Alert
+            type={globalAlert.type}
+            message={globalAlert.message}
+            onClose={() => setGlobalAlert?.(null)}
+            autoDismiss={5000}
+          />
+        )}
+      </div>
       {/* Hero / Banner */}
       <div
         className="dashboard-banner py-5 mb-5 rounded-4"

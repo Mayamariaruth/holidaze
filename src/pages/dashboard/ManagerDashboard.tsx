@@ -15,7 +15,12 @@ export default function ManagerDashboard() {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
   const [editVenue, setEditVenue] = useState<Venue | null>(null);
-  const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null); // <-- just the venue ID
+  const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
+  const [globalAlert, setGlobalAlert] = useState<{
+    type: 'success' | 'danger';
+    message: string;
+  } | null>(null);
+
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -50,7 +55,12 @@ export default function ManagerDashboard() {
   };
 
   return (
-    <Dashboard profile={profile} setProfile={setProfile}>
+    <Dashboard
+      profile={profile}
+      setProfile={setProfile}
+      globalAlert={globalAlert}
+      setGlobalAlert={setGlobalAlert}
+    >
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Venues</h2>
@@ -127,7 +137,13 @@ export default function ManagerDashboard() {
 
       {/* Create Venue Modal */}
       {showCreateModal && (
-        <CreateVenue onClose={() => setShowCreateModal(false)} onCreate={handleCreateVenue} />
+        <CreateVenue
+          onClose={() => setShowCreateModal(false)}
+          onCreate={(venue) => {
+            handleCreateVenue(venue);
+            setGlobalAlert?.({ type: 'success', message: 'Venue created successfully!' });
+          }}
+        />
       )}
 
       {/* Edit Venue Modal */}
@@ -143,6 +159,7 @@ export default function ManagerDashboard() {
                 venues: prev.venues.map((v) => (v.id === updated.id ? updated : v)),
               };
             });
+            setGlobalAlert({ type: 'success', message: 'Venue updated successfully!' });
           }}
         />
       )}
@@ -152,7 +169,10 @@ export default function ManagerDashboard() {
         <DeleteVenue
           venueId={deleteVenueId}
           onClose={() => setDeleteVenueId(null)}
-          onDelete={handleVenueDelete}
+          onDelete={(id) => {
+            handleVenueDelete(id);
+            setGlobalAlert({ type: 'success', message: 'Venue deleted successfully!' });
+          }}
         />
       )}
 
