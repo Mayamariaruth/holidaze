@@ -3,6 +3,7 @@ import placeholder from '../../assets/images/placeholder.jpg';
 import EditProfile from '../modals/EditProfile';
 import type { UserProfile } from '../../types/user.types';
 import Alert from '../../components/ui/Alert';
+import Loader from '../../components/ui/Loader';
 
 interface Props {
   profile: UserProfile | null;
@@ -12,6 +13,7 @@ interface Props {
   setGlobalAlert?: React.Dispatch<
     React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>
   >;
+  loading?: boolean;
 }
 
 export default function Dashboard({
@@ -20,8 +22,18 @@ export default function Dashboard({
   children,
   globalAlert,
   setGlobalAlert,
+  loading,
 }: Props) {
   const [showModal, setShowModal] = useState(false);
+
+  // Loader
+  if (loading) {
+    return (
+      <div className="position-relative" style={{ minHeight: '100vh' }}>
+        <Loader overlay size="lg" />
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard-page">
@@ -36,6 +48,7 @@ export default function Dashboard({
           />
         )}
       </div>
+
       {/* Hero / Banner */}
       <div
         className="dashboard-banner py-5 mb-5 rounded-4"

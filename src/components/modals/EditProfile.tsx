@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { UserProfile } from '../../types/user.types';
 import { useAuthStore } from '../../stores/auth.stores';
 import { getProfile, updateProfile } from '../../services/profiles.service';
+import Loader from '../ui/Loader';
 
 interface Props {
   profile: UserProfile | null;
@@ -87,6 +88,8 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
       <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content p-3">
+            {/* Loader overlay */}
+            {loading && <Loader overlay size="lg" />}
             <div className="modal-header">
               <h3 className="modal-title">Edit Profile</h3>
               <button type="button" className="btn-close" onClick={onClose}></button>

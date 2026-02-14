@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Venue, Location, VenuePayload } from '../../types/venue.types';
 import { useAuthStore } from '../../stores/auth.stores';
 import { updateVenue } from '../../services/venues.service';
+import Loader from '../ui/Loader';
 
 interface Props {
   venue: Venue;
@@ -125,6 +126,8 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
       <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content p-3">
+            {/* Loader overlay */}
+            {loading && <Loader overlay size="lg" />}
             <div className="modal-header">
               <h2 className="modal-title">Edit venue</h2>
               <button type="button" className="btn-close" onClick={onClose}></button>

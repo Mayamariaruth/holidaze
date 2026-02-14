@@ -16,6 +16,7 @@ export default function ManagerDashboard() {
   const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
   const [editVenue, setEditVenue] = useState<Venue | null>(null);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [globalAlert, setGlobalAlert] = useState<{
     type: 'success' | 'danger';
     message: string;
@@ -29,11 +30,14 @@ export default function ManagerDashboard() {
     const { name } = user;
 
     async function fetchProfile() {
+      setLoading(true);
       try {
         const data = await getProfile(name);
         setProfile(data);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -60,6 +64,7 @@ export default function ManagerDashboard() {
       setProfile={setProfile}
       globalAlert={globalAlert}
       setGlobalAlert={setGlobalAlert}
+      loading={loading}
     >
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">

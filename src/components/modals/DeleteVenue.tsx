@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { deleteVenue } from '../../services/venues.service';
+import Loader from '../ui/Loader';
 
 interface Props {
   venueId: string;
@@ -29,6 +30,8 @@ export default function DeleteVenue({ venueId, onClose, onDelete }: Props) {
       <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content p-3">
+            {/* Loader overlay */}
+            {loading && <Loader overlay size="lg" />}
             <div className="d-flex justify-content-between mb-3">
               <div className="delete-trash">
                 <i className="fa-regular fa-trash-can"></i>
