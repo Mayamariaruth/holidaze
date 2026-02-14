@@ -89,16 +89,16 @@ export default function VenueDetail() {
 
         {/* Edit / Save */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          {role === 'venue_manager' && (
-            <button className="btn btn-primary" onClick={() => setShowEditModal(true)}>
+          {role === 'venue_manager' ? (
+            <button className="btn btn-primary btn-edit" onClick={() => setShowEditModal(true)}>
               Edit
             </button>
+          ) : (
+            <button className="btn">
+              <i className="fa-regular fa-heart me-2" /> Save
+            </button>
           )}
-          : (
-          <button className="btn">
-            <i className="fa-regular fa-heart me-2" /> Save
-          </button>
-          )
+
           <span>
             Managed by <strong>{venue.owner?.name}</strong>
           </span>

@@ -13,6 +13,7 @@ body {
   max-width: 2000px;
 }
 
+// Navbar
 .navbar {
   z-index: 10;
 }
@@ -43,6 +44,28 @@ body {
   transform: translateX(-50%);
 }
 
+.hamburger-btn {
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  z-index: 1100;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: white;
+  z-index: 1050;
+}
+
+.mobile-menu-overlay a {
+  font-size: 22px;
+  font-weight: 500;
+  color: $primary;
+  text-decoration: none;
+}
+
+// Footer
 footer {
   width: 98%;
   margin: 0 auto 13px;
@@ -53,6 +76,7 @@ footer {
   max-width: 300px;
 }
 
+// Inputs
 input:focus {
   border: solid 2px;
 }

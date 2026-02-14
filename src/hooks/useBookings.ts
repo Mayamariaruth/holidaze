@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { createBooking } from '../services/bookings.service';
 import type { Venue } from '../types/venue.types';
 import { isOverlapping } from '../utils/validation';
+import { useAuthStore } from '../stores/auth.stores';
 
 export function useBookings(venue: Venue | null, isAuthenticated: boolean) {
+  const { role } = useAuthStore();
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
   const [guests, setGuests] = useState<number | ''>('');
@@ -24,6 +26,11 @@ export function useBookings(venue: Venue | null, isAuthenticated: boolean) {
 
     if (!isAuthenticated) {
       setError('You must be logged in to book');
+      return;
+    }
+
+    if (role === 'venue_manager') {
+      setError('Venue managers cannot make bookings');
       return;
     }
 

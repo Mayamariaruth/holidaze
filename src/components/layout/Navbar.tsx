@@ -1,58 +1,38 @@
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
 import { useAuthStore } from '../../stores/auth.stores';
 import logo from '../../assets/images/logo.png';
+import blueLogo from '../../assets/images/logo-blue.png';
 
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuthStore();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const dashboardRoute = '/dashboard';
 
   return (
-    <nav className="navbar navbar-expand-lg position-absolute w-100 py-4">
-      {/* Logo */}
-      <Link className="navbar-brand ps-4" to="/">
-        <img src={logo} alt="Holidaze" />
-      </Link>
+    <>
+      <nav className="navbar position-absolute w-100 py-4 d-flex justify-content-between align-items-center">
+        {/* Logo */}
+        <Link className="navbar-brand ps-4" to="/">
+          <img src={logo} alt="Holidaze" />
+        </Link>
 
-      <div className="collapse navbar-collapse justify-content-end pe-5 gap-5 pt-3">
-        <ul className="navbar-nav gap-5">
-          {!isAuthenticated ? (
-            <>
-              <li className="nav-item">
-                <Link className="nav-link fw-normal text-white" to="/">
-                  Home
-                </Link>
-              </li>
+        {/* Desktop menu */}
+        <div className="d-none d-lg-flex align-items-center gap-5 pe-5">
+          <Link className="nav-link text-white" to="/">
+            Home
+          </Link>
+          <Link className="nav-link text-white" to="/venues">
+            Venues
+          </Link>
 
-              <li className="nav-item">
-                <Link className="nav-link fw-normal text-white" to="/venues">
-                  Venues
-                </Link>
-              </li>
-            </>
-          ) : (
-            <ul className="navbar-nav gap-5">
-              <li className="nav-item">
-                <Link className="nav-link fw-normal text-white" to="/">
-                  Home
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link fw-normal text-white" to="/venues">
-                  Venues
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link fw-normal text-white" to={dashboardRoute}>
-                  Dashboard
-                </Link>
-              </li>
-            </ul>
+          {isAuthenticated && (
+            <Link className="nav-link text-white" to={dashboardRoute}>
+              Dashboard
+            </Link>
           )}
-        </ul>
 
-        {/* Buttons */}
-        <div>
           {!isAuthenticated ? (
             <Link to="/login" className="btn btn-outline-white nav-btn">
               Login
@@ -63,7 +43,65 @@ export default function Navbar() {
             </button>
           )}
         </div>
-      </div>
-    </nav>
+
+        {/* Mobile hamburger */}
+        <button
+          className="d-lg-none btn me-4"
+          onClick={() => setMenuOpen(true)}
+          aria-label="Open menu"
+        >
+          <i className="fa-solid fa-bars text-white fs-2"></i>
+        </button>
+      </nav>
+
+      {/* Mobile white overlay */}
+      {menuOpen && (
+        <div className="mobile-menu-overlay">
+          <Link className="navbar-brand ps-4" to="/">
+            <img className="mt-4" src={blueLogo} alt="Holidaze" />
+          </Link>
+
+          <button
+            className="btn position-absolute top-0 end-0 m-4"
+            onClick={() => setMenuOpen(false)}
+            aria-label="Close menu"
+          >
+            <i className="fa-solid fa-bars text-primary fs-2"></i>
+          </button>
+
+          {/* Links */}
+          <div className="d-flex flex-column align-items-center justify-content-start gap-4 h-100 p-5">
+            <Link to="/" onClick={() => setMenuOpen(false)}>
+              Home
+            </Link>
+            <Link to="/venues" onClick={() => setMenuOpen(false)}>
+              Venues
+            </Link>
+
+            {isAuthenticated && (
+              <Link to={dashboardRoute} onClick={() => setMenuOpen(false)}>
+                Dashboard
+              </Link>
+            )}
+
+            {!isAuthenticated ? (
+              <Link to="/login" className="btn btn-primary mt-3 nav-btn">
+                Login
+              </Link>
+            ) : (
+              <button
+                className="btn btn-cta mt-3 nav-btn"
+                onClick={() => {
+                  logout();
+                  setMenuOpen(false);
+                }}
+              >
+                Logout
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }

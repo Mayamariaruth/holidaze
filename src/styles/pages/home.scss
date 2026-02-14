@@ -187,6 +187,10 @@
 }
 
 @media (max-width: 768px) {
+  .hero {
+    height: 130vh;
+  }
+
   .scroll-btn {
     display: none;
   }
