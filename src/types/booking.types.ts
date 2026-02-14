@@ -10,6 +10,9 @@ export interface Booking {
 }
 
 export interface UserBooking extends Booking {
+  customer?: {
+    name: string;
+  };
   venue?: {
     id: string;
     name: string;

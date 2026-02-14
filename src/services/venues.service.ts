@@ -6,8 +6,8 @@ export function getVenues() {
   return apiFetch<Venue[]>(endpoints.venues);
 }
 
-export function fetchVenueById(id: string) {
-  return apiFetch(`${endpoints.venues}/${id}?_bookings=true&_owner=true`);
+export function fetchVenueById(id: string): Promise<Venue> {
+  return apiFetch<Venue>(`${endpoints.venues}/${id}?_bookings=true&_owner=true`);
 }
 
 export function createVenue(ownerName: string, payload: VenuePayload) {

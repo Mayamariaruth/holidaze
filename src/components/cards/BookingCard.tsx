@@ -4,9 +4,10 @@ import placeholder from '../../assets/images/placeholder.jpg';
 
 interface Props {
   booking: UserBooking;
+  isManagerView?: boolean;
 }
 
-export default function BookingCard({ booking }: Props) {
+export default function BookingCard({ booking, isManagerView = false }: Props) {
   const venue = booking.venue;
   const location = venue?.location;
   const image = venue?.media?.[0];
@@ -14,6 +15,13 @@ export default function BookingCard({ booking }: Props) {
   const fullAddress = location
     ? [location.address, location.city, location.zip, location.country].filter(Boolean).join(', ')
     : 'No location available';
+
+  const title = isManagerView
+    ? typeof booking.customer === 'string'
+      ? booking.customer
+      : booking.customer?.name || 'Unknown customer'
+    : venue?.name || 'Unknown venue';
+  const locationLine = isManagerView ? venue?.name || 'Unknown venue' : fullAddress;
 
   return (
     <div className="booking-card bg-light p-4 rounded-3 box-shadow d-flex flex-column flex-md-row gap-4">
@@ -28,17 +36,17 @@ export default function BookingCard({ booking }: Props) {
 
       {/* Content */}
       <div className="flex-grow-1 d-flex flex-column justify-between">
-        {/* Venue name + price */}
+        {/* Title + price */}
         <div className="d-flex justify-content-between mb-1 flex-wrap">
-          {venue ? (
+          {isManagerView ? (
+            <p className="booking-font fw-bold mb-0">{title}</p>
+          ) : (
             <Link
-              to={`/venues/${venue.id}`}
+              to={`/venues/${venue?.id}`}
               className="booking-font fw-bold mb-0 text-decoration-none text-dark"
             >
-              {venue.name}
+              {title}
             </Link>
-          ) : (
-            <p className="fw-bold mb-0">Unknown venue</p>
           )}
 
           <p className="fw-semibold mb-0">
@@ -46,9 +54,9 @@ export default function BookingCard({ booking }: Props) {
           </p>
         </div>
 
-        {/* Address + guests */}
+        {/* Location + guests */}
         <div className="d-flex justify-content-between mb-2 flex-column flex-md-row">
-          <p className="text-muted mb-1 mb-md-0">{fullAddress}</p>
+          <p className="text-muted mb-1 mb-md-0">{locationLine}</p>
           <p className="mb-0 fw-medium">{booking.guests} Guests</p>
         </div>
 

@@ -2,18 +2,22 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../stores/auth.stores';
 import { getProfile } from '../../services/profiles.service';
+import { fetchBookingsByVenue } from '../../services/bookings.service';
 import Dashboard from '../../components/layout/Dashboard';
 import CreateVenue from '../../components/modals/CreateVenue';
 import type { UserProfile } from '../../types/user.types';
 import type { Venue } from '../../types/venue.types';
+import type { UserBooking } from '../../types/booking.types';
 import DeleteVenue from '../../components/modals/DeleteVenue';
 import EditVenue from '../../components/modals/EditVenue';
+import ManagerBookings from '../../components/modals/ManagerBookings';
 
 export default function ManagerDashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
   const [editVenue, setEditVenue] = useState<Venue | null>(null);
+  const [selectedBookings, setSelectedBookings] = useState<UserBooking[] | null>(null);
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -91,7 +95,19 @@ export default function ManagerDashboard() {
                       <h4 className="mb-1">{venue.name}</h4>
                     </Link>
                     <p className="text-muted mb-2">{fullAddress}</p>
-                    <button className="btn-bookings fw-semibold mt-4">See bookings</button>
+                    <button
+                      className="btn-bookings fw-semibold mt-4"
+                      onClick={async () => {
+                        try {
+                          const bookings = await fetchBookingsByVenue(venue.id);
+                          setSelectedBookings(bookings);
+                        } catch (err) {
+                          console.error(err);
+                        }
+                      }}
+                    >
+                      See bookings
+                    </button>
                   </div>
 
                   {/* Buttons */}
@@ -148,6 +164,11 @@ export default function ManagerDashboard() {
           onClose={() => setDeleteVenueId(null)}
           onDelete={handleVenueDelete}
         />
+      )}
+
+      {/* Bookings Modal */}
+      {selectedBookings && (
+        <ManagerBookings bookings={selectedBookings} onClose={() => setSelectedBookings(null)} />
       )}
     </Dashboard>
   );
