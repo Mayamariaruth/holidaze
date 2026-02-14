@@ -23,12 +23,20 @@ export async function apiFetch<T>(
     headers,
   });
 
+  // Handle errors
   if (!response.ok) {
-    const errorData = await response.json().catch(() => null);
+    const errorData = await response
+      .text()
+      .then((t) => (t ? JSON.parse(t) : null))
+      .catch(() => null);
     console.error('API error:', errorData);
     throw new Error(errorData?.errors?.[0]?.message || 'API request failed');
   }
 
-  const json = await response.json();
+  // Handle empty responses
+  const text = await response.text();
+  if (!text) return {} as T;
+
+  const json = JSON.parse(text);
   return json.data ?? json;
 }

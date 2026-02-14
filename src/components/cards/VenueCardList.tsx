@@ -20,7 +20,9 @@ export default function VenueCardList({ venue }: Props) {
         <p className="text-neutral mt-1 mb-1">
           {venue.location.city}, {venue.location.country}
         </p>
-        <div>{venue.rating || 'No ratings'}</div>
+        <div className="fw-semibold">
+          {venue.rating !== undefined ? `⭐ ${venue.rating}/5` : 'No ratings'}
+        </div>
         <p className="fw-medium mb-0 mt-1">${venue.price}/night</p>
       </div>
     </Link>

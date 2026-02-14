@@ -61,7 +61,9 @@ export default function VenueDetail() {
         {/* Title */}
         <div className="mb-4 text-center">
           <h1 className="mb-1">{venue.name}</h1>
-          <div className="text-primary">{venue.rating}</div>
+          <div className="fw-bold rating-size">
+            {venue.rating !== undefined ? `⭐ ${venue.rating}/5` : 'No ratings'}
+          </div>
           <p className="text-neutral fw-medium h4">
             {venue.location.city}, {venue.location.country}
           </p>

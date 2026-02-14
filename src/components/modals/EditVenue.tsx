@@ -18,7 +18,7 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     price: '',
     maxGuests: '',
     amenities: [] as string[],
-    rating: 0,
+    rating: '' as number | '',
     location: { address: '', city: '', zip: '', country: '' } as Location,
     media: [''] as string[],
   });
@@ -26,33 +26,33 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
 
   // Prepopulate form
   useEffect(() => {
-  if (!venue) return;
+    if (!venue) return;
 
-  const amenities: string[] = [];
-  if (venue.meta?.wifi) amenities.push('Wi-Fi');
-  if (venue.meta?.parking) amenities.push('Parking');
-  if (venue.meta?.breakfast) amenities.push('Breakfast');
-  if (venue.meta?.pets) amenities.push('Pets');
+    const amenities: string[] = [];
+    if (venue.meta?.wifi) amenities.push('Wi-Fi');
+    if (venue.meta?.parking) amenities.push('Parking');
+    if (venue.meta?.breakfast) amenities.push('Breakfast');
+    if (venue.meta?.pets) amenities.push('Pets');
 
-  setFormState({
-    name: venue.name ?? '',
-    description: venue.description ?? '',
-    price: venue.price !== undefined ? venue.price.toString() : '',
-    maxGuests: venue.maxGuests !== undefined ? venue.maxGuests.toString() : '',
-    rating: venue.rating ?? 0,
-    amenities,
-    location: {
-      address: venue.location?.address ?? '',
-      city: venue.location?.city ?? '',
-      zip: venue.location?.zip ?? '',
-      country: venue.location?.country ?? '',
-      continent: venue.location?.continent ?? '',
-      lat: venue.location?.lat ?? 0,
-      long: venue.location?.long ?? 0,
-    },
-    media: venue.media?.map((m) => m.url ?? '') || [''],
-  });
-}, [venue]);
+    setFormState({
+      name: venue.name ?? '',
+      description: venue.description ?? '',
+      price: venue.price !== undefined ? venue.price.toString() : '',
+      maxGuests: venue.maxGuests !== undefined ? venue.maxGuests.toString() : '',
+      rating: venue.rating ?? '',
+      amenities,
+      location: {
+        address: venue.location?.address ?? '',
+        city: venue.location?.city ?? '',
+        zip: venue.location?.zip ?? '',
+        country: venue.location?.country ?? '',
+        continent: venue.location?.continent ?? '',
+        lat: venue.location?.lat ?? 0,
+        long: venue.location?.long ?? 0,
+      },
+      media: venue.media?.map((m) => m.url ?? '') || [''],
+    });
+  }, [venue]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -92,7 +92,7 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
         name: formState.name,
         description: formState.description,
         price: Number(formState.price),
-        rating: formState.rating,
+        rating: formState.rating === '' ? undefined : formState.rating,
         maxGuests: Number(formState.maxGuests),
         meta: {
           wifi: formState.amenities.includes('Wi-Fi'),
@@ -219,7 +219,10 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
                     className="form-control"
                     value={formState.rating}
                     onChange={(e) =>
-                      setFormState((prev) => ({ ...prev, rating: Number(e.target.value) }))
+                      setFormState((prev) => ({
+                        ...prev,
+                        rating: e.target.value === '' ? '' : Number(e.target.value),
+                      }))
                     }
                   />
                 </div>

@@ -10,6 +10,7 @@ export interface Venue {
   meta: VenueMeta;
   location: Location;
   bookings?: Booking[];
+  created?: string;
   owner?: {
     name: string;
   };
@@ -44,6 +45,7 @@ export interface VenuePayload {
   maxGuests: number;
   meta: VenueMeta;
   location: Location;
+  owner?: string;
   media?: {
     url: string;
     alt?: string;

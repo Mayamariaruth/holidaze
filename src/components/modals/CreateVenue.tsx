@@ -16,7 +16,7 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
     price: '',
     maxGuests: '',
     amenities: [] as string[],
-    rating: 0,
+    rating: '' as number | '',
     location: { address: '', city: '', zip: '', country: '' } as Location,
     media: [''] as string[],
   });
@@ -60,7 +60,7 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
         name: formState.name,
         description: formState.description,
         price: Number(formState.price),
-        rating: formState.rating,
+        rating: formState.rating === '' ? undefined : formState.rating,
         maxGuests: Number(formState.maxGuests),
         meta: {
           wifi: formState.amenities.includes('Wi-Fi'),
@@ -188,10 +188,14 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                     max={5}
                     step={0.5}
                     name="rating"
+                    placeholder="0–5"
                     className="form-control"
                     value={formState.rating}
                     onChange={(e) =>
-                      setFormState((prev) => ({ ...prev, rating: Number(e.target.value) }))
+                      setFormState((prev) => ({
+                        ...prev,
+                        rating: e.target.value === '' ? '' : Number(e.target.value),
+                      }))
                     }
                   />
                 </div>
