@@ -114,6 +114,50 @@
   font-size: 18px;
 }
 
+.btn-filters {
+  background-color: white !important;
+  border: none;
+  color: $dark;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
+  height: 44px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-filters:hover,
+.btn-filters:focus {
+  background-color: white !important;
+  color: $dark !important;
+}
+
+.dropdown-menu-custom {
+  background-color: white;
+  border: none;
+  border-radius: 8px;
+  min-width: 200px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 0;
+}
+
+.dropdown-menu-custom .dropdown-item {
+  padding: 0.5rem 1rem;
+  color: $dark;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.dropdown-menu-custom .dropdown-item:hover,
+.dropdown-menu-custom .dropdown-item.active {
+  background-color: $neutral-500;
+  color: $dark;
+}
+
+.btn-pag {
+  width: 100px;
+}
+
 @media (min-width: 998px) {
   .venue-controls {
     margin-top: -40px;
