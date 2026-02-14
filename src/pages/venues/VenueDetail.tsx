@@ -7,6 +7,7 @@ import { apiFetch } from '../../utils/api';
 import type { Venue, VenueMeta } from '../../types/venue.types';
 import { useBookings } from '../../hooks/useBookings';
 import EditVenue from '../../components/modals/EditVenue';
+import VenueMap from '../../components/ui/VenueMap';
 
 export default function VenueDetail() {
   const { id } = useParams<{ id: string }>();
@@ -67,23 +68,13 @@ export default function VenueDetail() {
         </div>
 
         {/* Image */}
-        <div className="row g-3">
+        <div className="row g-3 mb-3">
           <div className="col-12 col-md-8 w-100">
             <img
               src={venue.media?.[0]?.url}
               className="img-fluid rounded-4 w-100"
               alt={venue.media?.[0]?.alt || venue.name}
             />
-          </div>
-
-          <div className="col-12 col-md-4">
-            <div className="row g-2">
-              {venue.media?.slice(1, 5).map((img) => (
-                <div className="col-6" key={img.url}>
-                  <img src={img.url} alt={img.alt ?? venue.name} className="img-fluid rounded-3" />
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
@@ -98,7 +89,6 @@ export default function VenueDetail() {
               <i className="fa-regular fa-heart me-2" /> Save
             </button>
           )}
-
           <span>
             Managed by <strong>{venue.owner?.name}</strong>
           </span>
@@ -110,9 +100,9 @@ export default function VenueDetail() {
           <p>{venue.description}</p>
         </div>
 
-        <div className="row g-5">
-          {/* Left - Amenities + Location */}
-          <div className="col-12 col-lg-7">
+        <div className="row g-5 justify-content-between">
+          {/* Left: Amenities + Location */}
+          <div className="col-12 col-lg-6 order-2 order-lg-1">
             <h3>Amenities</h3>
             <ul className="list-unstyled row">
               {amenities.map((amenity) => (
@@ -125,17 +115,22 @@ export default function VenueDetail() {
               ))}
             </ul>
 
-            <h3 className="mt-5">Location</h3>
-            <div className="map-placeholder rounded-4 mb-3" />
-            <p>
-              {venue.location.address}, {venue.location.city}, {venue.location.zip}{' '}
-              {venue.location.country}
-            </p>
+            {/* Location with maps */}
+            <div className="mt-5">
+              <h3>Location</h3>
+              <div className="bg-white rounded-4 pb-2">
+                <VenueMap name={venue.name} location={venue.location} />
+                <p className="ps-3">
+                  {venue.location.address}, {venue.location.city}, {venue.location.zip}{' '}
+                  {venue.location.country}
+                </p>
+              </div>
+            </div>
           </div>
 
-          {/* Right - Booking Box */}
-          <div className="col-12 col-lg-5">
-            <div className="booking-box rounded-4 p-4 sticky-top bg-white">
+          {/* Right: Booking Box */}
+          <div className="col-12 col-lg-6 order-1 order-lg-2">
+            <div className="booking-box rounded-4 p-4 p-lg-5 sticky-top bg-white">
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h2 className="h3">Availability</h2>
                 <span className="fw-medium">Max {venue.maxGuests} guests</span>

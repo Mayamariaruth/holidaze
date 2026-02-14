@@ -1,37 +1,44 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import type { LatLngExpression } from 'leaflet';
+import type { Location } from '../../types/venue.types';
 import L from 'leaflet';
 
-interface VenueMapProps {
-  lat: number;
-  long: number;
-  name: string;
-}
-
-/* Fix marker icons */
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
 });
 
-export default function VenueMap({ lat, long, name }: VenueMapProps) {
-  const position: LatLngExpression = [lat, long];
+interface Props {
+  location: Location;
+  name: string;
+  fallbackCoords?: [number, number];
+}
+
+// Default fallback location
+const defaultFallback: [number, number] = [40.7128, -74.006];
+
+export default function VenueMap({ name, location, fallbackCoords = defaultFallback }: Props) {
+  // Check if lat/lon are valid numbers
+  const lat =
+    typeof location.lat === 'number' && !isNaN(location.lat) && location.lat !== 0
+      ? location.lat
+      : fallbackCoords[0];
+  const lon =
+    typeof location.long === 'number' && !isNaN(location.long) && location.long !== 0
+      ? location.long
+      : fallbackCoords[1];
 
   return (
     <MapContainer
-      center={position}
+      center={[lat, lon]}
       zoom={13}
       scrollWheelZoom={false}
-      className="rounded-4"
       style={{ height: '300px', width: '100%' }}
+      className="rounded-4 mb-3"
     >
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; OpenStreetMap contributors"
+        attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
       />
-
-      <Marker position={position}>
+      <Marker position={[lat, lon]}>
         <Popup>{name}</Popup>
       </Marker>
     </MapContainer>
