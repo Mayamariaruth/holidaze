@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Dropdown, ButtonGroup } from 'react-bootstrap';
 import VenueCardList from '../../components/cards/VenueCardList';
@@ -10,38 +10,27 @@ import heroImage from '../../assets/images/venue-hero.jpg';
 export default function Venues() {
   const { venues, isLoading, isError } = useVenues();
   const location = useLocation();
-  const params = Object.fromEntries(new URLSearchParams(location.search));
-
-  // Local form state (prefilled from URL)
-  const [locationInput, setLocationInput] = useState(params.location || '');
-  const [guestsInput, setGuestsInput] = useState(params.guests ? Number(params.guests) : '');
-  const [dateFromInput, setDateFromInput] = useState(
-    params.dateFrom ? new Date(params.dateFrom) : null
+  const params = useMemo(
+    () => Object.fromEntries(new URLSearchParams(location.search)),
+    [location.search]
   );
-  const [dateToInput, setDateToInput] = useState(params.dateTo ? new Date(params.dateTo) : null);
 
-  const { handleChange, searchResults } = useSearch(venues);
+  const { searchParams, handleChange, searchResults } = useSearch(venues, {
+    location: params.location || '',
+    guests: params.guests ? Number(params.guests) : null,
+    dateFrom: params.dateFrom ? new Date(params.dateFrom) : null,
+    dateTo: params.dateTo ? new Date(params.dateTo) : null,
+  });
 
-  // Filters
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
   const [minRating, setMinRating] = useState<number | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [amenitiesFilter, setAmenitiesFilter] = useState<string[]>([]);
-  const [showCalendar, setShowCalendar] = useState(false);
 
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
-  // Search button handler
-  const onSearch = () => {
-    handleChange('location', locationInput);
-    handleChange('guests', guestsInput ? Number(guestsInput) : null);
-    handleChange('dateFrom', dateFromInput);
-    handleChange('dateTo', dateToInput);
-    setCurrentPage(1);
-  };
-
-  // Toggle amenities
   const toggleAmenity = (amenity: string) => {
     setAmenitiesFilter((prev) =>
       prev.includes(amenity) ? prev.filter((a) => a !== amenity) : [...prev, amenity]
@@ -49,17 +38,17 @@ export default function Venues() {
     setCurrentPage(1);
   };
 
-  // Apply filters on searchResults
   let filteredVenues = searchResults;
 
   if (minRating) {
     filteredVenues = filteredVenues.filter((v) => (v.rating ?? 0) >= minRating);
-    filteredVenues.sort((a, b) => (a.rating ?? 0) - (b.rating ?? 0));
   }
 
-  if (maxPrice) filteredVenues = filteredVenues.filter((v) => v.price <= maxPrice);
+  if (maxPrice) {
+    filteredVenues = filteredVenues.filter((v) => v.price <= maxPrice);
+  }
 
-  if (amenitiesFilter.length > 0) {
+  if (amenitiesFilter.length) {
     filteredVenues = filteredVenues.filter((v) => {
       if (!v.meta) return false;
       return amenitiesFilter.every((a) => {
@@ -72,7 +61,6 @@ export default function Venues() {
     });
   }
 
-  // Pagination
   const totalPages = Math.ceil(filteredVenues.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentVenues = filteredVenues.slice(startIndex, startIndex + itemsPerPage);
@@ -83,50 +71,54 @@ export default function Venues() {
       {isError && <p>Failed to load venues</p>}
 
       {!isLoading && !isError && (
-        <div>
+        <>
           <section className="venue-hero" style={{ backgroundImage: `url(${heroImage})` }}>
-            <div className="hero-overlay"></div>
+            <div className="hero-overlay" />
           </section>
 
           <div className="container mb-5">
-            {/* Search Form */}
+            {/* Search bar */}
             <section className="venue-controls">
               <form
                 className="search-bar rounded-4 mb-5 box-shadow"
                 onSubmit={(e) => e.preventDefault()}
               >
                 <input
-                  className="form-control flex-fill"
+                  className="form-control"
                   placeholder="Location"
-                  value={locationInput}
-                  onChange={(e) => setLocationInput(e.target.value)}
+                  value={searchParams.location}
+                  onChange={(e) => {
+                    handleChange('location', e.target.value);
+                    setCurrentPage(1);
+                  }}
                 />
+
                 <input
-                  type="text"
                   className="form-control"
                   placeholder="Check-in"
+                  value={searchParams.dateFrom?.toLocaleDateString() ?? ''}
                   readOnly
-                  value={dateFromInput ? dateFromInput.toLocaleDateString() : ''}
                   onClick={() => setShowCalendar(true)}
                 />
+
                 <input
-                  type="text"
                   className="form-control"
                   placeholder="Check-out"
+                  value={searchParams.dateTo?.toLocaleDateString() ?? ''}
                   readOnly
-                  value={dateToInput ? dateToInput.toLocaleDateString() : ''}
                   onClick={() => setShowCalendar(true)}
                 />
+
                 <input
                   className="form-control"
                   placeholder="Guests"
                   type="number"
-                  value={guestsInput ?? ''}
-                  onChange={(e) => setGuestsInput(Number(e.target.value))}
+                  value={searchParams.guests ?? ''}
+                  onChange={(e) => {
+                    handleChange('guests', e.target.value ? Number(e.target.value) : null);
+                    setCurrentPage(1);
+                  }}
                 />
-                <button className="btn btn-cta px-4" type="button" onClick={onSearch}>
-                  Search
-                </button>
               </form>
 
               {showCalendar && (
@@ -134,20 +126,19 @@ export default function Venues() {
                   bookings={[]}
                   onClose={() => setShowCalendar(false)}
                   onSelectRange={(from, to) => {
-                    setDateFromInput(from);
-                    setDateToInput(to);
+                    handleChange('dateFrom', from);
+                    handleChange('dateTo', to);
+                    setCurrentPage(1);
                     setShowCalendar(false);
                   }}
                 />
               )}
 
               {/* Filters */}
-              <div className="mt-2 d-flex flex-column flex-md-row gap-3">
+              <div className="d-flex flex-wrap gap-3">
                 {/* Rating */}
                 <Dropdown as={ButtonGroup}>
-                  <Dropdown.Toggle className="btn btn-filters">
-                    <i className="fa-regular fa-star me-1"></i> Rating
-                  </Dropdown.Toggle>
+                  <Dropdown.Toggle className="btn btn-filters">Rating</Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-custom">
                     {[1, 2, 3, 4, 5].map((r) => (
                       <Dropdown.Item
@@ -161,15 +152,21 @@ export default function Venues() {
                         {r} ⭐ & up
                       </Dropdown.Item>
                     ))}
-                    <Dropdown.Item onClick={() => setMinRating(null)}>Clear</Dropdown.Item>
+                    {/* Clear button */}
+                    <Dropdown.Item
+                      onClick={() => {
+                        setMinRating(null);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      Clear
+                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
 
                 {/* Price */}
                 <Dropdown as={ButtonGroup}>
-                  <Dropdown.Toggle className="btn btn-filters">
-                    <i className="fa-solid fa-dollar-sign me-1"></i> Price
-                  </Dropdown.Toggle>
+                  <Dropdown.Toggle className="btn btn-filters">Price</Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-custom">
                     {[50, 100, 200, 500].map((price) => (
                       <Dropdown.Item
@@ -183,25 +180,31 @@ export default function Venues() {
                         Up to ${price}
                       </Dropdown.Item>
                     ))}
-                    <Dropdown.Item onClick={() => setMaxPrice(null)}>Clear</Dropdown.Item>
+                    {/* Clear button */}
+                    <Dropdown.Item
+                      onClick={() => {
+                        setMaxPrice(null);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      Clear
+                    </Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
 
                 {/* Amenities */}
                 <Dropdown as={ButtonGroup}>
-                  <Dropdown.Toggle className="btn btn-filters">
-                    <i className="fa-solid fa-wifi me-1"></i> Amenities
-                  </Dropdown.Toggle>
+                  <Dropdown.Toggle className="btn btn-filters">Amenities</Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-custom">
-                    {['Wi-Fi', 'Parking', 'Breakfast', 'Pets'].map((amenity) => (
+                    {['Wi-Fi', 'Parking', 'Breakfast', 'Pets'].map((a) => (
                       <Dropdown.Item
-                        key={amenity}
-                        onClick={() => toggleAmenity(amenity)}
-                        className="d-flex justify-content-between align-items-center"
+                        key={a}
+                        onClick={() => toggleAmenity(a)}
+                        className="d-flex justify-content-between"
                       >
-                        <span>{amenity}</span>
-                        {amenitiesFilter.includes(amenity) && (
-                          <i className="fa-solid fa-check text-success"></i>
+                        {a}
+                        {amenitiesFilter.includes(a) && (
+                          <i className="fa-solid fa-check text-success" />
                         )}
                       </Dropdown.Item>
                     ))}
@@ -211,7 +214,7 @@ export default function Venues() {
               </div>
             </section>
 
-            {/* Venues List */}
+            {/* Venues list */}
             <section>
               <div className="venues-grid">
                 {currentVenues.map((venue) => (
@@ -219,29 +222,26 @@ export default function Venues() {
                 ))}
               </div>
 
-              {filteredVenues.length === 0 && (
-                <p className="mt-3 text-center text-muted">
-                  No venues match your filters. Try changing your search or clearing some filters.
-                </p>
+              {!filteredVenues.length && (
+                <p className="text-center text-muted mt-4">No venues match your search.</p>
               )}
 
-              {/* Pagination */}
               {totalPages > 1 && (
-                <div className="d-flex justify-content-center gap-2 mt-5">
+                <div className="d-flex justify-content-center gap-3 mt-5">
                   <button
-                    className="btn btn-outline-primary btn-pag"
+                    className="btn btn-outline-primary"
                     disabled={currentPage === 1}
-                    onClick={() => setCurrentPage((prev) => prev - 1)}
+                    onClick={() => setCurrentPage((p) => p - 1)}
                   >
                     Previous
                   </button>
-                  <span className="align-self-center">
+                  <span>
                     Page {currentPage} of {totalPages}
                   </span>
                   <button
-                    className="btn btn-primary btn-pag"
+                    className="btn btn-primary"
                     disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage((prev) => prev + 1)}
+                    onClick={() => setCurrentPage((p) => p + 1)}
                   >
                     Next
                   </button>
@@ -249,7 +249,7 @@ export default function Venues() {
               )}
             </section>
           </div>
-        </div>
+        </>
       )}
     </>
   );

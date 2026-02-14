@@ -3,7 +3,7 @@ import { apiFetch } from '../utils/api';
 import type { Venue, VenuePayload } from '../types/venue.types';
 
 export function getVenues() {
-  return apiFetch<Venue[]>(endpoints.venues);
+  return apiFetch<Venue[]>(`${endpoints.venues}?_bookings=true`);
 }
 
 export function fetchVenueById(id: string): Promise<Venue> {

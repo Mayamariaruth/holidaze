@@ -53,7 +53,7 @@ export default function ManagerDashboard() {
     <Dashboard profile={profile} setProfile={setProfile}>
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <p className="h2">Venues</p>
+        <h2>Venues</h2>
         <button className="btn btn-primary btn-create" onClick={() => setShowCreateModal(true)}>
           Create venue
         </button>

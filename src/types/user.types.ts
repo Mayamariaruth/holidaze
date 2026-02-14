@@ -3,12 +3,6 @@ import type { UserBooking } from './booking.types';
 
 export type AccountType = 'customer' | 'venue_manager';
 
-export interface Favorite {
-  id: string;
-  name: string;
-  venueId?: string;
-}
-
 export interface UserProfile {
   name: string;
   email: string;
@@ -22,7 +16,6 @@ export interface UserProfile {
     alt: string;
   };
   bookings?: UserBooking[];
-  favorites?: Favorite[];
   venueManager?: boolean;
   venues?: Venue[];
 }

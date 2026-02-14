@@ -13,10 +13,7 @@ export default function VenueCardHome({ venue }: Props) {
         <img src={venue.media?.[0]?.url || placeholder} alt={venue.media?.[0]?.alt || venue.name} />
       </div>
       <div className="px-3 pt-2">
-        <div className="d-flex justify-content-between align-items-center">
-          <h4 className="mb-0">{venue.name}</h4>
-          <i className="fa-regular fa-heart"></i>
-        </div>
+        <h4 className="mb-0">{venue.name}</h4>
         <p className="text-neutral mt-1 mb-1">
           {venue.location.city}, {venue.location.country}
         </p>

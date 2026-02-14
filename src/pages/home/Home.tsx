@@ -57,6 +57,17 @@ export default function Home() {
 
   const { searchParams, handleChange } = useSearch([]);
 
+  const onSearch = () => {
+    const query = new URLSearchParams({
+      location: searchParams.location,
+      guests: searchParams.guests?.toString() ?? '',
+      dateFrom: dateFrom ? dateFrom.toISOString() : '',
+      dateTo: dateTo ? dateTo.toISOString() : '',
+    }).toString();
+
+    navigate(`/venues?${query}`);
+  };
+
   return (
     <>
       {/* Hero section */}
@@ -72,35 +83,35 @@ export default function Home() {
             Book unique venues in destinations around the world.
           </p>
 
-          <form className="hero-form d-flex flex-column flex-md-row bg-white align-items-stretch rounded-4 p-3 gap-2">
+          <form
+            onSubmit={(e) => e.preventDefault()}
+            className="hero-form d-flex flex-column flex-md-row bg-white align-items-stretch rounded-4 p-3 gap-2"
+          >
             {/* Location */}
             <input
-              className="form-control flex-fill"
+              className="form-control"
               placeholder="Location"
               value={searchParams.location}
               onChange={(e) => handleChange('location', e.target.value)}
             />
-
             {/* Check-in */}
             <input
               type="text"
-              className="form-control flex-fill"
+              className="form-control"
               placeholder="Check-in"
               readOnly
               value={dateFrom ? dateFrom.toLocaleDateString() : ''}
               onClick={() => setShowCalendar(true)}
             />
-
             {/* Check-out */}
             <input
               type="text"
-              className="form-control flex-fill"
+              className="form-control"
               placeholder="Check-out"
               readOnly
               value={dateTo ? dateTo.toLocaleDateString() : ''}
               onClick={() => setShowCalendar(true)}
             />
-
             {/* Guests */}
             <input
               className="form-control"
@@ -109,21 +120,8 @@ export default function Home() {
               value={searchParams.guests ?? ''}
               onChange={(e) => handleChange('guests', Number(e.target.value))}
             />
-
-            <button
-              className="btn btn-cta px-4"
-              type="button"
-              onClick={() => {
-                const query = new URLSearchParams({
-                  location: searchParams.location,
-                  guests: searchParams.guests?.toString() ?? '',
-                  dateFrom: searchParams.dateFrom?.toISOString() ?? '',
-                  dateTo: searchParams.dateTo?.toISOString() ?? '',
-                }).toString();
-
-                navigate(`/venues?${query}`);
-              }}
-            >
+            {/* Search Button */}
+            <button className="btn btn-cta px-4" type="button" onClick={onSearch}>
               Search
             </button>
           </form>
