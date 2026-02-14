@@ -8,10 +8,15 @@ import type { Venue, VenueMeta } from '../../types/venue.types';
 import { useBookings } from '../../hooks/useBookings';
 import EditVenue from '../../components/modals/EditVenue';
 import VenueMap from '../../components/ui/VenueMap';
+import Alert from '../../components/ui/Alert';
 
 export default function VenueDetail() {
   const { id } = useParams<{ id: string }>();
   const { role, isAuthenticated } = useAuthStore();
+  const [globalAlert, setGlobalAlert] = useState<{
+    type: 'success' | 'danger';
+    message: string;
+  } | null>(null);
 
   const [venue, setVenue] = useState<Venue | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -19,6 +24,14 @@ export default function VenueDetail() {
   const [showCalendar, setShowCalendar] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const booking = useBookings(venue, isAuthenticated);
+
+  useEffect(() => {
+    if (booking.success) {
+      setGlobalAlert({ type: 'success', message: 'Your booking was successful!' });
+    } else if (booking.error) {
+      setGlobalAlert({ type: 'danger', message: booking.error });
+    }
+  }, [booking.success, booking.error]);
 
   useEffect(() => {
     if (!id) return;
@@ -42,8 +55,23 @@ export default function VenueDetail() {
 
   const amenities: (keyof VenueMeta)[] = ['wifi', 'parking', 'breakfast', 'pets'];
 
+  const handleBooking = async () => {
+    await booking.book();
+  };
+
   return (
     <div>
+      <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1050 }}>
+        {globalAlert && (
+          <Alert
+            type={globalAlert.type}
+            message={globalAlert.message}
+            onClose={() => setGlobalAlert(null)}
+            autoDismiss={5000}
+          />
+        )}
+      </div>
+
       {/* Breadcrumb */}
       <nav className="breadcrumb mt-4 mb-5 ms-4 d-flex align-items-center gap-1">
         <Link to="/" className="text-decoration-none text-muted">
@@ -175,7 +203,7 @@ export default function VenueDetail() {
                   disabled={
                     !booking.dateFrom || !booking.dateTo || booking.isSubmitting || !booking.guests
                   }
-                  onClick={booking.book}
+                  onClick={handleBooking}
                 >
                   {booking.isSubmitting ? 'Booking…' : 'Book'}
                 </button>
