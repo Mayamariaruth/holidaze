@@ -156,10 +156,13 @@ export default function Venues() {
                     {['Wi-Fi', 'Parking', 'Breakfast', 'Pets'].map((amenity) => (
                       <Dropdown.Item
                         key={amenity}
-                        active={amenitiesFilter.includes(amenity)}
                         onClick={() => toggleAmenity(amenity)}
+                        className="d-flex justify-content-between align-items-center"
                       >
-                        {amenity}
+                        <span>{amenity}</span>
+                        {amenitiesFilter.includes(amenity) && (
+                          <i className="fa-solid fa-check text-success"></i>
+                        )}
                       </Dropdown.Item>
                     ))}
                     <Dropdown.Item onClick={() => setAmenitiesFilter([])}>Clear All</Dropdown.Item>
