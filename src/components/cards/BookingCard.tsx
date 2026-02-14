@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import type { UserBooking } from '../../types/user.types';
+import type { UserBooking } from '../../types/booking.types';
 import placeholder from '../../assets/images/placeholder.jpg';
 
 interface Props {
@@ -7,13 +7,13 @@ interface Props {
 }
 
 export default function BookingCard({ booking }: Props) {
-  const location = booking.venue?.location;
+  const venue = booking.venue;
+  const location = venue?.location;
+  const image = venue?.media?.[0];
 
-  const formattedAddress = location
+  const fullAddress = location
     ? [location.address, location.city, location.zip, location.country].filter(Boolean).join(', ')
-    : '';
-
-  const fullAddress = formattedAddress || 'No location available';
+    : 'No location available';
 
   return (
     <div className="booking-card bg-light p-4 rounded-3 box-shadow d-flex flex-column flex-md-row gap-4">
@@ -21,28 +21,32 @@ export default function BookingCard({ booking }: Props) {
       <div className="flex-shrink-0 booking-img">
         <img
           className="img-fluid rounded object-fit-cover"
-          src={booking.venue?.media?.url || placeholder}
-          alt={booking.venue?.media?.alt || booking.venue?.name}
+          src={image?.url || placeholder}
+          alt={image?.alt || venue?.name || 'Venue image'}
         />
       </div>
 
       {/* Content */}
       <div className="flex-grow-1 d-flex flex-column justify-between">
-        {/* Venue name and price */}
+        {/* Venue name + price */}
         <div className="d-flex justify-content-between mb-1 flex-wrap">
-          <Link
-            to={`/venues/${booking.venue?.id}`}
-            className="booking-font fw-bold mb-0 text-decoration-none text-dark"
-          >
-            {booking.venue?.name}
-          </Link>
+          {venue ? (
+            <Link
+              to={`/venues/${venue.id}`}
+              className="booking-font fw-bold mb-0 text-decoration-none text-dark"
+            >
+              {venue.name}
+            </Link>
+          ) : (
+            <p className="fw-bold mb-0">Unknown venue</p>
+          )}
 
           <p className="fw-semibold mb-0">
-            {booking.venue?.price ? `$${booking.venue.price}/night` : 'No price available'}
+            {venue?.price ? `$${venue.price}/night` : 'No price available'}
           </p>
         </div>
 
-        {/* Address and guests */}
+        {/* Address + guests */}
         <div className="d-flex justify-content-between mb-2 flex-column flex-md-row">
           <p className="text-muted mb-1 mb-md-0">{fullAddress}</p>
           <p className="mb-0 fw-medium">{booking.guests} Guests</p>
@@ -50,13 +54,12 @@ export default function BookingCard({ booking }: Props) {
 
         <hr className="my-2" />
 
-        {/* Check-in */}
-        <div className="d-flex justify-content-between mb-1 flex-wrap">
+        {/* Dates */}
+        <div className="d-flex justify-content-between mb-1">
           <p className="mb-0">Check-in</p>
           <p className="mb-0">{new Date(booking.dateFrom).toLocaleDateString()}</p>
         </div>
 
-        {/* Check-out */}
         <div className="d-flex justify-content-between">
           <p className="mb-0">Check-out</p>
           <p className="mb-0">{new Date(booking.dateTo).toLocaleDateString()}</p>

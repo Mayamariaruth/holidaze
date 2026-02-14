@@ -1,3 +1,5 @@
+import type { Location } from './venue.types';
+
 export interface Booking {
   id: string;
   dateFrom: string;

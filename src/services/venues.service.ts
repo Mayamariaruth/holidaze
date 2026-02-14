@@ -17,6 +17,13 @@ export function createVenue(ownerName: string, payload: VenuePayload) {
   });
 }
 
+export function updateVenue(id: string, payload: VenuePayload) {
+  return apiFetch<Venue>(`${endpoints.venues}/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(payload),
+  });
+}
+
 export function deleteVenue(id: string) {
   return apiFetch(`${endpoints.venues}/${id}`, {
     method: 'DELETE',

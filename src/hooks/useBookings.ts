@@ -3,7 +3,7 @@ import { createBooking } from '../services/bookings.service';
 import type { Venue } from '../types/venue.types';
 import { isOverlapping } from '../utils/validation';
 
-export function useBooking(venue: Venue | null) {
+export function useBookings(venue: Venue | null, isAuthenticated: boolean) {
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
   const [guests, setGuests] = useState<number | ''>('');
@@ -21,6 +21,11 @@ export function useBooking(venue: Venue | null) {
 
   const book = async () => {
     if (!venue) return;
+
+    if (!isAuthenticated) {
+      setError('You must be logged in to book');
+      return;
+    }
 
     if (!dateFrom || !dateTo) {
       setError('Please select dates');

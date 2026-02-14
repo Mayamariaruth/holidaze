@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuthStore } from '../../stores/auth.stores';
 import { getProfile } from '../../services/profiles.service';
 import Dashboard from '../../components/layout/Dashboard';
@@ -6,11 +7,13 @@ import CreateVenue from '../../components/modals/CreateVenue';
 import type { UserProfile } from '../../types/user.types';
 import type { Venue } from '../../types/venue.types';
 import DeleteVenue from '../../components/modals/DeleteVenue';
+import EditVenue from '../../components/modals/EditVenue';
 
 export default function ManagerDashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
+  const [editVenue, setEditVenue] = useState<Venue | null>(null);
   const { user } = useAuthStore();
 
   useEffect(() => {
@@ -84,14 +87,21 @@ export default function ManagerDashboard() {
                 <div className="flex-grow-1 d-flex flex-column flex-md-row justify-between gap-3">
                   {/* Content */}
                   <div className="flex-grow-1">
-                    <h4 className="mb-1">{venue.name}</h4>
+                    <Link to={`/venues/${venue?.id}`} className="text-dark text-decoration-none">
+                      <h4 className="mb-1">{venue.name}</h4>
+                    </Link>
                     <p className="text-muted mb-2">{fullAddress}</p>
                     <button className="btn-bookings fw-semibold mt-4">See bookings</button>
                   </div>
 
                   {/* Buttons */}
                   <div className="btn-container d-flex flex-row flex-md-column gap-2">
-                    <button className="btn btn-cancel flex-grow-1">Edit</button>
+                    <button
+                      className="btn btn-cancel flex-grow-1"
+                      onClick={() => setEditVenue(venue)}
+                    >
+                      Edit
+                    </button>
                     <button
                       className="btn btn-danger flex-grow-1"
                       onClick={() => setDeleteVenueId(venue.id)}
@@ -111,6 +121,24 @@ export default function ManagerDashboard() {
       {/* Create Venue Modal */}
       {showCreateModal && (
         <CreateVenue onClose={() => setShowCreateModal(false)} onCreate={handleCreateVenue} />
+      )}
+
+      {/* Edit Venue Modal */}
+      {editVenue && (
+        <EditVenue
+          venue={editVenue}
+          onClose={() => setEditVenue(null)}
+          onEdit={(updated) => {
+            setProfile((prev) => {
+              if (!prev || !prev.venues) return prev;
+
+              return {
+                ...prev,
+                venues: prev.venues.map((v) => (v.id === updated.id ? updated : v)),
+              };
+            });
+          }}
+        />
       )}
 
       {/* Delete Venue Modal */}
