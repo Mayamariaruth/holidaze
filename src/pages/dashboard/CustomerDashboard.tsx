@@ -6,14 +6,27 @@ import BookingCard from '../../components/cards/BookingCard';
 import type { UserProfile } from '../../types/user.types';
 import type { UserBooking } from '../../types/booking.types';
 
+/**
+ * Customer Dashboard page component.
+ *
+ * Displays a list of bookings for the logged-in customer.
+ *
+ * @component
+ * @example
+ * <CustomerDashboard />
+ *
+ * @remarks
+ * - Fetches the customer's profile using `getProfile` from the API.
+ * - Each booking is rendered with `BookingCard`.
+ * - Simple layout with header, bookings list, and message if no bookings exist.
+ */
 export default function CustomerDashboard() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
-
   const { user } = useAuthStore();
 
+  // Fetch customer profile with bookings
   useEffect(() => {
     if (!user?.name) return;
-
     const { name } = user;
 
     async function fetchProfile() {
@@ -36,6 +49,7 @@ export default function CustomerDashboard() {
       </div>
       <hr />
 
+      {/* Booking list */}
       <div className="mt-5">
         <div className="d-flex flex-column gap-3">
           {profile?.bookings?.length ? (

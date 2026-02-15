@@ -5,24 +5,53 @@ import bgImg from '../../assets/images/auth/register.jpg';
 import Alert from '../../components/ui/Alert';
 import Loader from '../../components/ui/Loader';
 
+/**
+ * Register page component.
+ *
+ * Provides a form for new users to create an account.
+ * Users can register as a regular customer or as a venue manager.
+ * Displays global alerts for success or failure and includes inline validation for name, email, and password.
+ * Redirects to the Login page after successful registration.
+ *
+ * @component
+ * @example
+ * <Register />
+ *
+ * @remarks
+ * - Uses `useAuth` hook for registration functionality and loading state.
+ * - Inline validation ensures name, email, and password are provided.
+ * - Enforces registration with a `@stud.noroff.no` email address.
+ * - Users can optionally register as a venue manager via a checkbox.
+ * - Shows a Loader overlay while registration request is in progress.
+ * - Global alerts are automatically dismissed after 5 seconds.
+ */
 export default function Register() {
   const { register, isLoading } = useAuth();
   const navigate = useNavigate();
 
+  // Form state
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [venueManager, setVenueManager] = useState(false);
 
+  // Inline field errors
   const [errors, setErrors] = useState<{ name?: string; email?: string; password?: string }>({});
+
+  // Global success/failure alert
   const [globalAlert, setGlobalAlert] = useState<{
     type: 'success' | 'danger';
     message: string;
   } | null>(null);
 
+  /**
+   * Handles form submission.
+   * Validates fields, triggers registration, shows alerts, and navigates on success.
+   */
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    // Validate fields
     const fieldErrors: typeof errors = {};
     if (!name.trim()) fieldErrors.name = 'Name is required';
     if (!email.trim()) fieldErrors.email = 'Email is required';
@@ -33,6 +62,7 @@ export default function Register() {
     setErrors(fieldErrors);
     if (Object.keys(fieldErrors).length > 0) return;
 
+    // Perform registration API call
     try {
       await register(name, email, password, venueManager);
       setGlobalAlert({ type: 'success', message: 'Registration successful!' });
@@ -110,7 +140,7 @@ export default function Register() {
           />
           {errors.password && <div className="invalid-feedback">{errors.password}</div>}
 
-          {/* Account type checkbox */}
+          {/* Venue manager checkbox */}
           <div className="form-check my-3">
             <input
               type="checkbox"
@@ -124,6 +154,7 @@ export default function Register() {
             </label>
           </div>
 
+          {/* Submit button */}
           <button type="submit" className="btn btn-primary mt-4 w-100" disabled={isLoading}>
             {isLoading ? 'Registering…' : 'Register'}
           </button>

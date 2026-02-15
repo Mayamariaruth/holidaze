@@ -2,21 +2,36 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import type { Location } from '../../types/venue.types';
 import L from 'leaflet';
 
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-});
-
+/**
+ * VenueMap component to display a map for a venue location.
+ *
+ * Uses Leaflet via react-leaflet and falls back to default coordinates if the location is invalid.
+ *
+ * @param {Object} props Component props
+ * @param {Location} props.location Venue latitude and longitude
+ * @param {string} props.name Venue name to display in popup
+ * @param {[number, number]} [props.fallbackCoords] Optional fallback coordinates if venue location is invalid
+ * @returns {JSX.Element} Leaflet map element with marker
+ *
+ * @example
+ * <VenueMap name="Luxury Villa" location={{ lat: 40.7, long: -74.0 }} />
+ */
 interface Props {
   location: Location;
   name: string;
   fallbackCoords?: [number, number];
 }
 
-// Default fallback location
+// Default fallback coordinates (New York City)
 const defaultFallback: [number, number] = [40.7128, -74.006];
 
+// Configure default Leaflet marker icons
+L.Icon.Default.mergeOptions({
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+});
+
 export default function VenueMap({ name, location, fallbackCoords = defaultFallback }: Props) {
-  // Check if lat/lon are valid numbers
+  // Validate latitude/longitude or use fallback
   const lat =
     typeof location.lat === 'number' && !isNaN(location.lat) && location.lat !== 0
       ? location.lat
@@ -34,10 +49,13 @@ export default function VenueMap({ name, location, fallbackCoords = defaultFallb
       style={{ height: '300px', width: '100%' }}
       className="rounded-4 mb-3"
     >
+      {/* Tile layer for map */}
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"
       />
+
+      {/* Marker with popup */}
       <Marker position={[lat, lon]}>
         <Popup>{name}</Popup>
       </Marker>

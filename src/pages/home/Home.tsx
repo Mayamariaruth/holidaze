@@ -6,7 +6,6 @@ import type { Venue } from '../../types/venue.types';
 import VenueCardHome from '../../components/cards/VenueCardHome';
 import { useSearch } from '../../hooks/useSearch';
 import { useNavigate } from 'react-router-dom';
-
 import Loader from '../../components/ui/Loader';
 
 import scrollIcon from '../../assets/icons/scroll-icon.png';
@@ -21,15 +20,39 @@ import venues1 from '../../assets/images/home/venues/venues1.jpg';
 import venues2 from '../../assets/images/home/venues/venues2.jpg';
 import venues3 from '../../assets/images/home/venues/venues3.jpg';
 
+/**
+ * Home page component.
+ *
+ * Displays a hero section with a search form for locations, check-in/out dates, and guest count.
+ * Shows top destinations, highest-rated venues, and featured venue sections.
+ * Integrates a Calendar modal for date selection.
+ *
+ * @component
+ * @example
+ * <Home />
+ *
+ * @remarks
+ * - Uses `useSearch` hook for search input state management.
+ * - Fetches top-rated venues from the API on mount.
+ * - Navigates to `/venues` with query params when the user clicks Search.
+ */
 export default function Home() {
   const navigate = useNavigate();
+
+  // State for search inputs
   const [dateFrom, setDateFrom] = useState<Date | null>(null);
   const [dateTo, setDateTo] = useState<Date | null>(null);
   const [showCalendar, setShowCalendar] = useState(false);
+
+  // State for highest-rated venues
   const [ratedVenues, setRatedVenues] = useState<Venue[]>([]);
+
+  // State for showing loader when searching
   const [searching, setSearching] = useState(false);
+
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
+  // Horizontal scroll handler for rated venues
   const scroll = (direction: 'left' | 'right'): void => {
     if (!scrollRef.current) return;
     const scrollAmount = 400;
@@ -39,12 +62,13 @@ export default function Home() {
     });
   };
 
+  // Fetch top-rated venues
   useEffect(() => {
     async function fetchVenues() {
       try {
         const venues = await getVenues();
+        // Sort by rating descending and take top 10
         const sorted = venues.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 10);
-
         setRatedVenues(sorted);
       } catch (error) {
         console.error(error);
@@ -55,6 +79,7 @@ export default function Home() {
 
   const { searchParams, handleChange } = useSearch([]);
 
+  // Handle search button click
   const onSearch = () => {
     setSearching(true);
     const query = new URLSearchParams({
@@ -64,6 +89,7 @@ export default function Home() {
       dateTo: dateTo ? dateTo.toISOString() : '',
     }).toString();
 
+    // Delay navigation
     setTimeout(() => {
       navigate(`/venues?${query}`);
       setSearching(false);
@@ -88,18 +114,17 @@ export default function Home() {
             Book unique venues in destinations around the world.
           </p>
 
+          {/* Search bar */}
           <form
             onSubmit={(e) => e.preventDefault()}
             className="hero-form d-flex flex-column flex-md-row bg-white align-items-stretch rounded-4 p-3 gap-2"
           >
-            {/* Location */}
             <input
               className="form-control"
               placeholder="Location"
               value={searchParams.location}
               onChange={(e) => handleChange('location', e.target.value)}
             />
-            {/* Check-in */}
             <input
               type="text"
               className="form-control"
@@ -108,7 +133,6 @@ export default function Home() {
               value={dateFrom ? dateFrom.toLocaleDateString() : ''}
               onClick={() => setShowCalendar(true)}
             />
-            {/* Check-out */}
             <input
               type="text"
               className="form-control"
@@ -117,7 +141,6 @@ export default function Home() {
               value={dateTo ? dateTo.toLocaleDateString() : ''}
               onClick={() => setShowCalendar(true)}
             />
-            {/* Guests */}
             <input
               className="form-control"
               placeholder="Guests"
@@ -125,7 +148,6 @@ export default function Home() {
               value={searchParams.guests ?? ''}
               onChange={(e) => handleChange('guests', Number(e.target.value))}
             />
-            {/* Search Button */}
             <button className="btn btn-cta px-4" type="button" onClick={onSearch}>
               Search
             </button>
@@ -194,7 +216,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* View all venues */}
+      {/* About/Venues */}
       <section className="mb-5">
         <div className="mb-4 d-flex align-items-center justify-content-center gap-3">
           <hr className="title-line" />
@@ -207,7 +229,6 @@ export default function Home() {
             <div className="col-12 col-lg-4 p-0">
               <div className="image-wrapper">
                 <img src={venues1} alt="Beautiful luxury resort" className="img-fluid" />
-
                 <div className="info-box mt-4">
                   <p>
                     From intimate retreats to refined city escapes, explore carefully selected
@@ -220,9 +241,7 @@ export default function Home() {
             <div className="col-12 col-lg-4 p-0">
               <Link to="/venues" className="image-wrapper d-block text-decoration-none">
                 <img src={venues2} alt="Beautiful luxury resort" className="img-fluid" />
-
                 <div className="home-overlay"></div>
-
                 <div className="overlay-text">View all venues</div>
               </Link>
             </div>

@@ -10,13 +10,35 @@ import DeleteVenue from '../../components/modals/DeleteVenue';
 import EditVenue from '../../components/modals/EditVenue';
 import ManagerBookings from '../../components/modals/ManagerBookings';
 
+/**
+ * Manager Dashboard page component.
+ *
+ * Displays a list of venues owned by the logged-in venue manager.
+ * Allows creating, editing, and deleting venues.
+ * Provides access to view bookings for each venue.
+ *
+ * @component
+ * @example
+ * <ManagerDashboard />
+ *
+ * @remarks
+ * - Fetches the manager's profile using `getProfile` from the API.
+ * - Maintains state for modals: CreateVenue, EditVenue, DeleteVenue, ManagerBookings.
+ * - Updates the local profile state when venues are created, edited, or deleted.
+ * - Shows global alert messages for success/failure of venue operations.
+ * - Each venue card displays basic info, location, and buttons for bookings, edit, delete.
+ */
 export default function ManagerDashboard() {
+  // States for CRUD actions
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
   const [editVenue, setEditVenue] = useState<Venue | null>(null);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
+
   const [loading, setLoading] = useState(true);
+
+  // Global alerts for booking success/error
   const [globalAlert, setGlobalAlert] = useState<{
     type: 'success' | 'danger';
     message: string;
@@ -24,9 +46,9 @@ export default function ManagerDashboard() {
 
   const { user } = useAuthStore();
 
+  // Fetch manager's profile with venues
   useEffect(() => {
     if (!user?.name) return;
-
     const { name } = user;
 
     async function fetchProfile() {
@@ -44,6 +66,7 @@ export default function ManagerDashboard() {
     fetchProfile();
   }, [user]);
 
+  // Add a new venue to the profile state
   const handleCreateVenue = (venue: Venue) => {
     setProfile((prev) => ({
       ...prev!,
@@ -51,6 +74,7 @@ export default function ManagerDashboard() {
     }));
   };
 
+  // Remove a venue from profile state after deletion
   const handleVenueDelete = (id: string) => {
     setProfile((prev) => ({
       ...prev!,
@@ -66,7 +90,7 @@ export default function ManagerDashboard() {
       setGlobalAlert={setGlobalAlert}
       loading={loading}
     >
-      {/* Header */}
+      {/* Header with Create button */}
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2>Venues</h2>
         <button className="btn btn-primary btn-create" onClick={() => setShowCreateModal(true)}>
@@ -100,9 +124,8 @@ export default function ManagerDashboard() {
                   />
                 </div>
 
-                {/* Content */}
+                {/* Venue details and buttons */}
                 <div className="flex-grow-1 d-flex flex-column flex-md-row justify-between gap-3">
-                  {/* Content */}
                   <div className="flex-grow-1">
                     <Link to={`/venues/${venue?.id}`} className="text-dark text-decoration-none">
                       <h4 className="mb-1">{venue.name}</h4>
@@ -110,13 +133,13 @@ export default function ManagerDashboard() {
                     <p className="text-muted mb-2">{fullAddress}</p>
                     <button
                       className="btn-bookings fw-semibold mt-4"
-                      onClick={() => setSelectedVenueId(venue.id)} // <-- just set the ID
+                      onClick={() => setSelectedVenueId(venue.id)}
                     >
                       See bookings
                     </button>
                   </div>
 
-                  {/* Buttons */}
+                  {/* Edit & Delete buttons */}
                   <div className="btn-container d-flex flex-row flex-md-column gap-2">
                     <button
                       className="btn btn-cancel flex-grow-1"
@@ -140,7 +163,7 @@ export default function ManagerDashboard() {
         )}
       </div>
 
-      {/* Create Venue Modal */}
+      {/* Modals */}
       {showCreateModal && (
         <CreateVenue
           onClose={() => setShowCreateModal(false)}
@@ -152,7 +175,6 @@ export default function ManagerDashboard() {
         />
       )}
 
-      {/* Edit Venue Modal */}
       {editVenue && (
         <EditVenue
           venue={editVenue}
@@ -172,7 +194,6 @@ export default function ManagerDashboard() {
         />
       )}
 
-      {/* Delete Venue Modal */}
       {deleteVenueId && (
         <DeleteVenue
           venueId={deleteVenueId}
@@ -185,7 +206,6 @@ export default function ManagerDashboard() {
         />
       )}
 
-      {/* Bookings Modal */}
       {selectedVenueId && (
         <ManagerBookings venueId={selectedVenueId} onClose={() => setSelectedVenueId(null)} />
       )}
