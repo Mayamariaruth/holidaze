@@ -81,12 +81,12 @@ export default function BookingCard({ booking, isManagerView = false }: Props) {
         {/* Dates */}
         <div className="d-flex justify-content-between mb-1">
           <p className="mb-0">Check-in</p>
-          <p className="mb-0">{new Date(booking.dateFrom).toLocaleDateString()}</p>
+          <p className="mb-0 fw-medium">{new Date(booking.dateFrom).toLocaleDateString()}</p>
         </div>
 
         <div className="d-flex justify-content-between">
           <p className="mb-0">Check-out</p>
-          <p className="mb-0">{new Date(booking.dateTo).toLocaleDateString()}</p>
+          <p className="mb-0 fw-medium">{new Date(booking.dateTo).toLocaleDateString()}</p>
         </div>
       </div>
     </div>

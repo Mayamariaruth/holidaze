@@ -68,6 +68,14 @@ export default function ManagerDashboard({ profile, setProfile }: Props) {
       </div>
       <hr />
 
+      {/* Global Alert */}
+      {globalAlert && (
+        <div className={`alert alert-${globalAlert.type} mb-3`} role="alert">
+          {globalAlert.message}
+          <button type="button" className="btn-close" onClick={() => setGlobalAlert(null)}></button>
+        </div>
+      )}
+
       {/* Venues list */}
       <div className="d-flex flex-column gap-4 mt-4">
         {profile.venues?.length ? (
@@ -109,10 +117,16 @@ export default function ManagerDashboard({ profile, setProfile }: Props) {
                     </button>
                   </div>
                   <div className="d-flex flex-row flex-md-column gap-2 btn-container">
-                    <button className="btn btn-cancel" onClick={() => setEditVenue(venue)}>
+                    <button
+                      className="btn btn-cancel flex-fill"
+                      onClick={() => setEditVenue(venue)}
+                    >
                       Edit
                     </button>
-                    <button className="btn btn-danger" onClick={() => setDeleteVenueId(venue.id)}>
+                    <button
+                      className="btn btn-danger flex-fill"
+                      onClick={() => setDeleteVenueId(venue.id)}
+                    >
                       Delete
                     </button>
                   </div>
@@ -132,7 +146,7 @@ export default function ManagerDashboard({ profile, setProfile }: Props) {
           onCreate={(venue) => {
             handleCreateVenue(venue);
             setShowCreateModal(false);
-            setGlobalAlert({ type: 'success', message: 'Venue created!' });
+            setGlobalAlert({ type: 'success', message: 'Venue created successfully!' });
           }}
         />
       )}
@@ -147,7 +161,7 @@ export default function ManagerDashboard({ profile, setProfile }: Props) {
               venues: prev!.venues!.map((v) => (v.id === updated.id ? updated : v)),
             }));
             setEditVenue(null);
-            setGlobalAlert({ type: 'success', message: 'Venue updated!' });
+            setGlobalAlert({ type: 'success', message: 'Venue updated successfully!' });
           }}
         />
       )}
@@ -159,7 +173,7 @@ export default function ManagerDashboard({ profile, setProfile }: Props) {
           onDelete={(id) => {
             handleDeleteVenue(id);
             setDeleteVenueId(null);
-            setGlobalAlert({ type: 'success', message: 'Venue deleted!' });
+            setGlobalAlert({ type: 'success', message: 'Venue deleted successfully!' });
           }}
         />
       )}

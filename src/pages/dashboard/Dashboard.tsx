@@ -32,11 +32,12 @@ export default function DashboardWrapper() {
 
   useEffect(() => {
     if (!user?.name) return;
+    const { name } = user;
 
     async function fetchProfile() {
       setLoading(true);
       try {
-        const data = await getProfile(user.name);
+        const data = await getProfile(name);
         const normalizedProfile: UserProfile = {
           ...data,
           venueManager: data.venueManager ?? false,

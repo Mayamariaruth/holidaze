@@ -81,7 +81,7 @@ export default function Login() {
         )}
       </div>
 
-      <div className="auth-form bg-white rounded-4 p-5 position-relative">
+      <div className="auth-form bg-white rounded-4 px-3 py-5 px-md-5 position-relative">
         {/* Loader overlay */}
         {isLoading && <Loader overlay size="lg" />}
 
