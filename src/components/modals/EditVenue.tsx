@@ -24,6 +24,7 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     media: [''] as string[],
   });
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // Prepopulate form
   useEffect(() => {
@@ -83,8 +84,28 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     }));
   };
 
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formState.name.trim()) newErrors.name = 'Venue name is required';
+    if (!formState.price || Number(formState.price) <= 0) newErrors.price = 'Price is required';
+    if (!formState.maxGuests || Number(formState.maxGuests) <= 0)
+      newErrors.maxGuests = 'Max guests is required';
+    if (!formState.location.address.trim()) newErrors['location.address'] = 'Address is required';
+    if (!formState.location.city.trim()) newErrors['location.city'] = 'City is required';
+    if (!formState.location.zip.trim()) newErrors['location.zip'] = 'Postcode is required';
+    if (!formState.location.country.trim()) newErrors['location.country'] = 'Country is required';
+    if (!formState.media[0]?.trim()) newErrors['media.0'] = 'Image URL is required';
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     setLoading(true);
     try {
       if (!user) throw new Error('User not logged in');
@@ -120,9 +141,14 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     }
   };
 
+  const handleClose = () => {
+    setErrors({});
+    onClose();
+  };
+
   return (
     <>
-      <div className="modal-backdrop fade show" onClick={onClose}></div>
+      <div className="modal-backdrop fade show" onClick={handleClose}></div>
       <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content p-3">
@@ -130,7 +156,7 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
             {loading && <Loader overlay size="lg" />}
             <div className="modal-header">
               <h2 className="modal-title">Edit venue</h2>
-              <button type="button" className="btn-close" onClick={onClose}></button>
+              <button type="button" className="btn-close" onClick={handleClose}></button>
             </div>
 
             <div className="modal-body">
@@ -144,11 +170,12 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
                     type="text"
                     id="name"
                     name="name"
-                    className="form-control"
+                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                     value={formState.name}
                     onChange={handleChange}
                     required
                   />
+                  {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                 </div>
 
                 {/* Description */}
@@ -159,10 +186,13 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
                   <textarea
                     id="description"
                     name="description"
-                    className="form-control"
+                    className={`form-control ${errors.description ? 'is-invalid' : ''}`}
                     value={formState.description}
                     onChange={handleChange}
                   />
+                  {errors.description && (
+                    <div className="invalid-feedback">{errors.description}</div>
+                  )}
                 </div>
 
                 {/* Price & Capacity */}
@@ -172,22 +202,24 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
                     <input
                       type="number"
                       name="price"
-                      className="form-control"
+                      className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                       value={formState.price}
                       onChange={handleChange}
                       required
                     />
+                    {errors.price && <div className="invalid-feedback">{errors.price}</div>}
                   </div>
                   <div className="flex-fill">
                     <label className="form-label mb-0">Max guests*</label>
                     <input
                       type="number"
                       name="maxGuests"
-                      className="form-control"
+                      className={`form-control ${errors.maxGuests ? 'is-invalid' : ''}`}
                       value={formState.maxGuests}
                       onChange={handleChange}
                       required
                     />
+                    {errors.maxGuests && <div className="invalid-feedback">{errors.maxGuests}</div>}
                   </div>
                 </div>
 
@@ -238,44 +270,56 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
                     <input
                       type="text"
                       name="location.address"
-                      className="form-control mb-1"
+                      className={`form-control ${errors['location.address'] ? 'is-invalid' : ''}`}
                       value={formState.location.address}
                       onChange={handleChange}
                       required
                     />
+                    {errors['location.address'] && (
+                      <div className="invalid-feedback">{errors['location.address']}</div>
+                    )}
                     <div className="d-flex gap-2">
                       <div className="flex-fill">
                         <label className="mb-0">Postcode</label>
                         <input
                           type="text"
                           name="location.zip"
-                          className="form-control mb-1"
+                          className={`form-control ${errors['location.zip'] ? 'is-invalid' : ''}`}
                           value={formState.location.zip}
                           onChange={handleChange}
                           required
                         />
+                        {errors['location.zip'] && (
+                          <div className="invalid-feedback">{errors['location.zip']}</div>
+                        )}
                       </div>
                       <div className="flex-fill">
                         <label className="mb-0">City</label>
                         <input
                           type="text"
                           name="location.city"
-                          className="form-control mb-1"
+                          className={`form-control ${errors['location.city'] ? 'is-invalid' : ''}`}
                           value={formState.location.city}
                           onChange={handleChange}
                           required
                         />
+                        {errors['location.city'] && (
+                          <div className="invalid-feedback">{errors['location.city']}</div>
+                        )}
                       </div>
                     </div>
                     <label className="mb-0">Country</label>
                     <input
                       type="text"
                       name="location.country"
-                      className="form-control"
+                      className={`form-control ${errors['location.country'] ? 'is-invalid' : ''}`}
                       value={formState.location.country}
                       onChange={handleChange}
                       required
                     />
+                    {errors['location.country'] && (
+                      <div className="invalid-feedback">{errors['location.country']}</div>
+                    )}
                   </div>
                 </div>
 
@@ -287,13 +331,15 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
                       key={idx}
                       type="text"
                       name={`media.${idx}`}
-                      className="form-control mb-1"
+                      className={`form-control ${errors['media.0'] ? 'is-invalid' : ''}`}
                       value={url}
                       onChange={handleChange}
                       required={idx === 0}
                     />
                   ))}
+                  {errors['media.0'] && <div className="invalid-feedback">{errors['media.0']}</div>}
                 </div>
+
                 <hr className="my-4" />
                 <div className="d-flex gap-2">
                   <button type="button" className="btn btn-cancel flex-fill" onClick={onClose}>

@@ -25,6 +25,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
   });
 
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!profile) return;
@@ -49,9 +50,25 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
     }));
   };
 
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formState.bio.trim()) newErrors.bio = 'Bio cannot be empty';
+    if (formState.banner && !/^https?:\/\/.+/.test(formState.banner))
+      newErrors.banner = 'Banner must be a valid URL';
+    if (formState.avatar && !/^https?:\/\/.+/.test(formState.avatar))
+      newErrors.avatar = 'Avatar must be a valid URL';
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
+
+    if (!validateForm()) return;
 
     setLoading(true);
 
@@ -65,11 +82,8 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
 
       const freshProfile = await getProfile(profile.name);
       setProfile(freshProfile);
-
       setRole(formState.accountType === 'manager' ? 'venue_manager' : 'customer');
-
       onClose();
-
       setGlobalAlert?.({ type: 'success', message: 'Profile updated successfully!' });
     } catch (error) {
       console.error('Failed to update profile:', error);
@@ -79,11 +93,16 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
     }
   };
 
+  const handleClose = () => {
+    setErrors({});
+    onClose();
+  };
+
   if (!profile) return null;
 
   return (
     <>
-      <div className="modal-backdrop fade show" onClick={onClose}></div>
+      <div className="modal-backdrop fade show" onClick={handleClose}></div>
 
       <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
@@ -92,7 +111,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
             {loading && <Loader overlay size="lg" />}
             <div className="modal-header">
               <h3 className="modal-title">Edit Profile</h3>
-              <button type="button" className="btn-close" onClick={onClose}></button>
+              <button type="button" className="btn-close" onClick={handleClose}></button>
             </div>
 
             <div className="modal-body">
@@ -129,10 +148,11 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
                   <label className="form-label mb-0">Bio</label>
                   <textarea
                     name="bio"
-                    className="form-control"
+                    className={`form-control ${errors.bio ? 'is-invalid' : ''}`}
                     value={formState.bio}
                     onChange={handleChange}
                   />
+                  {errors.bio && <div className="invalid-feedback">{errors.bio}</div>}
                 </div>
 
                 {/* Banner */}
@@ -141,10 +161,11 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
                   <input
                     type="text"
                     name="banner"
-                    className="form-control"
+                    className={`form-control ${errors.banner ? 'is-invalid' : ''}`}
                     value={formState.banner}
                     onChange={handleChange}
                   />
+                  {errors.banner && <div className="invalid-feedback">{errors.banner}</div>}
                 </div>
 
                 {/* Avatar */}
@@ -153,10 +174,11 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
                   <input
                     type="text"
                     name="avatar"
-                    className="form-control"
+                    className={`form-control ${errors.avatar ? 'is-invalid' : ''}`}
                     value={formState.avatar}
                     onChange={handleChange}
                   />
+                  {errors.avatar && <div className="invalid-feedback">{errors.avatar}</div>}
                 </div>
 
                 <hr />
@@ -165,7 +187,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
                   <button
                     type="button"
                     className="btn btn-cancel flex-fill"
-                    onClick={onClose}
+                    onClick={handleClose}
                     disabled={loading}
                   >
                     Cancel
