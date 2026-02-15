@@ -30,6 +30,11 @@ export default function DashboardWrapper() {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [globalAlert, setGlobalAlert] = useState<{
+    type: 'success' | 'danger';
+    message: string;
+  } | null>(null);
+
   useEffect(() => {
     if (!user?.name) return;
     const { name } = user;
@@ -61,11 +66,24 @@ export default function DashboardWrapper() {
   if (!profile) return <p>Error loading profile</p>;
 
   return (
-    <DashboardLayout profile={profile} setProfile={setProfile}>
+    <DashboardLayout
+      profile={profile}
+      setProfile={setProfile}
+      globalAlert={globalAlert}
+      setGlobalAlert={setGlobalAlert}
+    >
       {profile.venueManager ? (
-        <ManagerDashboard profile={profile} setProfile={setProfile} />
+        <ManagerDashboard
+          profile={profile}
+          setProfile={setProfile}
+          setGlobalAlert={setGlobalAlert}
+        />
       ) : (
-        <CustomerDashboard profile={profile} setProfile={setProfile} />
+        <CustomerDashboard
+          profile={profile}
+          setProfile={setProfile}
+          setGlobalAlert={setGlobalAlert}
+        />
       )}
     </DashboardLayout>
   );

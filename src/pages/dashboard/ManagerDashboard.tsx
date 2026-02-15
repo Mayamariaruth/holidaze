@@ -10,6 +10,9 @@ import type { Venue } from '../../types/venue.types';
 interface Props {
   profile: UserProfile;
   setProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
+  setGlobalAlert: React.Dispatch<
+    React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>
+  >;
 }
 
 /**
@@ -29,17 +32,11 @@ interface Props {
  * - Shows global alert messages for success/failure of venue operations.
  * - Each venue card displays basic info, location, and buttons for bookings, edit, delete.
  */
-export default function ManagerDashboard({ profile, setProfile }: Props) {
+export default function ManagerDashboard({ profile, setProfile, setGlobalAlert }: Props) {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editVenue, setEditVenue] = useState<Venue | null>(null);
   const [deleteVenueId, setDeleteVenueId] = useState<string | null>(null);
   const [selectedVenueId, setSelectedVenueId] = useState<string | null>(null);
-
-  // Global alerts for booking success/error
-  const [globalAlert, setGlobalAlert] = useState<{
-    type: 'success' | 'danger';
-    message: string;
-  } | null>(null);
 
   // Add a new venue to the profile state
   const handleCreateVenue = (venue: Venue) => {
@@ -67,14 +64,6 @@ export default function ManagerDashboard({ profile, setProfile }: Props) {
         </button>
       </div>
       <hr />
-
-      {/* Global Alert */}
-      {globalAlert && (
-        <div className={`alert alert-${globalAlert.type} mb-3`} role="alert">
-          {globalAlert.message}
-          <button type="button" className="btn-close" onClick={() => setGlobalAlert(null)}></button>
-        </div>
-      )}
 
       {/* Venues list */}
       <div className="d-flex flex-column gap-4 mt-4">

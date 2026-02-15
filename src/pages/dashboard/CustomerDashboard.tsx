@@ -5,6 +5,9 @@ import type { UserBooking } from '../../types/booking.types';
 interface Props {
   profile: UserProfile;
   setProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
+  setGlobalAlert: React.Dispatch<
+    React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>
+  >;
 }
 
 /**

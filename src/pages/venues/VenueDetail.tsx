@@ -88,10 +88,19 @@ export default function VenueDetail() {
    * Booking handler
    */
   const handleBooking = async () => {
+    if (!canBook) {
+      setGlobalAlert({
+        type: 'danger',
+        message: 'Venue managers cannot book venues.',
+      });
+      return;
+    }
+
     await booking.book();
   };
 
   const isOwner = venue.owner?.name === user?.name;
+  const canBook = isAuthenticated && role !== 'venue_manager' && !isOwner;
 
   return (
     <div>
@@ -205,7 +214,10 @@ export default function VenueDetail() {
                   placeholder="Check-in"
                   readOnly
                   value={booking.dateFrom ? booking.dateFrom.toLocaleDateString() : ''}
-                  onClick={() => setShowCalendar(true)}
+                  onClick={() => {
+                    if (!canBook) return;
+                    setShowCalendar(true);
+                  }}
                 />
                 <input
                   type="text"
@@ -213,7 +225,10 @@ export default function VenueDetail() {
                   placeholder="Check-out"
                   readOnly
                   value={booking.dateTo ? booking.dateTo.toLocaleDateString() : ''}
-                  onClick={() => setShowCalendar(true)}
+                  onClick={() => {
+                    if (!canBook) return;
+                    setShowCalendar(true);
+                  }}
                 />
               </div>
 
@@ -225,10 +240,20 @@ export default function VenueDetail() {
                 min={1}
                 max={venue.maxGuests}
                 value={booking.guests}
+                disabled={!canBook}
                 onChange={(e) =>
                   booking.setGuests(e.target.value === '' ? '' : Number(e.target.value))
                 }
               />
+
+              {!canBook ? (
+                <p className="text-danger">Venue managers can’t book venues.</p>
+              ) : (
+                <p>
+                  Select your dates and number of guests to check availability and complete your
+                  booking.
+                </p>
+              )}
 
               {/* Booking feedback */}
               {booking.error && <p className="text-danger">{booking.error}</p>}
@@ -240,7 +265,11 @@ export default function VenueDetail() {
                 <button
                   className="btn btn-cta w-100"
                   disabled={
-                    !booking.dateFrom || !booking.dateTo || booking.isSubmitting || !booking.guests
+                    !canBook ||
+                    !booking.dateFrom ||
+                    !booking.dateTo ||
+                    booking.isSubmitting ||
+                    !booking.guests
                   }
                   onClick={handleBooking}
                 >

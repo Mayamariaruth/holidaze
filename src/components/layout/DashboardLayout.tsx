@@ -7,8 +7,8 @@ import Alert from '../ui/Alert';
 interface Props {
   profile: UserProfile;
   setProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
-  globalAlert?: { type: 'success' | 'danger'; message: string } | null;
-  setGlobalAlert?: React.Dispatch<
+  globalAlert: { type: 'success' | 'danger'; message: string } | null;
+  setGlobalAlert: React.Dispatch<
     React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>
   >;
   children: React.ReactNode;
@@ -45,7 +45,7 @@ export default function DashboardLayout({
           <Alert
             type={globalAlert.type}
             message={globalAlert.message}
-            onClose={() => setGlobalAlert?.(null)}
+            onClose={() => setGlobalAlert(null)}
             autoDismiss={5000}
           />
         </div>
