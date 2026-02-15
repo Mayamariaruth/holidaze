@@ -14,9 +14,29 @@ interface Props {
   >;
 }
 
+/**
+ * Component for editing a user's profile information.
+ *
+ * Displays a form for editing bio, account type, banner, and avatar.
+ * Submits updated data and displays loader during the update process.
+ *
+ * @param {Object} props Component props
+ * @param {UserProfile | null} props.profile The user's profile to edit
+ * @param {React.Dispatch<React.SetStateAction<UserProfile | null>>} props.setProfile Function to update the profile state
+ * @param {() => void} props.onClose Function to close the modal
+ * @param {React.Dispatch<React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>>} [props.setGlobalAlert] Optional function to display global alert messages
+ * @returns {JSX.Element} JSX to render the profile editing modal
+ *
+ * @example
+ * <EditProfile
+ *   profile={userProfile}
+ *   setProfile={setUserProfile}
+ *   onClose={handleCloseModal}
+ *   setGlobalAlert={setAlertMessage}
+ * />
+ */
 export default function EditProfile({ profile, setProfile, onClose, setGlobalAlert }: Props) {
   const { setRole } = useAuthStore();
-
   const [formState, setFormState] = useState({
     bio: '',
     accountType: 'customer' as 'customer' | 'manager',
@@ -29,7 +49,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
 
   useEffect(() => {
     if (!profile) return;
-
+    // Prepopulate form with the user's current profile data
     setFormState({
       bio: profile.bio || '',
       accountType: profile.venueManager ? 'manager' : 'customer',
@@ -38,11 +58,13 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
     });
   }, [profile]);
 
+  // Input change handler
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormState((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Account type radio button change
   const handleAccountTypeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormState((prev) => ({
       ...prev,
@@ -50,6 +72,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
     }));
   };
 
+  // Validates the form fields
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -60,19 +83,19 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
       newErrors.avatar = 'Avatar must be a valid URL';
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
+  // Submit updated profile
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
 
     if (!validateForm()) return;
-
     setLoading(true);
 
     try {
+      // Update profile on backend
       await updateProfile(profile.name, {
         bio: formState.bio,
         venueManager: formState.accountType === 'manager',
@@ -80,6 +103,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
         avatar: formState.avatar ? { url: formState.avatar } : undefined,
       });
 
+      // Fetch fresh profile and update global state
       const freshProfile = await getProfile(profile.name);
       setProfile(freshProfile);
       setRole(formState.accountType === 'manager' ? 'venue_manager' : 'customer');
@@ -93,6 +117,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
     }
   };
 
+  // Handles modal close
   const handleClose = () => {
     setErrors({});
     onClose();
@@ -103,7 +128,6 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
   return (
     <>
       <div className="modal-backdrop fade show" onClick={handleClose}></div>
-
       <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content p-3">
@@ -114,6 +138,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
               <button type="button" className="btn-close" onClick={handleClose}></button>
             </div>
 
+            {/* Form */}
             <div className="modal-body">
               <form onSubmit={handleSubmit}>
                 {/* Account type */}
@@ -183,6 +208,7 @@ export default function EditProfile({ profile, setProfile, onClose, setGlobalAle
 
                 <hr />
 
+                {/* Buttons */}
                 <div className="d-flex gap-2 mt-4">
                   <button
                     type="button"

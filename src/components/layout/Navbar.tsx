@@ -4,6 +4,20 @@ import { useAuthStore } from '../../stores/auth.stores';
 import logo from '../../assets/images/logo.png';
 import blueLogo from '../../assets/images/logo-blue.png';
 
+/**
+ * Transparent navbar for Holidaze for pages with hero sections.
+ *
+ * Shows the company logo, navigation links (Home, Venues, Dashboard),
+ * authentication buttons (Login/Logout), and a mobile hamburger menu
+ * that opens a white overlay menu.
+ *
+ * Uses white text links and a transparent background.
+ *
+ * @returns {JSX.Element} The main site navbar
+ *
+ * @example
+ * <Navbar />
+ */
 export default function Navbar() {
   const { isAuthenticated, logout } = useAuthStore();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -20,6 +34,7 @@ export default function Navbar() {
 
         {/* Desktop menu */}
         <div className="d-none d-lg-flex align-items-center gap-5 pe-5">
+          {/* Links */}
           <Link className="nav-link text-white" to="/">
             Home
           </Link>
@@ -33,6 +48,7 @@ export default function Navbar() {
             </Link>
           )}
 
+          {/* Buttons */}
           {!isAuthenticated ? (
             <Link to="/login" className="btn btn-outline-white nav-btn">
               Login
@@ -84,6 +100,7 @@ export default function Navbar() {
               </Link>
             )}
 
+            {/* Buttons */}
             {!isAuthenticated ? (
               <Link to="/login" className="btn btn-primary mt-3 nav-btn">
                 Login

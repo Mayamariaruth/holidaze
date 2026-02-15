@@ -16,6 +16,20 @@ interface Props {
   loading?: boolean;
 }
 
+/**
+ * Dashboard page layout for logged-in users.
+ *
+ * Displays user profile, banner, global alerts, and a content section.
+ * Includes modal for editing profile.
+ *
+ * @param {Props} props Component props
+ * @returns {JSX.Element} Dashboard layout
+ *
+ * @example
+ * <Dashboard profile={profile} setProfile={setProfile}>
+ *   <MyContent />
+ * </Dashboard>
+ */
 export default function Dashboard({
   profile,
   setProfile,
@@ -73,8 +87,11 @@ export default function Dashboard({
                   <i className="fa-solid fa-pen-to-square"></i>
                 </button>
               </div>
+
+              {/* User bio */}
               <p className="mb-0">{profile.bio}</p>
 
+              {/* Profile details */}
               <div className="w-100">
                 <div className="d-flex justify-content-between">
                   <p className="fw-medium profile-label">Name</p>

@@ -2,6 +2,17 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/images/logo-blue.png';
 import footer from '../../assets/icons/footer.png';
 
+/**
+ * Footer component displayed on all pages.
+ *
+ * Shows the company logo, description, contact information,
+ * navigation links, and social media links.
+ *
+ * @returns {JSX.Element} The site footer
+ *
+ * @example
+ * <Footer />
+ */
 export default function Footer() {
   return (
     <footer className="footer bg-white pt-5 pb-3 mt-auto">

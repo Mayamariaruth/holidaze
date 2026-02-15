@@ -8,11 +8,25 @@ interface Props {
   onClose: () => void;
 }
 
+/**
+ * Modal for a manager to view all bookings for a specific venue.
+ *
+ * Fetches bookings for the given venue ID and displays them using BookingCard components.
+ *
+ * @param {Object} props
+ * @param {string} props.venueId The ID of the venue to fetch bookings for
+ * @param {() => void} props.onClose Callback to close the modal
+ * @returns {JSX.Element} Modal component showing venue bookings
+ */
 export default function ManagerBookings({ venueId, onClose }: Props) {
   const [bookings, setBookings] = useState<UserBooking[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    /**
+     * Fetch venue data and extract bookings.
+     * Adds a fallback for missing customer info.
+     */
     async function loadBookings() {
       setLoading(true);
       try {
@@ -60,6 +74,7 @@ export default function ManagerBookings({ venueId, onClose }: Props) {
               <button type="button" className="btn-close" onClick={onClose}></button>
             </div>
 
+            {/* Bookings list */}
             <div className="mt-3 d-flex flex-column gap-3 p-2">
               {loading ? (
                 <p className="text-center mt-2">Loading bookings...</p>

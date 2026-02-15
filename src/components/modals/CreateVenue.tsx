@@ -4,6 +4,20 @@ import { useAuthStore } from '../../stores/auth.stores';
 import { createVenue } from '../../services/venues.service';
 import Loader from '../ui/Loader';
 
+/**
+ * Modal component to create a new venue.
+ *
+ * Provides a form for entering venue details, including name, description, price, max guests,
+ * amenities, rating, location, and media. Handles validation, toggling amenities, and submission.
+ *
+ * @param {Object} props Component props
+ * @param {() => void} props.onClose Callback to close the modal
+ * @param {(venue: Venue) => void} props.onCreate Callback called after a successful venue creation
+ * @returns {JSX.Element} Modal element with venue creation form
+ *
+ * @example
+ * <CreateVenue onClose={() => setShowModal(false)} onCreate={(venue) => console.log(venue)} />
+ */
 interface Props {
   onClose: () => void;
   onCreate: (venue: Venue) => void;
@@ -11,8 +25,8 @@ interface Props {
 
 export default function CreateVenue({ onClose, onCreate }: Props) {
   const { user } = useAuthStore();
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(false);
+
+  // Form state
   const [formState, setFormState] = useState({
     name: '',
     description: '',
@@ -24,6 +38,13 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
     media: [''] as string[],
   });
 
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
+
+  /**
+   * Updates form state on input change.
+   * Handles nested fields for location and media arrays.
+   */
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
@@ -43,6 +64,9 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
     }
   };
 
+  /**
+   * Toggles amenities in the form state.
+   */
   const handleAmenityToggle = (amenity: string) => {
     setFormState((prev) => ({
       ...prev,
@@ -52,21 +76,30 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
     }));
   };
 
+  /**
+   * Validates the form fields.
+   * Sets errors for missing or invalid inputs.
+   *
+   * @returns {boolean} True if the form is valid
+   */
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
+    // Basic venue fields
     if (!formState.name.trim()) newErrors.name = 'Venue name is required';
     if (!formState.description.trim()) newErrors.description = 'Description is required';
     if (!formState.price || Number(formState.price) <= 0) newErrors.price = 'Price is required';
     if (!formState.maxGuests || Number(formState.maxGuests) <= 0)
       newErrors.maxGuests = 'Max guests is required';
 
+    // Location fields
     const loc = formState.location;
     if (!loc.address.trim()) newErrors['location.address'] = 'Address is required';
     if (!loc.city.trim()) newErrors['location.city'] = 'City is required';
     if (!loc.zip.trim()) newErrors['location.zip'] = 'Postcode is required';
     if (!loc.country.trim()) newErrors['location.country'] = 'Country is required';
 
+    // Media field
     if (!formState.media[0]?.trim()) newErrors['media.0'] = 'Image URL is required';
 
     setErrors(newErrors);
@@ -74,13 +107,19 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
     return Object.keys(newErrors).length === 0;
   };
 
+  /**
+   * Handles form submission.
+   * Validates form, prepares payload, calls createVenue, and triggers callbacks.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
+
     setLoading(true);
     try {
       if (!user) throw new Error('User not logged in');
 
+      // Build venue payload
       const newVenue: VenuePayload = {
         name: formState.name,
         description: formState.description,
@@ -102,6 +141,7 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
         media: formState.media.filter(Boolean).map((url) => ({ url, alt: undefined })),
       };
 
+      // Call API and trigger parent callbacks
       const created = await createVenue(user.name, newVenue);
       onCreate(created);
       onClose();
@@ -114,7 +154,10 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
 
   return (
     <>
+      {/* Backdrop for modal */}
       <div className="modal-backdrop fade show" onClick={onClose}></div>
+
+      {/* Modal content */}
       <div className="modal show d-block" tabIndex={-1}>
         <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content p-3">

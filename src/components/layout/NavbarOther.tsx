@@ -3,6 +3,21 @@ import { useState } from 'react';
 import { useAuthStore } from '../../stores/auth.stores';
 import logo from '../../assets/images/logo-blue.png';
 
+/**
+ * Other Holidaze navbar with white background and primary-colored links.
+ *
+ * Shows the company logo, navigation links (Home, Venues, Dashboard),
+ * authentication buttons (Login/Logout), and a mobile hamburger menu
+ * that opens a white overlay menu.
+ *
+ * Uses a white background with primary-colored text links for desktop view.
+ * This version is used on all other pages without a hero section.
+ *
+ * @returns {JSX.Element} The other site navbar
+ *
+ * @example
+ * <NavbarOther />
+ */
 export default function NavbarOther() {
   const { isAuthenticated, logout } = useAuthStore();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -19,6 +34,7 @@ export default function NavbarOther() {
 
         {/* Desktop menu */}
         <div className="d-none d-lg-flex align-items-center gap-5 pe-5">
+          {/* Links */}
           <Link className="nav-link nav-link-other fw-normal text-primary" to="/">
             Home
           </Link>
@@ -32,6 +48,7 @@ export default function NavbarOther() {
             </Link>
           )}
 
+          {/* Buttons */}
           {!isAuthenticated ? (
             <Link to="/login" className="btn btn-primary nav-btn">
               Login
@@ -83,6 +100,7 @@ export default function NavbarOther() {
               </Link>
             )}
 
+            {/* Buttons */}
             {!isAuthenticated ? (
               <Link to="/login" className="btn btn-primary mt-3 nav-btn">
                 Login

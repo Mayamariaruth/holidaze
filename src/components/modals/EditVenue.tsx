@@ -10,9 +10,22 @@ interface Props {
   onEdit: (venue: Venue) => void;
 }
 
+/**
+ * Modal for editing an existing venue.
+ *
+ * Prepopulates form with venue data, allows updating name, description, price,
+ * max guests, amenities, rating, location, and images.
+ *
+ * @param {Object} props
+ * @param {Venue} props.venue The venue to edit
+ * @param {() => void} props.onClose Callback to close the modal
+ * @param {(venue: Venue) => void} props.onEdit Callback invoked with the updated venue
+ * @returns {JSX.Element} Modal component for editing a venue
+ */
 export default function EditVenue({ venue, onClose, onEdit }: Props) {
   const { user } = useAuthStore();
 
+  // Form state
   const [formState, setFormState] = useState({
     name: '',
     description: '',
@@ -23,10 +36,11 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     location: { address: '', city: '', zip: '', country: '' } as Location,
     media: [''] as string[],
   });
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  // Prepopulate form
+  // Prepopulate form with venue data
   useEffect(() => {
     if (!venue) return;
 
@@ -56,15 +70,13 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     });
   }, [venue]);
 
+  // Handles input and textarea changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
 
     if (name.startsWith('location.')) {
       const key = name.split('.')[1];
-      setFormState((prev) => ({
-        ...prev,
-        location: { ...prev.location, [key]: value },
-      }));
+      setFormState((prev) => ({ ...prev, location: { ...prev.location, [key]: value } }));
     } else if (name.startsWith('media.')) {
       const idx = parseInt(name.split('.')[1]);
       const newMedia = [...formState.media];
@@ -75,6 +87,7 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     }
   };
 
+  // Toggles amenities checkboxes
   const handleAmenityToggle = (amenity: string) => {
     setFormState((prev) => ({
       ...prev,
@@ -84,9 +97,9 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     }));
   };
 
+  // Validates form fields and sets errors
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
-
     if (!formState.name.trim()) newErrors.name = 'Venue name is required';
     if (!formState.price || Number(formState.price) <= 0) newErrors.price = 'Price is required';
     if (!formState.maxGuests || Number(formState.maxGuests) <= 0)
@@ -98,10 +111,10 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     if (!formState.media[0]?.trim()) newErrors['media.0'] = 'Image URL is required';
 
     setErrors(newErrors);
-
     return Object.keys(newErrors).length === 0;
   };
 
+  // Submits the updated venue
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
@@ -141,6 +154,7 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
     }
   };
 
+  // Clears errors and closes modal
   const handleClose = () => {
     setErrors({});
     onClose();
@@ -341,6 +355,7 @@ export default function EditVenue({ venue, onClose, onEdit }: Props) {
                 </div>
 
                 <hr className="my-4" />
+                {/* Buttons */}
                 <div className="d-flex gap-2">
                   <button type="button" className="btn btn-cancel flex-fill" onClick={onClose}>
                     Cancel
