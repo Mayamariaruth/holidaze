@@ -10,21 +10,43 @@ import Alert from '../../components/ui/Alert';
 import Loader from '../../components/ui/Loader';
 import { fetchVenueById } from '../../services/venues.service';
 
+/**
+ * VenueDetail page component.
+ * Displays detailed information about a venue, including:
+ * - Name, rating, location
+ * - Images
+ * - Amenities
+ * - Map location
+ * - Booking interface
+ * - Edit modal for venue managers
+ *
+ * @returns {JSX.Element} Venue detail page
+ */
 export default function VenueDetail() {
   const { id } = useParams<{ id: string }>();
   const { role, isAuthenticated, user } = useAuthStore();
+
+  // Global alerts for booking success/error
   const [globalAlert, setGlobalAlert] = useState<{
     type: 'success' | 'danger';
     message: string;
   } | null>(null);
 
+  // Venue data
   const [venue, setVenue] = useState<Venue | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+
+  // Modals
   const [showCalendar, setShowCalendar] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+
+  // Booking hook
   const booking = useBookings(venue, isAuthenticated);
 
+  /**
+   * Update global alert when booking status changes
+   */
   useEffect(() => {
     if (booking.success) {
       setGlobalAlert({ type: 'success', message: 'Your booking was successful!' });
@@ -33,6 +55,9 @@ export default function VenueDetail() {
     }
   }, [booking.success, booking.error]);
 
+  /**
+   * Fetch venue data by ID
+   */
   useEffect(() => {
     if (!id) return;
 
@@ -50,12 +75,17 @@ export default function VenueDetail() {
     fetchVenue();
   }, [id]);
 
+  // Early returns for loading/error states
   if (isLoading) return <Loader overlay size="lg" />;
   if (isError || !venue)
     return <div className="container py-5 text-center text-danger">Venue not found.</div>;
 
+  // List of amenities keys for display
   const amenities: (keyof VenueMeta)[] = ['wifi', 'parking', 'breakfast', 'pets'];
 
+  /**
+   * Booking handler
+   */
   const handleBooking = async () => {
     await booking.book();
   };
@@ -64,6 +94,7 @@ export default function VenueDetail() {
 
   return (
     <div>
+      {/* Global alert */}
       <div className="position-fixed top-0 end-0 p-3" style={{ zIndex: 1050 }}>
         {globalAlert && (
           <Alert
@@ -75,7 +106,7 @@ export default function VenueDetail() {
         )}
       </div>
 
-      {/* Breadcrumb */}
+      {/* Breadcrumb navigation */}
       <nav className="breadcrumb mt-4 mb-5 ms-4 d-flex align-items-center gap-1">
         <Link to="/" className="text-decoration-none text-muted">
           Home
@@ -89,7 +120,7 @@ export default function VenueDetail() {
       </nav>
 
       <div className="container mb-5 pt-3">
-        {/* Title */}
+        {/* Venue title, rating, and location */}
         <div className="mb-4 text-center">
           <h1 className="mb-1">{venue.name}</h1>
           <div className="fw-bold rating-size">
@@ -111,7 +142,7 @@ export default function VenueDetail() {
           </div>
         </div>
 
-        {/* Edit button */}
+        {/* Edit button & owner info */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           {role === 'venue_manager' && isOwner && (
             <button className="btn btn-primary btn-edit" onClick={() => setShowEditModal(true)}>
@@ -130,7 +161,7 @@ export default function VenueDetail() {
         </div>
 
         <div className="row g-5 justify-content-between">
-          {/* Left: Amenities + Location */}
+          {/* Left column: Amenities + Map */}
           <div className="col-12 col-lg-6 order-2 order-lg-1">
             <h3>Amenities</h3>
             <ul className="list-unstyled row">
@@ -144,7 +175,7 @@ export default function VenueDetail() {
               ))}
             </ul>
 
-            {/* Location with maps */}
+            {/* Map + full address */}
             <div className="mt-5">
               <h3>Location</h3>
               <div className="bg-white rounded-4 pb-2">
@@ -157,7 +188,7 @@ export default function VenueDetail() {
             </div>
           </div>
 
-          {/* Right: Booking Box */}
+          {/* Right column: Booking box */}
           <div className="col-12 col-lg-6 order-1 order-lg-2">
             <div className="booking-box rounded-4 p-4 p-lg-5 sticky-top bg-white">
               <div className="d-flex justify-content-between align-items-center mb-3">
@@ -165,6 +196,7 @@ export default function VenueDetail() {
                 <span className="fw-medium">Max {venue.maxGuests} guests</span>
               </div>
 
+              {/* Check-in / Check-out */}
               <div className="d-flex gap-2 mb-3">
                 <input
                   type="text"
@@ -184,6 +216,7 @@ export default function VenueDetail() {
                 />
               </div>
 
+              {/* Guests input */}
               <input
                 type="number"
                 className="form-control mb-3"
@@ -196,9 +229,11 @@ export default function VenueDetail() {
                 }
               />
 
+              {/* Booking feedback */}
               {booking.error && <p className="text-danger">{booking.error}</p>}
               {booking.success && <p className="text-success">Booking confirmed!</p>}
 
+              {/* Price & Book button */}
               <div className="d-flex justify-content-between align-items-center gap-5 mt-4">
                 <strong>${venue.price}/night</strong>
                 <button
@@ -227,7 +262,7 @@ export default function VenueDetail() {
           />
         )}
 
-        {/* Edit venue modal */}
+        {/* Edit modal */}
         {showEditModal && venue && (
           <EditVenue
             venue={venue}

@@ -8,14 +8,29 @@ import { useSearch } from '../../hooks/useSearch';
 import heroImage from '../../assets/images/venue-hero.jpg';
 import Loader from '../../components/ui/Loader';
 
+/**
+ * Venues page - displays a searchable, filterable, and paginated list of venues.
+ *
+ * Features:
+ * - Search by location, dates, and number of guests
+ * - Filter by rating, price, and amenities
+ * - Paginated results with 12 venues per page
+ * - Calendar modal for selecting check-in/out dates
+ *
+ * @returns {JSX.Element} Venues page component
+ */
 export default function Venues() {
+  // Fetch all venues from API, refetches on route change
   const { venues, isLoading, isError } = useVenues();
+
+  // Get URL search params for pre-filling search
   const location = useLocation();
   const params = useMemo(
     () => Object.fromEntries(new URLSearchParams(location.search)),
     [location.search]
   );
 
+  // Custom search hook: filters venues based on location, dates, guests
   const { searchParams, handleChange, searchResults } = useSearch(venues, {
     location: params.location || '',
     guests: params.guests ? Number(params.guests) : null,
@@ -23,6 +38,7 @@ export default function Venues() {
     dateTo: params.dateTo ? new Date(params.dateTo) : null,
   });
 
+  // UI state
   const [showCalendar, setShowCalendar] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [minRating, setMinRating] = useState<number | null>(null);
@@ -31,6 +47,10 @@ export default function Venues() {
 
   const itemsPerPage = 12;
 
+  /**
+   * Toggle an amenity filter on/off
+   * Resets to first page when changed
+   */
   const toggleAmenity = (amenity: string) => {
     setAmenitiesFilter((prev) =>
       prev.includes(amenity) ? prev.filter((a) => a !== amenity) : [...prev, amenity]
@@ -38,6 +58,7 @@ export default function Venues() {
     setCurrentPage(1);
   };
 
+  // Filters
   let filteredVenues = searchResults;
 
   if (minRating) filteredVenues = filteredVenues.filter((v) => (v.rating ?? 0) >= minRating);
@@ -55,21 +76,25 @@ export default function Venues() {
     });
   }
 
+  // Pagination calculation
   const totalPages = Math.ceil(filteredVenues.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentVenues = filteredVenues.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <>
-      {/* Loader overlay */}
+      {/* Loader overlay while fetching */}
       {isLoading && <Loader overlay size="lg" />}
 
+      {/* Error state */}
       {!isLoading && isError && (
         <div className="text-center text-danger mt-5">Failed to load venues.</div>
       )}
 
+      {/* Main page content */}
       {!isLoading && !isError && (
         <>
+          {/* Hero section */}
           <section className="venue-hero" style={{ backgroundImage: `url(${heroImage})` }}>
             <div className="hero-overlay" />
           </section>
@@ -81,6 +106,7 @@ export default function Venues() {
                 className="search-bar rounded-4 mb-5 box-shadow"
                 onSubmit={(e) => e.preventDefault()}
               >
+                {/* Location input */}
                 <input
                   className="form-control"
                   placeholder="Location"
@@ -91,6 +117,7 @@ export default function Venues() {
                   }}
                 />
 
+                {/* Check-in date input */}
                 <input
                   className="form-control"
                   placeholder="Check-in"
@@ -99,6 +126,7 @@ export default function Venues() {
                   onClick={() => setShowCalendar(true)}
                 />
 
+                {/* Check-out date input */}
                 <input
                   className="form-control"
                   placeholder="Check-out"
@@ -107,6 +135,7 @@ export default function Venues() {
                   onClick={() => setShowCalendar(true)}
                 />
 
+                {/* Guests input */}
                 <input
                   className="form-control"
                   placeholder="Guests"
@@ -119,6 +148,7 @@ export default function Venues() {
                 />
               </form>
 
+              {/* Calendar modal */}
               {showCalendar && (
                 <Calendar
                   bookings={[]}
@@ -134,7 +164,7 @@ export default function Venues() {
 
               {/* Filters */}
               <div className="d-flex flex-wrap gap-3">
-                {/* Rating */}
+                {/* Rating filter */}
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="btn btn-filters">Rating</Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-custom">
@@ -161,7 +191,7 @@ export default function Venues() {
                   </Dropdown.Menu>
                 </Dropdown>
 
-                {/* Price */}
+                {/* Price filter */}
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="btn btn-filters">Price</Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-custom">
@@ -188,7 +218,7 @@ export default function Venues() {
                   </Dropdown.Menu>
                 </Dropdown>
 
-                {/* Amenities */}
+                {/* Amenities filter */}
                 <Dropdown as={ButtonGroup}>
                   <Dropdown.Toggle className="btn btn-filters">Amenities</Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu-custom">
@@ -210,7 +240,7 @@ export default function Venues() {
               </div>
             </section>
 
-            {/* Venues list */}
+            {/* Venue cards */}
             <section>
               <div className="venues-grid">
                 {currentVenues.map((venue) => (
@@ -218,10 +248,12 @@ export default function Venues() {
                 ))}
               </div>
 
+              {/* No results message */}
               {!filteredVenues.length && (
                 <div className="text-center text-muted mt-4">No venues match your search.</div>
               )}
 
+              {/* Pagination */}
               {totalPages > 1 && (
                 <div className="d-flex justify-content-center gap-3 mt-5">
                   <button

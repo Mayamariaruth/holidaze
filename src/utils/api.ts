@@ -2,6 +2,10 @@ import { useAuthStore } from '../stores/auth.stores';
 
 const API_KEY = import.meta.env.VITE_API_KEY;
 
+if (!API_KEY) {
+  throw new Error('Missing VITE_API_KEY environment variable');
+}
+
 /**
  * Fetch data from an API with optional authentication.
  *
