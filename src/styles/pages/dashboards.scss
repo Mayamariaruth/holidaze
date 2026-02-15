@@ -18,27 +18,11 @@
   object-fit: cover;
 }
 
-.dashboard-content {
-  width: 100%;
-}
-
-.dashboard-content .tabs .btn {
-  flex: 1;
-}
-
 .profile-label {
   font-size: 18px;
 }
 
 .box-shadow {
-  box-shadow:
-    rgba(17, 17, 26, 0.1) 0px 4px 16px,
-    rgba(17, 17, 26, 0.05) 0px 8px 32px;
-}
-
-.btn-tab {
-  background-color: $light;
-  border: none;
   box-shadow:
     rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.05) 0px 8px 32px;

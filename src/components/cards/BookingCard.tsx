@@ -23,12 +23,12 @@ interface Props {
  */
 export default function BookingCard({ booking, isManagerView = false }: Props) {
   const venue = booking.venue;
-  const location = venue?.location;
   const image = venue?.media?.[0];
-
-  const fullAddress = location
-    ? [location.address, location.city, location.zip, location.country].filter(Boolean).join(', ')
-    : 'No location available';
+  const location = booking.venue?.location;
+  const fullAddress =
+    location && (location.address || location.city || location.zip || location.country)
+      ? [location.address, location.city, location.zip, location.country].filter(Boolean).join(', ')
+      : 'No location available';
 
   const title = isManagerView
     ? typeof booking.customer === 'string'
@@ -38,7 +38,7 @@ export default function BookingCard({ booking, isManagerView = false }: Props) {
   const locationLine = isManagerView ? venue?.name || 'Unknown venue' : fullAddress;
 
   return (
-    <div className="booking-card bg-light p-4 rounded-3 box-shadow d-flex flex-column flex-md-row gap-4">
+    <div className="booking-card bg-light p-4 rounded-3 box-shadow d-flex flex-column flex-md-row gap-3">
       {/* Image */}
       <div className="flex-shrink-0 booking-img">
         <img

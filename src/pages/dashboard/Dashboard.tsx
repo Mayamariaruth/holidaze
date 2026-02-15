@@ -1,27 +1,71 @@
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../../stores/auth.stores';
-import CustomerDashboard from './CustomerDashboard';
+import DashboardLayout from '../../components/layout/DashboardLayout';
+import { getProfile } from '../../services/profiles.service';
+import Loader from '../../components/ui/Loader';
 import ManagerDashboard from './ManagerDashboard';
+import CustomerDashboard from './CustomerDashboard';
+import type { UserProfile } from '../../types/user.types';
 
 /**
- * Main Dashboard wrapper component.
+ * DashboardWrapper
  *
- * Renders either the `ManagerDashboard` or `CustomerDashboard` depending on user role.
+ * Fetches the current user's profile and renders the appropriate dashboard
+ * based on their account type (venue manager or customer).
+ *
+ * Displays a loader while the profile is being fetched.
  *
  * @component
- * @example
- * <Dashboard />
+ * @returns {JSX.Element} The dashboard layout with either ManagerDashboard or CustomerDashboard inside.
  *
  * @remarks
- * - Uses `useAuthStore` to determine the role of the logged-in user.
- * - If role is `venue_manager`, renders `ManagerDashboard`.
- * - Otherwise renders `CustomerDashboard`.
+ * - Updates the global auth store with the user's role after fetching the profile.
+ * - Handles API errors gracefully and shows a fallback error message.
+ *
+ * @example
+ * <DashboardWrapper />
  */
-export default function Dashboard() {
-  const { role } = useAuthStore();
+export default function DashboardWrapper() {
+  const { user, setRole } = useAuthStore();
+  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  if (role === 'venue_manager') {
-    return <ManagerDashboard />;
-  }
+  useEffect(() => {
+    if (!user?.name) return;
 
-  return <CustomerDashboard />;
+    async function fetchProfile() {
+      setLoading(true);
+      try {
+        const data = await getProfile(user.name);
+        const normalizedProfile: UserProfile = {
+          ...data,
+          venueManager: data.venueManager ?? false,
+        };
+        setProfile(normalizedProfile);
+
+        // Set role in auth store
+        const role = normalizedProfile.venueManager ? 'venue_manager' : 'customer';
+        setRole(role);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProfile();
+  }, [user, setRole]);
+
+  if (loading) return <Loader overlay size="lg" />;
+  if (!profile) return <p>Error loading profile</p>;
+
+  return (
+    <DashboardLayout profile={profile} setProfile={setProfile}>
+      {profile.venueManager ? (
+        <ManagerDashboard profile={profile} setProfile={setProfile} />
+      ) : (
+        <CustomerDashboard profile={profile} setProfile={setProfile} />
+      )}
+    </DashboardLayout>
+  );
 }

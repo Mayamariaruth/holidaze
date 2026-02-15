@@ -255,9 +255,9 @@ export default function Venues() {
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="d-flex justify-content-center gap-3 mt-5">
+                <div className="d-flex justify-content-center align-items-center gap-3 mt-5">
                   <button
-                    className="btn btn-outline-primary"
+                    className="btn btn-outline-primary btn-pag"
                     disabled={currentPage === 1}
                     onClick={() => setCurrentPage((p) => p - 1)}
                   >
@@ -267,7 +267,7 @@ export default function Venues() {
                     Page {currentPage} of {totalPages}
                   </span>
                   <button
-                    className="btn btn-primary"
+                    className="btn btn-primary btn-pag"
                     disabled={currentPage === totalPages}
                     onClick={() => setCurrentPage((p) => p + 1)}
                   >

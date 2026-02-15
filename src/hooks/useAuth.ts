@@ -40,11 +40,13 @@ export function useAuth() {
 
       const data = await loginUser({ email, password });
 
-      // Normalize API response into internal AuthUser shape
       const { name, email: userEmail, venueManager, accessToken } = data;
       const user: AuthUser = { name, email: userEmail, venueManager };
 
       loginToStore(user, accessToken);
+
+      // Immediately update role to reflect the correct content in the dashboard
+      useAuthStore.getState().setRole(venueManager ? 'venue_manager' : 'customer');
     } catch (error) {
       setIsError(true);
       throw error;
@@ -58,12 +60,7 @@ export function useAuth() {
    *
    * Does not automatically log the user in.
    */
-  const register = async (
-    name: string,
-    email: string,
-    password: string,
-    venueManager: boolean
-  ) => {
+  const register = async (name: string, email: string, password: string, venueManager: boolean) => {
     try {
       setIsLoading(true);
       setIsError(false);
