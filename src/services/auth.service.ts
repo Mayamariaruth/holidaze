@@ -21,6 +21,15 @@ interface LoginPayload {
   password: string;
 }
 
+/**
+ * Logs in a user with email and password.
+ *
+ * @param {LoginPayload} payload User login credentials.
+ * @returns {Promise<LoginResponse>} Authenticated user data and access token.
+ *
+ * @example
+ * const response = await loginUser({ email, password });
+ */
 export function loginUser(payload: LoginPayload) {
   return apiFetch<LoginResponse>(endpoints.login, {
     method: 'POST',
@@ -28,6 +37,15 @@ export function loginUser(payload: LoginPayload) {
   });
 }
 
+/**
+ * Registers a new user.
+ *
+ * @param {RegisterPayload} payload User registration data.
+ * @returns {Promise<AuthUser>} Newly created user.
+ *
+ * @example
+ * await registerUser({ name, email, password });
+ */
 export function registerUser(payload: RegisterPayload) {
   return apiFetch<AuthUser>(endpoints.register, {
     method: 'POST',

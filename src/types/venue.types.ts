@@ -20,6 +20,9 @@ export interface Venue {
   }[];
 }
 
+/**
+ * Venue metadata for amenities.
+ */
 export interface VenueMeta {
   wifi: boolean;
   parking: boolean;
