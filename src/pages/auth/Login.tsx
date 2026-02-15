@@ -29,7 +29,7 @@ export default function Login() {
     try {
       await login(email, password);
       setGlobalAlert({ type: 'success', message: 'Logged in successfully!' });
-      setTimeout(() => navigate('/'), 1500);
+      setTimeout(() => navigate('/'), 1200);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Invalid email or password';
       setGlobalAlert({ type: 'danger', message });

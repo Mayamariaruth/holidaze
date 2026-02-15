@@ -12,7 +12,7 @@ import { fetchVenueById } from '../../services/venues.service';
 
 export default function VenueDetail() {
   const { id } = useParams<{ id: string }>();
-  const { role, isAuthenticated } = useAuthStore();
+  const { role, isAuthenticated, user } = useAuthStore();
   const [globalAlert, setGlobalAlert] = useState<{
     type: 'success' | 'danger';
     message: string;
@@ -38,7 +38,7 @@ export default function VenueDetail() {
 
     const fetchVenue = async () => {
       try {
-        const data = await fetchVenueById();
+        const data = await fetchVenueById(id);
         setVenue(data);
       } catch {
         setIsError(true);
@@ -59,6 +59,8 @@ export default function VenueDetail() {
   const handleBooking = async () => {
     await booking.book();
   };
+
+  const isOwner = venue.owner?.name === user?.name;
 
   return (
     <div>
@@ -93,7 +95,7 @@ export default function VenueDetail() {
           <div className="fw-bold rating-size">
             {venue.rating !== undefined ? `⭐ ${venue.rating}/5` : 'No ratings'}
           </div>
-          <p className="text-neutral fw-medium h4">
+          <p className="text-neutral fw-medium h4 mt-3">
             {venue.location.city}, {venue.location.country}
           </p>
         </div>
@@ -109,9 +111,9 @@ export default function VenueDetail() {
           </div>
         </div>
 
-        {/* Edit button (managers) */}
+        {/* Edit button */}
         <div className="d-flex justify-content-between align-items-center mb-4">
-          {role === 'venue_manager' && (
+          {role === 'venue_manager' && isOwner && (
             <button className="btn btn-primary btn-edit" onClick={() => setShowEditModal(true)}>
               Edit
             </button>

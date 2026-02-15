@@ -5,7 +5,7 @@ import type { AuthState, AuthUser } from '../types/auth.types';
 interface AuthStore extends AuthState {
   login: (user: AuthUser, token: string) => void;
   logout: () => void;
-  setRole: (role: 'customer' | 'venue_manager') => void; // new
+  setRole: (role: 'customer' | 'venue_manager') => void;
 }
 
 export const useAuthStore = create<AuthStore>()(

@@ -1,8 +1,7 @@
 import { Link } from 'react-router-dom';
 import Calendar from '../../components/modals/Calendar';
 import { useEffect, useRef, useState } from 'react';
-import { endpoints } from '../../config/api';
-import { apiFetch } from '../../utils/api';
+import { getVenues } from '../../services/venues.service';
 import type { Venue } from '../../types/venue.types';
 import VenueCardHome from '../../components/cards/VenueCardHome';
 import { useSearch } from '../../hooks/useSearch';
@@ -43,8 +42,9 @@ export default function Home() {
   useEffect(() => {
     async function fetchVenues() {
       try {
-        const venues = await apiFetch<Venue[]>(`${endpoints.venues}?limit=20`);
+        const venues = await getVenues();
         const sorted = venues.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0)).slice(0, 10);
+
         setRatedVenues(sorted);
       } catch (error) {
         console.error(error);

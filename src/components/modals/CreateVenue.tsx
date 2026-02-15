@@ -11,6 +11,8 @@ interface Props {
 
 export default function CreateVenue({ onClose, onCreate }: Props) {
   const { user } = useAuthStore();
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(false);
   const [formState, setFormState] = useState({
     name: '',
     description: '',
@@ -21,7 +23,6 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
     location: { address: '', city: '', zip: '', country: '' } as Location,
     media: [''] as string[],
   });
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -51,8 +52,31 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
     }));
   };
 
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (!formState.name.trim()) newErrors.name = 'Venue name is required';
+    if (!formState.description.trim()) newErrors.description = 'Description is required';
+    if (!formState.price || Number(formState.price) <= 0) newErrors.price = 'Price is required';
+    if (!formState.maxGuests || Number(formState.maxGuests) <= 0)
+      newErrors.maxGuests = 'Max guests is required';
+
+    const loc = formState.location;
+    if (!loc.address.trim()) newErrors['location.address'] = 'Address is required';
+    if (!loc.city.trim()) newErrors['location.city'] = 'City is required';
+    if (!loc.zip.trim()) newErrors['location.zip'] = 'Postcode is required';
+    if (!loc.country.trim()) newErrors['location.country'] = 'Country is required';
+
+    if (!formState.media[0]?.trim()) newErrors['media.0'] = 'Image URL is required';
+
+    setErrors(newErrors);
+
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) return;
     setLoading(true);
     try {
       if (!user) throw new Error('User not logged in');
@@ -113,29 +137,32 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                     id="name"
                     placeholder="Venue Name"
                     name="name"
-                    className="form-control"
+                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                     value={formState.name}
                     onChange={handleChange}
-                    required
                   />
+                  {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                 </div>
 
                 {/* Description */}
                 <div className="mb-3">
                   <label htmlFor="description" className="form-label mb-0">
-                    Description
+                    Description*
                   </label>
                   <textarea
                     id="description"
                     name="description"
                     placeholder="Description"
-                    className="form-control"
+                    className={`form-control ${errors.description ? 'is-invalid' : ''}`}
                     value={formState.description}
                     onChange={handleChange}
                   />
+                  {errors.description && (
+                    <div className="invalid-feedback">{errors.description}</div>
+                  )}
                 </div>
 
-                {/* Price & Capacity */}
+                {/* Price & guest */}
                 <div className="mb-3 d-flex gap-2">
                   <div className="flex-fill">
                     <label className="form-label mb-0">Price/night (USD)*</label>
@@ -143,11 +170,11 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                       type="number"
                       name="price"
                       placeholder="Price/night"
-                      className="form-control"
+                      className={`form-control ${errors.price ? 'is-invalid' : ''}`}
                       value={formState.price}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.price && <div className="invalid-feedback">{errors.price}</div>}
                   </div>
                   <div className="flex-fill">
                     <label className="form-label mb-0">Max guests*</label>
@@ -155,11 +182,11 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                       type="number"
                       name="maxGuests"
                       placeholder="Max guests"
-                      className="form-control"
+                      className={`form-control ${errors.maxGuests ? 'is-invalid' : ''}`}
                       value={formState.maxGuests}
                       onChange={handleChange}
-                      required
                     />
+                    {errors.maxGuests && <div className="invalid-feedback">{errors.maxGuests}</div>}
                   </div>
                 </div>
 
@@ -201,6 +228,7 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                       }))
                     }
                   />
+                  {errors.rating && <div className="invalid-feedback">{errors.rating}</div>}
                 </div>
 
                 {/* Location */}
@@ -212,11 +240,13 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                       type="text"
                       name="location.address"
                       placeholder="Address"
-                      className="form-control mb-1"
+                      className={`form-control ${errors['location.address'] ? 'is-invalid' : ''}`}
                       value={formState.location.address}
                       onChange={handleChange}
-                      required
                     />
+                    {errors['location.address'] && (
+                      <div className="invalid-feedback">{errors['location.address']}</div>
+                    )}
                     <div className="d-flex gap-2">
                       <div className="flex-fill">
                         <label className="mb-0">Postcode</label>
@@ -224,11 +254,13 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                           type="text"
                           name="location.zip"
                           placeholder="Postcode"
-                          className="form-control mb-1"
+                          className={`form-control ${errors['location.zip'] ? 'is-invalid' : ''}`}
                           value={formState.location.zip}
                           onChange={handleChange}
-                          required
                         />
+                        {errors['location.zip'] && (
+                          <div className="invalid-feedback">{errors['location.zip']}</div>
+                        )}
                       </div>
                       <div className="flex-fill">
                         <label className="mb-0">City</label>
@@ -236,11 +268,13 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                           type="text"
                           name="location.city"
                           placeholder="City"
-                          className="form-control mb-1"
+                          className={`form-control ${errors['location.city'] ? 'is-invalid' : ''}`}
                           value={formState.location.city}
                           onChange={handleChange}
-                          required
                         />
+                        {errors['location.city'] && (
+                          <div className="invalid-feedback">{errors['location.city']}</div>
+                        )}
                       </div>
                     </div>
                     <label className="mb-0">Country</label>
@@ -248,29 +282,31 @@ export default function CreateVenue({ onClose, onCreate }: Props) {
                       type="text"
                       name="location.country"
                       placeholder="Country"
-                      className="form-control"
+                      className={`form-control ${errors['location.country'] ? 'is-invalid' : ''}`}
                       value={formState.location.country}
                       onChange={handleChange}
-                      required
                     />
+                    {errors['location.country'] && (
+                      <div className="invalid-feedback">{errors['location.country']}</div>
+                    )}
                   </div>
                 </div>
 
                 {/* Media */}
                 <div className="mb-3">
-                  <label className="form-label mb-0">Image URL</label>
+                  <label className="form-label mb-0">Image URL*</label>
                   {formState.media.map((url, idx) => (
                     <input
                       key={idx}
                       type="text"
                       placeholder="e.g. https://unsplash.com/photos/a-large-swimming-pool"
                       name={`media.${idx}`}
-                      className="form-control mb-1"
+                      className={`form-control ${errors['media.0'] ? 'is-invalid' : ''}`}
                       value={url}
                       onChange={handleChange}
-                      required={idx === 0}
                     />
                   ))}
+                  {errors['media.0'] && <div className="invalid-feedback">{errors['media.0']}</div>}
                 </div>
 
                 <hr className="my-4" />
