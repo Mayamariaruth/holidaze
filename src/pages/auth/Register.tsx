@@ -69,7 +69,7 @@ export default function Register() {
       setTimeout(() => navigate('/login'), 1500);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Registration failed';
-      setErrors({ ...fieldErrors, email: message });
+
       setGlobalAlert({ type: 'danger', message });
     }
   };

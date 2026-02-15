@@ -9,6 +9,7 @@ import VenueMap from '../../components/ui/VenueMap';
 import Alert from '../../components/ui/Alert';
 import Loader from '../../components/ui/Loader';
 import { fetchVenueById } from '../../services/venues.service';
+import placeholder from '../../assets/images/placeholder.jpg';
 
 /**
  * VenueDetail page component.
@@ -135,7 +136,7 @@ export default function VenueDetail() {
         <div className="row g-3 mb-3">
           <div className="col-12 col-md-8 w-100">
             <img
-              src={venue.media?.[0]?.url}
+              src={venue.media?.[0]?.url || placeholder}
               className="img-fluid rounded-4 w-100"
               alt={venue.media?.[0]?.alt || venue.name}
             />

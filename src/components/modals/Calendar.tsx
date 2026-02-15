@@ -36,10 +36,9 @@ export default function Calendar({ bookings, onClose, onSelectRange }: Props) {
   const handleSelect = (range: DateRange | undefined) => {
     if (!range) return;
 
-    setSelectedRange({ ...range });
+    setSelectedRange(range);
 
-    // Proceed if both 'from' and 'to' are selected and valid
-    if (range.from && range.to && range.from <= range.to) {
+    if (range.from && range.to && range.from.getTime() !== range.to.getTime()) {
       onSelectRange(range.from, range.to);
       onClose();
     }

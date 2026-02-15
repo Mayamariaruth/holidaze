@@ -1,6 +1,5 @@
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import type { Location } from '../../types/venue.types';
-import L from 'leaflet';
 
 /**
  * VenueMap component to display a map for a venue location.
@@ -24,11 +23,6 @@ interface Props {
 
 // Default fallback coordinates (New York City)
 const defaultFallback: [number, number] = [40.7128, -74.006];
-
-// Configure default Leaflet marker icons
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-});
 
 export default function VenueMap({ name, location, fallbackCoords = defaultFallback }: Props) {
   // Validate latitude/longitude or use fallback

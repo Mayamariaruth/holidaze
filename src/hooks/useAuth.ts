@@ -25,7 +25,6 @@ export function useAuth() {
   const logoutFromStore = useAuthStore((s) => s.logout);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isError, setIsError] = useState(false);
 
   /**
    * Log in a user using email and password.
@@ -36,7 +35,6 @@ export function useAuth() {
   const login = async (email: string, password: string) => {
     try {
       setIsLoading(true);
-      setIsError(false);
 
       const data = await loginUser({ email, password });
 
@@ -47,9 +45,6 @@ export function useAuth() {
 
       // Immediately update role to reflect the correct content in the dashboard
       useAuthStore.getState().setRole(venueManager ? 'venue_manager' : 'customer');
-    } catch (error) {
-      setIsError(true);
-      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -61,14 +56,9 @@ export function useAuth() {
    * Does not automatically log the user in.
    */
   const register = async (name: string, email: string, password: string, venueManager: boolean) => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      setIsError(false);
-
       await registerUser({ name, email, password, venueManager });
-    } catch (error) {
-      setIsError(true);
-      throw error;
     } finally {
       setIsLoading(false);
     }
@@ -79,6 +69,5 @@ export function useAuth() {
     register,
     logout: logoutFromStore,
     isLoading,
-    isError,
   };
 }
