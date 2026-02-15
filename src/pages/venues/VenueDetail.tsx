@@ -137,7 +137,20 @@ export default function VenueDetail() {
             {venue.rating !== undefined ? `⭐ ${venue.rating}/5` : 'No ratings'}
           </div>
           <p className="text-neutral fw-medium h4 mt-3">
-            {venue.location.city}, {venue.location.country}
+            {venue.location &&
+            (venue.location.address ||
+              venue.location.city ||
+              venue.location.zip ||
+              venue.location.country)
+              ? [
+                  venue.location.address,
+                  venue.location.city,
+                  venue.location.zip,
+                  venue.location.country,
+                ]
+                  .filter(Boolean)
+                  .join(', ')
+              : 'No location available'}
           </p>
         </div>
 
@@ -191,8 +204,20 @@ export default function VenueDetail() {
               <div className="bg-white rounded-4 pb-2">
                 <VenueMap name={venue.name} location={venue.location} />
                 <p className="ps-3">
-                  {venue.location.address}, {venue.location.city}, {venue.location.zip}{' '}
-                  {venue.location.country}
+                  {venue.location &&
+                  (venue.location.address ||
+                    venue.location.city ||
+                    venue.location.zip ||
+                    venue.location.country)
+                    ? [
+                        venue.location.address,
+                        venue.location.city,
+                        venue.location.zip,
+                        venue.location.country,
+                      ]
+                        .filter(Boolean)
+                        .join(', ')
+                    : 'No location available'}
                 </p>
               </div>
             </div>

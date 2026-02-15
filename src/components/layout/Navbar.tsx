@@ -4,6 +4,12 @@ import { useAuthStore } from '../../stores/auth.stores';
 import logo from '../../assets/images/logo.png';
 import blueLogo from '../../assets/images/logo-blue.png';
 
+interface Props {
+  setGlobalAlert?: React.Dispatch<
+    React.SetStateAction<{ type: 'success' | 'danger'; message: string } | null>
+  >;
+}
+
 /**
  * Transparent navbar for Holidaze for pages with hero sections.
  *
@@ -18,11 +24,17 @@ import blueLogo from '../../assets/images/logo-blue.png';
  * @example
  * <Navbar />
  */
-export default function Navbar() {
+export default function Navbar({ setGlobalAlert }: Props) {
   const { isAuthenticated, logout } = useAuthStore();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const dashboardRoute = '/dashboard';
+
+  const handleLogout = () => {
+    logout();
+    setGlobalAlert?.({ type: 'success', message: 'You have successfully logged out.' });
+    setMenuOpen(false);
+  };
 
   return (
     <>
@@ -54,7 +66,7 @@ export default function Navbar() {
               Login
             </Link>
           ) : (
-            <button className="btn btn-cta nav-btn" onClick={logout}>
+            <button className="btn btn-cta nav-btn" onClick={handleLogout}>
               Logout
             </button>
           )}
@@ -106,13 +118,7 @@ export default function Navbar() {
                 Login
               </Link>
             ) : (
-              <button
-                className="btn btn-cta mt-3 nav-btn"
-                onClick={() => {
-                  logout();
-                  setMenuOpen(false);
-                }}
-              >
+              <button className="btn btn-cta mt-3 nav-btn" onClick={handleLogout}>
                 Logout
               </button>
             )}

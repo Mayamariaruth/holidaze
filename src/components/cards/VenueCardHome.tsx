@@ -28,14 +28,30 @@ export default function VenueCardHome({ venue }: Props) {
       <div className="px-3 pt-2">
         {/* Title */}
         <h4 className="mb-0">{venue.name}</h4>
+
         {/* Location */}
         <p className="text-neutral mt-1 mb-1">
-          {venue.location.city}, {venue.location.country}
+          {venue.location &&
+          (venue.location.city ||
+            venue.location.country ||
+            venue.location.address ||
+            venue.location.zip)
+            ? [
+                venue.location.address,
+                venue.location.city,
+                venue.location.zip,
+                venue.location.country,
+              ]
+                .filter(Boolean)
+                .join(', ')
+            : 'No location available'}
         </p>
+
         {/* Rating */}
         <div className="fw-bold">
           {venue.rating !== undefined ? `⭐ ${venue.rating}/5` : 'No ratings'}
         </div>
+
         {/* Price */}
         <p className="fw-medium mb-0 mt-1">${venue.price}/night</p>
       </div>
