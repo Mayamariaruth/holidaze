@@ -7,6 +7,20 @@ interface Props {
   isManagerView?: boolean;
 }
 
+/**
+ * A component to display booking details such as the venue, customer, location, and dates.
+ *
+ * It can be used in both manager and customer views. In the manager view, it shows the customer's name, while in the regular view,
+ * it shows the venue details and a link to the venue page.
+ *
+ * @param {Object} props The props for the booking card.
+ * @param {UserBooking} props.booking The booking object containing venue, guest, and date information.
+ * @param {boolean} [props.isManagerView=false] If true, displays the booking details in a manager's view.
+ * @returns {JSX.Element} The rendered booking card component.
+ *
+ * @example
+ * <BookingCard booking={booking} isManagerView={true} />
+ */
 export default function BookingCard({ booking, isManagerView = false }: Props) {
   const venue = booking.venue;
   const location = venue?.location;

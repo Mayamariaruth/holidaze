@@ -18,7 +18,7 @@ interface Props {
  * @returns {JSX.Element} The rendered route or a redirect.
  *
  * @example
- * <ProtectedRoute role="admin" />
+ * <ProtectedRoute role="customer" />
  */
 export function ProtectedRoute({ role }: Props) {
   const { isAuthenticated, role: userRole } = useAuthStore();
