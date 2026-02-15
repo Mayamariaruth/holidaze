@@ -1,73 +1,91 @@
-# React + TypeScript + Vite
+# Holidaze – Venue Booking Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Holidaze is a venue booking web application where users can browse venues, make bookings, and manage their profile.  
+Users can also upgrade their account to a **Venue Manager**, allowing them to create, edit, and manage venues and view bookings.
 
-Currently, two official plugins are available:
+This project is built as part of a Noroff frontend assignment and integrates with the Noroff Holidaze API.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### General
 
-## Expanding the ESLint configuration
+- User authentication (login / register)
+- Persistent authentication using Zustand + localStorage
+- Profile page with editable avatar, banner, and bio
+- Global alert system for user feedback
+- Responsive design
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Customer
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Browse venues
+- View venue details
+- Make bookings
+- View own bookings in dashboard
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Venue Manager
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- Upgrade account to Venue Manager
+- Create, edit, and delete venues
+- View bookings per venue
+- Manager-specific dashboard
+
+---
+
+## Tech Stack
+
+- **React**
+- **TypeScript**
+- **React Router**
+- **Zustand** (state management)
+- **Bootstrap** (styling)
+- **Noroff Holidaze API**
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/Mayamariaruth/holidaze
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Install dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```bash
+npm install
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 3. Environment variables
+
+Create a .env file in the root of the project and add:
+
+```bash
+VITE_API_BASE_URL=https://api.noroff.dev/api/v1
+VITE_API_KEY=your_api_key_here
+```
+
+The API key is required for authenticated requests.
+
+### 4. Run the project locally
+
+```bash
+npm run dev
+```
+
+The app will be available at:
+http://localhost:5173
+
+## Scripts
+
+```bash
+npm run dev       # Start development server
+npm run build     # Build for production
+npm run preview   # Preview production build
+npm run deploy    # Deploy the build to GitHub Pages
+npm run lint      # Run ESLint to check for code issues
+npm run lint:fix  # Run ESLint and automatically fix issues
+npm run format    # Run Prettier to format the code
 ```
